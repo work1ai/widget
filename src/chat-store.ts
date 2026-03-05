@@ -14,6 +14,8 @@ export class ChatStore implements ReactiveController {
 
   private client: ChatClient | null = null;
   private greetingAdded = false;
+  private streamingMessageId: string | null = null;
+  private streamingContent = '';
 
   // ---- Reactive state (mutations call host.requestUpdate()) ----
 
@@ -21,6 +23,8 @@ export class ChatStore implements ReactiveController {
   connectionState: ConnectionState = 'disconnected';
   isOpen = false;
   inputDisabled = true;
+  statusText = '';
+  typingActive = false;
 
   constructor(host: ReactiveControllerHost) {
     this.host = host;
@@ -73,6 +77,19 @@ export class ChatStore implements ReactiveController {
    */
   send(content: string): void {
     if (!this.client?.connected) return;
+
+    // Finalize any in-progress streaming message before sending
+    if (this.streamingMessageId) {
+      this.messages = this.messages.map(m =>
+        m.id === this.streamingMessageId
+          ? { ...m, streaming: false }
+          : m
+      );
+      this.streamingMessageId = null;
+      this.streamingContent = '';
+      this.typingActive = false;
+      this.statusText = '';
+    }
 
     const message: ChatMessage = {
       id: crypto.randomUUID(),
@@ -149,7 +166,56 @@ export class ChatStore implements ReactiveController {
       this.host.requestUpdate();
     }) as EventListener);
 
-    // TODO Phase 3: token, typing, message_end, status listeners
+    this.client.addEventListener('token', ((e: CustomEvent<{ content: string }>) => {
+      this.typingActive = false;
+      this.statusText = '';
+
+      if (!this.streamingMessageId) {
+        const id = crypto.randomUUID();
+        this.streamingMessageId = id;
+        this.streamingContent = e.detail.content;
+        this.messages = [...this.messages, {
+          id,
+          role: 'agent' as const,
+          content: this.streamingContent,
+          timestamp: Date.now(),
+          streaming: true,
+        }];
+      } else {
+        this.streamingContent += e.detail.content;
+        this.messages = this.messages.map(m =>
+          m.id === this.streamingMessageId
+            ? { ...m, content: this.streamingContent }
+            : m
+        );
+      }
+      this.host.requestUpdate();
+    }) as EventListener);
+
+    this.client.addEventListener('typing', ((e: CustomEvent<{ active: boolean }>) => {
+      this.typingActive = e.detail.active;
+      this.host.requestUpdate();
+    }) as EventListener);
+
+    this.client.addEventListener('message_end', (() => {
+      if (this.streamingMessageId) {
+        this.messages = this.messages.map(m =>
+          m.id === this.streamingMessageId
+            ? { ...m, streaming: false }
+            : m
+        );
+        this.streamingMessageId = null;
+        this.streamingContent = '';
+      }
+      this.typingActive = false;
+      this.statusText = '';
+      this.host.requestUpdate();
+    }) as EventListener);
+
+    this.client.addEventListener('status', ((e: CustomEvent<{ content: string }>) => {
+      this.statusText = e.detail.content;
+      this.host.requestUpdate();
+    }) as EventListener);
   }
 
   private addSystemMessage(content: string): void {
