@@ -21,6 +21,8 @@ export interface InputAreaProps {
   onInput: (value: string) => void;
   value: string;
   byteCount: number;
+  showNewConversation?: boolean;
+  onNewConversation?: () => void;
 }
 
 function canSend(props: InputAreaProps): boolean {
@@ -45,6 +47,15 @@ function handleKeydown(e: KeyboardEvent, props: InputAreaProps): void {
  * and conditional byte counter.
  */
 export function renderInputArea(props: InputAreaProps): TemplateResult {
+  if (props.showNewConversation) {
+    return html`
+      <button
+        class="new-conversation-btn"
+        @click=${() => props.onNewConversation?.()}
+      >Start new conversation</button>
+    `;
+  }
+
   const sendable = canSend(props);
 
   return html`

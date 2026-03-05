@@ -10,6 +10,7 @@ import { widgetStyles } from './styles/widget.styles.js';
 import { panelStyles } from './styles/panel.styles.js';
 import { inputStyles } from './styles/input.styles.js';
 import { messageStyles } from './styles/messages.styles.js';
+import { streamingStyles } from './styles/streaming.styles.js';
 
 /**
  * <work1-chat-widget> - Embeddable chat widget custom element.
@@ -25,7 +26,7 @@ import { messageStyles } from './styles/messages.styles.js';
  */
 @customElement('work1-chat-widget')
 export class Work1ChatWidget extends LitElement {
-  static styles = [widgetStyles, panelStyles, inputStyles, messageStyles];
+  static styles = [widgetStyles, panelStyles, inputStyles, messageStyles, streamingStyles];
 
   /**
    * WebSocket server URL. Connection is initiated on first panel open.
@@ -123,6 +124,8 @@ export class Work1ChatWidget extends LitElement {
               this.store.messages,
               this.scrollManager,
               () => this.scrollManager.scrollToBottom(),
+              this.store.typingActive,
+              this.store.statusText,
             )}
           </div>
           <div class="input-wrapper" part="input">
@@ -133,6 +136,8 @@ export class Work1ChatWidget extends LitElement {
               onInput: (value) => this.handleInput(value),
               value: this.inputValue,
               byteCount: this.inputByteCount,
+              showNewConversation: this.store.connectionState === 'disconnected' && this.store.messages.length > 0 && this.eventsWired,
+              onNewConversation: () => this.handleNewConversation(),
             })}
           </div>
         `,
@@ -161,6 +166,15 @@ export class Work1ChatWidget extends LitElement {
     this.store.send(content);
     this.inputValue = '';
     this.inputByteCount = 0;
+  }
+
+  /**
+   * Handle "Start new conversation" button: disconnect, clear state, reconnect.
+   */
+  private handleNewConversation(): void {
+    this.store.disconnect();
+    this.store.messages = [];
+    this.store.connect(this.serverUrl, this.debug);
   }
 
   /**
@@ -231,6 +245,12 @@ export class Work1ChatWidget extends LitElement {
       this.scrollManager.onNewMessage();
     }
     this.lastMessageCount = currentCount;
+
+    // Auto-scroll during streaming as bubble height grows
+    const hasStreaming = this.store.messages.some(m => m.streaming);
+    if (hasStreaming && this.scrollManager.isAtBottom) {
+      this.scrollManager.onNewMessage();
+    }
 
     const currentState = this.store.connectionState;
 
