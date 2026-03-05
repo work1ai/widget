@@ -66,11 +66,11 @@ Plans:
   3. Agent messages render markdown (bold, italic, links, code blocks, lists) with all output sanitized via DOMPurify
   4. Status events display as transient indicators (e.g., "Looking up details...") that auto-clear on next token or message_end
   5. Connection errors, session ends, and message-too-large all produce clear, appropriate UI feedback
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01-PLAN.md -- Markdown pipeline, streaming styles, and ChatStore streaming state
+- [ ] 03-02-PLAN.md -- UI rendering: markdown bubbles, typing indicator, status text, error presentation
 
 ### Phase 4: Theming & Encapsulation
 **Goal**: Customers can deeply customize the widget's appearance without breaking encapsulation, and the widget is secure against XSS and style leaking
@@ -128,7 +128,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 |-------|----------------|--------|-----------|
 | 1. Connection Layer | 0/3 | Planning complete | - |
 | 2. UI Shell & Messaging | 0/4 | Planning complete | - |
-| 3. Streaming & Content | 0/0 | Not started | - |
+| 3. Streaming & Content | 0/2 | Planning complete | - |
 | 4. Theming & Encapsulation | 0/0 | Not started | - |
 | 5. Responsive & Distribution | 0/0 | Not started | - |
 | 6. Test Suites | 0/0 | Not started | - |
