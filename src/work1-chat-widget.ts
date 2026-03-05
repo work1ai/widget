@@ -84,6 +84,15 @@ export class Work1ChatWidget extends LitElement {
   @property({ type: String })
   height: string = '';
 
+  /**
+   * Primary accent color override (CSS color value, e.g. '#ff0000').
+   * Maps to --w1-accent-color on :host. External CSS custom properties
+   * override this value via natural CSS cascade.
+   * @attr primary-color
+   */
+  @property({ attribute: 'primary-color' })
+  primaryColor: string = '';
+
   private store = new ChatStore(this);
   private scrollManager = new ScrollManager();
   private scrollObserverInitialized = false;
@@ -108,7 +117,7 @@ export class Work1ChatWidget extends LitElement {
     const pos = this.position === 'bottom-left' ? 'left' : 'right';
 
     return html`
-      ${this.renderWidthHeightOverrides()}
+      ${this.renderAttributeOverrides()}
       ${renderBubble(
         () => this.handleOpen(),
         pos,
@@ -146,14 +155,16 @@ export class Work1ChatWidget extends LitElement {
   }
 
   /**
-   * Render dynamic CSS custom property overrides for width/height attributes.
-   * Only emits a <style> element when width or height is explicitly set.
+   * Render dynamic CSS custom property overrides for attribute-driven values.
+   * Emits a <style> element setting --w1-* vars on :host when attributes are set.
+   * External CSS custom properties override these via natural CSS cascade.
    */
-  private renderWidthHeightOverrides() {
-    if (!this.width && !this.height) return nothing;
+  private renderAttributeOverrides() {
     const rules: string[] = [];
     if (this.width) rules.push(`--w1-panel-width: ${this.width}`);
     if (this.height) rules.push(`--w1-panel-height: ${this.height}`);
+    if (this.primaryColor) rules.push(`--w1-accent-color: ${this.primaryColor}`);
+    if (!rules.length) return nothing;
     return html`<style>:host { ${rules.join('; ')} }</style>`;
   }
 
