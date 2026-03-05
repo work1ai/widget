@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v0.1
 milestone_name: milestone
-status: unknown
-last_updated: "2026-03-05T04:09:54.731Z"
+status: in-progress
+last_updated: "2026-03-05T04:46:14Z"
 progress:
-  total_phases: 2
+  total_phases: 3
   completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 8
+  completed_plans: 8
 ---
 
 # Project State
@@ -18,23 +18,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-04)
 
 **Core value:** The widget must reliably connect to the chat backend and stream agent responses in real time
-**Current focus:** Phase 2 - UI Shell & Messaging
+**Current focus:** Phase 3 - Streaming & Content
 
 ## Current Position
 
-Phase: 2 of 6 (UI Shell & Messaging) -- COMPLETE
-Plan: 4 of 4 in current phase -- COMPLETE
+Phase: 3 of 6 (Streaming & Content)
+Plan: 1 of 2 in current phase -- COMPLETE
 Status: In Progress
-Last activity: 2026-03-05 -- Completed 02-03-PLAN.md (Message List & Scroll)
+Last activity: 2026-03-05 -- Completed 03-01-PLAN.md (Streaming Data Layer)
 
-Progress: [██████░░░░] 54%
+Progress: [████████░░] 62%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
+- Total plans completed: 8
 - Average duration: 2min
-- Total execution time: 0.23 hours
+- Total execution time: 0.26 hours
 
 **By Phase:**
 
@@ -43,7 +43,7 @@ Progress: [██████░░░░] 54%
 | 01-connection-layer | 3 | 5min | 2min |
 
 **Recent Trend:**
-- Last 5 plans: 2min, 1min, 2min, 2min, 2min
+- Last 5 plans: 1min, 2min, 2min, 2min, 2min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -52,6 +52,7 @@ Progress: [██████░░░░] 54%
 | Phase 02-ui-shell-messaging P02 | 2min | 2 tasks | 7 files |
 | Phase 02-ui-shell-messaging P03 | 2min | 2 tasks | 4 files |
 | Phase 02-ui-shell-messaging P04 | 2min | 2 tasks | 4 files |
+| Phase 03-streaming-content P01 | 2min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,8 @@ Recent decisions affecting current work:
 - 02-03: Sentinel-based IntersectionObserver avoids scroll event listeners for performance
 - 02-04: TextEncoder cached at module level for byte counting performance
 - 02-04: Byte counter appears at 200 bytes from limit, not always visible
+- 03-01: @types/dompurify installed as stub -- dompurify v3 ships own types
+- 03-01: Code block max-height set to 250px (middle of 200-300px range)
 
 ### Pending Todos
 
@@ -87,10 +90,10 @@ None yet.
 
 - Phase 1: WebSocket heartbeat mechanism needs design -- browser WebSocket API cannot send protocol-level pings
 - Phase 1: Vite 6 IIFE library mode config verified -- builds ES + IIFE outputs correctly
-- Phase 3: marked v17 API should be verified during implementation
+- Phase 3: marked v17 API verified -- instance-based Marked() with token-based link renderer works correctly
 
 ## Session Continuity
 
 Last session: 2026-03-05
-Stopped at: Completed 02-03-PLAN.md
-Resume file: .planning/phases/02-ui-shell-messaging/02-03-SUMMARY.md
+Stopped at: Completed 03-01-PLAN.md
+Resume file: .planning/phases/03-streaming-content/03-01-SUMMARY.md

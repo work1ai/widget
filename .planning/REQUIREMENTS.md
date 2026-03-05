@@ -27,12 +27,12 @@
 
 ### Streaming
 
-- [ ] **STRM-01**: Widget accumulates `token` event content into a streaming message bubble
-- [ ] **STRM-02**: Widget shows typing indicator (animated dots) on `typing` active=true
-- [ ] **STRM-03**: Widget hides typing indicator on `typing` active=false
-- [ ] **STRM-04**: Widget finalizes streaming content into a complete agent message on `message_end`
-- [ ] **STRM-05**: Widget displays `status` events as transient system indicators (e.g., "Looking up service details...")
-- [ ] **STRM-06**: Status indicators auto-clear on next `token` or `message_end`
+- [x] **STRM-01**: Widget accumulates `token` event content into a streaming message bubble
+- [x] **STRM-02**: Widget shows typing indicator (animated dots) on `typing` active=true
+- [x] **STRM-03**: Widget hides typing indicator on `typing` active=false
+- [x] **STRM-04**: Widget finalizes streaming content into a complete agent message on `message_end`
+- [x] **STRM-05**: Widget displays `status` events as transient system indicators (e.g., "Looking up service details...")
+- [x] **STRM-06**: Status indicators auto-clear on next `token` or `message_end`
 
 ### UI Shell
 
@@ -153,12 +153,12 @@
 | MSG-04 | Phase 2 | Complete |
 | MSG-05 | Phase 2 | Complete |
 | MSG-06 | Phase 2 | Complete |
-| STRM-01 | Phase 3 | Pending |
-| STRM-02 | Phase 3 | Pending |
-| STRM-03 | Phase 3 | Pending |
-| STRM-04 | Phase 3 | Pending |
-| STRM-05 | Phase 3 | Pending |
-| STRM-06 | Phase 3 | Pending |
+| STRM-01 | Phase 3 | Complete |
+| STRM-02 | Phase 3 | Complete |
+| STRM-03 | Phase 3 | Complete |
+| STRM-04 | Phase 3 | Complete |
+| STRM-05 | Phase 3 | Complete |
+| STRM-06 | Phase 3 | Complete |
 | SHEL-01 | Phase 2 | Complete |
 | SHEL-02 | Phase 2 | Complete |
 | SHEL-03 | Phase 2 | Complete |
