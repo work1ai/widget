@@ -3,6 +3,13 @@ import { css } from 'lit';
 /**
  * Root widget and bubble button styles.
  * All colors use CSS custom properties with fallback defaults for Phase 4 theming.
+ *
+ * Public ::part() API:
+ *   ::part(bubble)       - Floating action button
+ *   ::part(panel)        - Chat panel container
+ *   ::part(header)       - Panel header bar
+ *   ::part(message-list) - Scrollable message area
+ *   ::part(input)        - Input area wrapper
  */
 export const widgetStyles = css`
   :host {
