@@ -1,5 +1,4 @@
 // Public API barrel export
-// ChatClient and Work1ChatWidget exports will be added in later plans
 export {
   type ServerMessage,
   type ClientMessage,
@@ -7,3 +6,5 @@ export {
   type TypedEventTarget,
   isServerMessage,
 } from './chat-client.types.js';
+
+export { ChatClient } from './chat-client.js';
