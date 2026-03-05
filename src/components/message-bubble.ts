@@ -1,5 +1,7 @@
 import { html, type TemplateResult } from 'lit';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import type { ChatMessage } from '../chat-store.types.js';
+import { renderMarkdown } from '../markdown.js';
 
 /**
  * Determine grouping position of a message within consecutive same-sender runs.
@@ -40,8 +42,26 @@ export function renderMessageBubble(
     groupClass = 'message--middle';
   }
 
+  if (message.role === 'agent') {
+    return html`
+      <div class="message message--agent ${groupClass}">
+        <div class="message-content markdown-content">
+          ${unsafeHTML(renderMarkdown(message.content))}${message.streaming ? html`<span class="streaming-cursor"></span>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  if (message.role === 'system') {
+    return html`
+      <div class="message message--system message--error ${groupClass}">
+        <div class="message-content">${message.content}</div>
+      </div>
+    `;
+  }
+
   return html`
-    <div class="message message--${message.role} ${groupClass}">
+    <div class="message message--user ${groupClass}">
       <div class="message-content">${message.content}</div>
     </div>
   `;

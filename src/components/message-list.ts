@@ -92,7 +92,11 @@ export function renderMessageList(
   messages: ChatMessage[],
   scrollManager: ScrollManager,
   onScrollToBottom: () => void,
+  typingActive: boolean = false,
+  statusText: string = '',
 ): TemplateResult {
+  const hasStreamingMessage = messages.some(m => m.streaming);
+
   return html`
     ${repeat(
       messages,
@@ -102,6 +106,19 @@ export function renderMessageList(
         return renderMessageBubble(msg, grouping);
       },
     )}
+    ${typingActive && !hasStreamingMessage ? html`
+      <div class="message message--agent message--solo">
+        <div class="typing-indicator">
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+        </div>
+        ${statusText ? html`<div class="status-text">${statusText}</div>` : ''}
+      </div>
+    ` : ''}
+    ${!typingActive && statusText ? html`
+      <div class="status-text">${statusText}</div>
+    ` : ''}
     <div class="scroll-sentinel"></div>
     ${scrollManager.unreadCount > 0 && !scrollManager.isAtBottom
       ? html`
