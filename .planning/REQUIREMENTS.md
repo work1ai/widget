@@ -69,7 +69,7 @@
 - [x] **THEM-02**: HTML attributes (primary-color, width, height, position) set default CSS custom property values
 - [x] **THEM-03**: CSS custom properties override attribute values when both are set
 - [x] **THEM-04**: Widget exposes `::part()` selectors for deep styling of individual components
-- [ ] **THEM-05**: Custom bubble icon support via `bubble-icon` attribute (URL or built-in name)
+- [x] **THEM-05**: Custom bubble icon support via `bubble-icon` attribute (URL or built-in name)
 
 ### Encapsulation & Security
 
@@ -183,7 +183,7 @@
 | THEM-02 | Phase 4 | Complete |
 | THEM-03 | Phase 4 | Complete |
 | THEM-04 | Phase 4 | Complete |
-| THEM-05 | Phase 4 | Pending |
+| THEM-05 | Phase 4 | Complete |
 | SEC-01 | Phase 4 | Complete |
 | SEC-02 | Phase 4 | Complete |
 | SEC-03 | Phase 4 | Complete |
