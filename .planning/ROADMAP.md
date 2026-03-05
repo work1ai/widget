@@ -48,11 +48,13 @@ Plans:
   3. User can press Shift+Enter to insert a newline without sending
   4. Message input enforces 4096 byte limit with inline validation and disables when disconnected
   5. Chat panel auto-scrolls to newest content but pauses auto-scroll when user scrolls up
-**Plans**: TBD
+**Plans:** 4 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md -- ChatStore ReactiveController and UI types
+- [ ] 02-02-PLAN.md -- Visual shell (bubble, panel, header, animations)
+- [ ] 02-03-PLAN.md -- Message list with bubbles, grouping, and scroll management
+- [ ] 02-04-PLAN.md -- Input area with auto-grow, byte validation, and send flow
 
 ### Phase 3: Streaming & Content
 **Goal**: Agent responses stream in token-by-token with typing indicators, render as sanitized markdown, and errors surface clearly to the user
@@ -125,7 +127,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Connection Layer | 0/3 | Planning complete | - |
-| 2. UI Shell & Messaging | 0/0 | Not started | - |
+| 2. UI Shell & Messaging | 0/4 | Planning complete | - |
 | 3. Streaming & Content | 0/0 | Not started | - |
 | 4. Theming & Encapsulation | 0/0 | Not started | - |
 | 5. Responsive & Distribution | 0/0 | Not started | - |
