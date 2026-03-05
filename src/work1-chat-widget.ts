@@ -93,6 +93,15 @@ export class Work1ChatWidget extends LitElement {
   @property({ attribute: 'primary-color' })
   primaryColor: string = '';
 
+  /**
+   * Bubble icon name from the Lucide registry (e.g. 'help-circle', 'bot').
+   * When set, replaces the default chat bubble icon. A named slot
+   * `<span slot="bubble-icon">...</span>` takes precedence over this attribute.
+   * @attr bubble-icon
+   */
+  @property({ attribute: 'bubble-icon' })
+  bubbleIcon: string = '';
+
   private store = new ChatStore(this);
   private scrollManager = new ScrollManager();
   private scrollObserverInitialized = false;
@@ -122,6 +131,7 @@ export class Work1ChatWidget extends LitElement {
         () => this.handleOpen(),
         pos,
         this.store.isOpen,
+        this.bubbleIcon,
       )}
       ${renderPanel(
         this.store.isOpen,
