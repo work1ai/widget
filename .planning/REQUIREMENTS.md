@@ -65,9 +65,9 @@
 
 ### Theming
 
-- [ ] **THEM-01**: Widget exposes CSS custom properties for colors, fonts, sizes, border-radius
-- [ ] **THEM-02**: HTML attributes (primary-color, width, height, position) set default CSS custom property values
-- [ ] **THEM-03**: CSS custom properties override attribute values when both are set
+- [x] **THEM-01**: Widget exposes CSS custom properties for colors, fonts, sizes, border-radius
+- [x] **THEM-02**: HTML attributes (primary-color, width, height, position) set default CSS custom property values
+- [x] **THEM-03**: CSS custom properties override attribute values when both are set
 - [ ] **THEM-04**: Widget exposes `::part()` selectors for deep styling of individual components
 - [ ] **THEM-05**: Custom bubble icon support via `bubble-icon` attribute (URL or built-in name)
 
@@ -179,9 +179,9 @@
 | ERR-03 | Phase 3 | Complete |
 | ERR-04 | Phase 3 | Complete |
 | ERR-05 | Phase 3 | Complete |
-| THEM-01 | Phase 4 | Pending |
-| THEM-02 | Phase 4 | Pending |
-| THEM-03 | Phase 4 | Pending |
+| THEM-01 | Phase 4 | Complete |
+| THEM-02 | Phase 4 | Complete |
+| THEM-03 | Phase 4 | Complete |
 | THEM-04 | Phase 4 | Pending |
 | THEM-05 | Phase 4 | Pending |
 | SEC-01 | Phase 4 | Pending |

@@ -2,13 +2,16 @@
 gsd_state_version: 1.0
 milestone: v0.1
 milestone_name: milestone
-status: unknown
-last_updated: "2026-03-05T05:05:46.704Z"
+status: executing
+stopped_at: Completed 03-02-PLAN.md
+last_updated: "2026-03-05T17:16:53.572Z"
+last_activity: 2026-03-05 -- Completed 03-02-PLAN.md (Streaming UI Components)
 progress:
-  total_phases: 3
+  total_phases: 6
   completed_phases: 3
-  total_plans: 9
-  completed_plans: 9
+  total_plans: 12
+  completed_plans: 10
+  percent: 69
 ---
 
 # Project State
@@ -18,21 +21,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-04)
 
 **Core value:** The widget must reliably connect to the chat backend and stream agent responses in real time
-**Current focus:** Phase 3 - Streaming & Content
+**Current focus:** Phase 4 - Theming & Encapsulation
 
 ## Current Position
 
-Phase: 3 of 6 (Streaming & Content) -- COMPLETE
-Plan: 2 of 2 in current phase -- COMPLETE
+Phase: 4 of 6 (Theming & Encapsulation)
+Plan: 1 of 2 in current phase -- COMPLETE
 Status: In Progress
-Last activity: 2026-03-05 -- Completed 03-02-PLAN.md (Streaming UI Components)
+Last activity: 2026-03-05 -- Completed 04-01-PLAN.md (CSS Custom Properties & Primary Color Attribute)
 
-Progress: [█████████░] 69%
+Progress: [████████░░] 83%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
+- Total plans completed: 10
 - Average duration: 2min
 - Total execution time: 0.28 hours
 
@@ -54,6 +57,7 @@ Progress: [█████████░] 69%
 | Phase 02-ui-shell-messaging P04 | 2min | 2 tasks | 4 files |
 | Phase 03-streaming-content P01 | 2min | 2 tasks | 4 files |
 | Phase 03-streaming-content P02 | 2min | 2 tasks | 4 files |
+| Phase 04-theming-encapsulation P01 | 1min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -86,6 +90,9 @@ Recent decisions affecting current work:
 - 03-02: Typing indicator only shown when no streaming message exists (avoids duplicate feedback)
 - 03-02: showNewConversation gated on disconnected + messages + eventsWired (was connected once)
 - 03-02: handleNewConversation does disconnect/clear/reconnect without greeting reset
+- 04-01: User bubble uses --w1-user-bg with --w1-accent-color fallback for granular override
+- 04-01: Removed --w1-system-color, --w1-disabled-color, --w1-muted-color, --w1-input-disabled-bg from public API
+- 04-01: primary-color attribute reuses renderAttributeOverrides pattern (renamed from renderWidthHeightOverrides)
 
 ### Pending Todos
 
@@ -100,5 +107,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-05
-Stopped at: Completed 03-02-PLAN.md
-Resume file: .planning/phases/03-streaming-content/03-02-SUMMARY.md
+Stopped at: Completed 04-01-PLAN.md
+Resume file: .planning/phases/04-theming-encapsulation/04-01-SUMMARY.md
