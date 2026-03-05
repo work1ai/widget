@@ -113,7 +113,7 @@ export const streamingStyles = css`
   .status-text {
     font-size: 11px;
     font-style: italic;
-    color: var(--w1-system-color, #888);
+    color: #888;
     padding: 2px 14px;
     animation: ellipsis-pulse 2s ease-in-out infinite;
   }

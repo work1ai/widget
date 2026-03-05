@@ -54,7 +54,7 @@ export const inputStyles = css`
   .input-textarea:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-    background: var(--w1-input-disabled-bg, #f0f0f0);
+    background: #f0f0f0;
   }
 
   .send-button {
@@ -74,7 +74,7 @@ export const inputStyles = css`
   }
 
   .send-button--disabled {
-    color: var(--w1-disabled-color, #ccc);
+    color: #ccc;
     cursor: default;
   }
 
@@ -83,7 +83,7 @@ export const inputStyles = css`
     right: 48px;
     bottom: 20px;
     font-size: 11px;
-    color: var(--w1-muted-color, #999);
+    color: #999;
   }
 
   .byte-counter--over {

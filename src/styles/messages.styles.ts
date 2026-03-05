@@ -33,7 +33,7 @@ export const messageStyles = css`
 
   .message--user {
     align-self: flex-end;
-    background: var(--w1-accent-color, #0066FF);
+    background: var(--w1-user-bg, var(--w1-accent-color, #0066FF));
     color: white;
     border-bottom-right-radius: 4px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
@@ -50,7 +50,7 @@ export const messageStyles = css`
   .message--system {
     align-self: center;
     background: none;
-    color: var(--w1-system-color, #888);
+    color: #888;
     font-size: 12px;
     font-style: italic;
     padding: 4px 8px;

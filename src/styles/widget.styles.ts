@@ -10,6 +10,14 @@ export const widgetStyles = css`
     position: fixed;
     z-index: 9999;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    color: #1a1a1a;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-align: left;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
   }
 
   .bubble-button {
