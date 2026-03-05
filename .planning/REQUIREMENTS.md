@@ -139,72 +139,72 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CONN-01 | — | Pending |
-| CONN-02 | — | Pending |
-| CONN-03 | — | Pending |
-| CONN-04 | — | Pending |
-| CONN-05 | — | Pending |
-| CONN-06 | — | Pending |
-| CONN-07 | — | Pending |
-| CONN-08 | — | Pending |
-| MSG-01 | — | Pending |
-| MSG-02 | — | Pending |
-| MSG-03 | — | Pending |
-| MSG-04 | — | Pending |
-| MSG-05 | — | Pending |
-| MSG-06 | — | Pending |
-| STRM-01 | — | Pending |
-| STRM-02 | — | Pending |
-| STRM-03 | — | Pending |
-| STRM-04 | — | Pending |
-| STRM-05 | — | Pending |
-| STRM-06 | — | Pending |
-| SHEL-01 | — | Pending |
-| SHEL-02 | — | Pending |
-| SHEL-03 | — | Pending |
-| SHEL-04 | — | Pending |
-| SHEL-05 | — | Pending |
-| SHEL-06 | — | Pending |
-| SHEL-07 | — | Pending |
-| SHEL-08 | — | Pending |
-| SHEL-09 | — | Pending |
-| SHEL-10 | — | Pending |
-| CONT-01 | — | Pending |
-| CONT-02 | — | Pending |
-| CONT-03 | — | Pending |
-| CONT-04 | — | Pending |
-| CONT-05 | — | Pending |
-| ERR-01 | — | Pending |
-| ERR-02 | — | Pending |
-| ERR-03 | — | Pending |
-| ERR-04 | — | Pending |
-| ERR-05 | — | Pending |
-| THEM-01 | — | Pending |
-| THEM-02 | — | Pending |
-| THEM-03 | — | Pending |
-| THEM-04 | — | Pending |
-| THEM-05 | — | Pending |
-| SEC-01 | — | Pending |
-| SEC-02 | — | Pending |
-| SEC-03 | — | Pending |
-| SEC-04 | — | Pending |
-| DIST-01 | — | Pending |
-| DIST-02 | — | Pending |
-| DIST-03 | — | Pending |
-| DIST-04 | — | Pending |
-| RESP-01 | — | Pending |
-| RESP-02 | — | Pending |
-| TEST-01 | — | Pending |
-| TEST-02 | — | Pending |
-| TEST-03 | — | Pending |
-| TEST-04 | — | Pending |
-| TEST-05 | — | Pending |
+| CONN-01 | Phase 1 | Pending |
+| CONN-02 | Phase 1 | Pending |
+| CONN-03 | Phase 1 | Pending |
+| CONN-04 | Phase 1 | Pending |
+| CONN-05 | Phase 1 | Pending |
+| CONN-06 | Phase 1 | Pending |
+| CONN-07 | Phase 1 | Pending |
+| CONN-08 | Phase 1 | Pending |
+| MSG-01 | Phase 2 | Pending |
+| MSG-02 | Phase 2 | Pending |
+| MSG-03 | Phase 2 | Pending |
+| MSG-04 | Phase 2 | Pending |
+| MSG-05 | Phase 2 | Pending |
+| MSG-06 | Phase 2 | Pending |
+| STRM-01 | Phase 3 | Pending |
+| STRM-02 | Phase 3 | Pending |
+| STRM-03 | Phase 3 | Pending |
+| STRM-04 | Phase 3 | Pending |
+| STRM-05 | Phase 3 | Pending |
+| STRM-06 | Phase 3 | Pending |
+| SHEL-01 | Phase 2 | Pending |
+| SHEL-02 | Phase 2 | Pending |
+| SHEL-03 | Phase 2 | Pending |
+| SHEL-04 | Phase 2 | Pending |
+| SHEL-05 | Phase 2 | Pending |
+| SHEL-06 | Phase 2 | Pending |
+| SHEL-07 | Phase 2 | Pending |
+| SHEL-08 | Phase 2 | Pending |
+| SHEL-09 | Phase 2 | Pending |
+| SHEL-10 | Phase 2 | Pending |
+| CONT-01 | Phase 3 | Pending |
+| CONT-02 | Phase 3 | Pending |
+| CONT-03 | Phase 3 | Pending |
+| CONT-04 | Phase 3 | Pending |
+| CONT-05 | Phase 3 | Pending |
+| ERR-01 | Phase 3 | Pending |
+| ERR-02 | Phase 3 | Pending |
+| ERR-03 | Phase 3 | Pending |
+| ERR-04 | Phase 3 | Pending |
+| ERR-05 | Phase 3 | Pending |
+| THEM-01 | Phase 4 | Pending |
+| THEM-02 | Phase 4 | Pending |
+| THEM-03 | Phase 4 | Pending |
+| THEM-04 | Phase 4 | Pending |
+| THEM-05 | Phase 4 | Pending |
+| SEC-01 | Phase 4 | Pending |
+| SEC-02 | Phase 4 | Pending |
+| SEC-03 | Phase 4 | Pending |
+| SEC-04 | Phase 4 | Pending |
+| DIST-01 | Phase 5 | Pending |
+| DIST-02 | Phase 5 | Pending |
+| DIST-03 | Phase 5 | Pending |
+| DIST-04 | Phase 5 | Pending |
+| RESP-01 | Phase 5 | Pending |
+| RESP-02 | Phase 5 | Pending |
+| TEST-01 | Phase 6 | Pending |
+| TEST-02 | Phase 6 | Pending |
+| TEST-03 | Phase 6 | Pending |
+| TEST-04 | Phase 6 | Pending |
+| TEST-05 | Phase 6 | Pending |
 
 **Coverage:**
-- v1 requirements: 51 total
-- Mapped to phases: 0
-- Unmapped: 51
+- v1 requirements: 60 total
+- Mapped to phases: 60
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-04*
-*Last updated: 2026-03-04 after initial definition*
+*Last updated: 2026-03-04 after roadmap creation*
