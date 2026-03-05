@@ -18,10 +18,10 @@
 
 ### Messaging
 
-- [ ] **MSG-01**: User can type and send messages via text input with send button
-- [ ] **MSG-02**: User can press Enter to send, Shift+Enter for newline
+- [x] **MSG-01**: User can type and send messages via text input with send button
+- [x] **MSG-02**: User can press Enter to send, Shift+Enter for newline
 - [x] **MSG-03**: Widget sends `{"type":"message","content":"..."}` JSON to server
-- [ ] **MSG-04**: Widget enforces 4096 byte message limit client-side with inline validation
+- [x] **MSG-04**: Widget enforces 4096 byte message limit client-side with inline validation
 - [x] **MSG-05**: Send button and input are disabled when no active WebSocket connection
 - [x] **MSG-06**: User messages appear immediately in chat as user bubbles
 
@@ -41,7 +41,7 @@
 - [x] **SHEL-03**: User can close chat panel via close button in header (returns to bubble)
 - [x] **SHEL-04**: Chat panel includes header with configurable title and "Powered by AI" badge
 - [ ] **SHEL-05**: Chat panel includes scrollable message area
-- [ ] **SHEL-06**: Message area auto-scrolls to newest content as tokens/messages arrive
+- [x] **SHEL-06**: Message area auto-scrolls to newest content as tokens/messages arrive
 - [ ] **SHEL-07**: Auto-scroll pauses when user scrolls up to read history
 - [x] **SHEL-08**: Panel position is configurable: `bottom-right` or `bottom-left`
 - [x] **SHEL-09**: Panel width and height are configurable via attributes
@@ -147,10 +147,10 @@
 | CONN-06 | Phase 1 | Complete |
 | CONN-07 | Phase 1 | Complete |
 | CONN-08 | Phase 1 | Complete |
-| MSG-01 | Phase 2 | Pending |
-| MSG-02 | Phase 2 | Pending |
+| MSG-01 | Phase 2 | Complete |
+| MSG-02 | Phase 2 | Complete |
 | MSG-03 | Phase 2 | Complete |
-| MSG-04 | Phase 2 | Pending |
+| MSG-04 | Phase 2 | Complete |
 | MSG-05 | Phase 2 | Complete |
 | MSG-06 | Phase 2 | Complete |
 | STRM-01 | Phase 3 | Pending |
@@ -164,7 +164,7 @@
 | SHEL-03 | Phase 2 | Complete |
 | SHEL-04 | Phase 2 | Complete |
 | SHEL-05 | Phase 2 | Pending |
-| SHEL-06 | Phase 2 | Pending |
+| SHEL-06 | Phase 2 | Complete |
 | SHEL-07 | Phase 2 | Pending |
 | SHEL-08 | Phase 2 | Complete |
 | SHEL-09 | Phase 2 | Complete |
