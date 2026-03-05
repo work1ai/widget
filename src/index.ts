@@ -8,3 +8,4 @@ export {
 } from './chat-client.types.js';
 
 export { ChatClient } from './chat-client.js';
+export { Work1ChatWidget } from './work1-chat-widget.js';
