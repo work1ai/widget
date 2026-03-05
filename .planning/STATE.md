@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v0.1
 milestone_name: milestone
 status: in-progress
-last_updated: "2026-03-05T03:57:00Z"
+last_updated: "2026-03-05T04:01:00Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 7
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -23,18 +23,18 @@ See: .planning/PROJECT.md (updated 2026-03-04)
 ## Current Position
 
 Phase: 2 of 6 (UI Shell & Messaging)
-Plan: 1 of 4 in current phase -- COMPLETE
+Plan: 2 of 4 in current phase -- COMPLETE
 Status: In Progress
-Last activity: 2026-03-05 -- Completed 02-01-PLAN.md (ChatStore ReactiveController)
+Last activity: 2026-03-05 -- Completed 02-02-PLAN.md (Visual Shell)
 
-Progress: [███░░░░░░░] 23%
+Progress: [████░░░░░░] 31%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: 2min
-- Total execution time: 0.11 hours
+- Total execution time: 0.13 hours
 
 **By Phase:**
 
@@ -43,12 +43,13 @@ Progress: [███░░░░░░░] 23%
 | 01-connection-layer | 3 | 5min | 2min |
 
 **Recent Trend:**
-- Last 5 plans: 2min, 2min, 1min, 2min
+- Last 5 plans: 2min, 2min, 1min, 2min, 2min
 - Trend: stable
 
 *Updated after each plan completion*
 | Phase 01-connection-layer P03 | 1min | 2 tasks | 2 files |
 | Phase 02-ui-shell-messaging P01 | 2min | 2 tasks | 3 files |
+| Phase 02-ui-shell-messaging P02 | 2min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,9 @@ Recent decisions affecting current work:
 - 01-03: rejected ChatClient event maps to w1-disconnected DOM event for simpler 4-event public API
 - 02-01: Greeting message added to messages array on first toggleOpen -- persists across close/reopen
 - 02-01: Connection state decoupled from panel open/close -- stays connected when panel closes
+- 02-02: Bubble hidden via CSS transform scale(0) when panel is open -- smooth transition
+- 02-02: Width/height overrides use dynamic style element setting CSS custom properties on :host
+- 02-02: DOM event forwarding uses updated() lifecycle to observe ChatStore connection state transitions
 
 ### Pending Todos
 
@@ -81,5 +85,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-05
-Stopped at: Completed 02-01-PLAN.md
-Resume file: .planning/phases/02-ui-shell-messaging/02-01-SUMMARY.md
+Stopped at: Completed 02-02-PLAN.md
+Resume file: .planning/phases/02-ui-shell-messaging/02-02-SUMMARY.md

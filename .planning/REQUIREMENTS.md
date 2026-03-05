@@ -36,16 +36,16 @@
 
 ### UI Shell
 
-- [ ] **SHEL-01**: Widget renders a floating circular bubble button (bottom-right by default)
-- [ ] **SHEL-02**: User can click bubble to open chat panel with slide-up animation
-- [ ] **SHEL-03**: User can close chat panel via close button in header (returns to bubble)
-- [ ] **SHEL-04**: Chat panel includes header with configurable title and "Powered by AI" badge
+- [x] **SHEL-01**: Widget renders a floating circular bubble button (bottom-right by default)
+- [x] **SHEL-02**: User can click bubble to open chat panel with slide-up animation
+- [x] **SHEL-03**: User can close chat panel via close button in header (returns to bubble)
+- [x] **SHEL-04**: Chat panel includes header with configurable title and "Powered by AI" badge
 - [ ] **SHEL-05**: Chat panel includes scrollable message area
 - [ ] **SHEL-06**: Message area auto-scrolls to newest content as tokens/messages arrive
 - [ ] **SHEL-07**: Auto-scroll pauses when user scrolls up to read history
-- [ ] **SHEL-08**: Panel position is configurable: `bottom-right` or `bottom-left`
-- [ ] **SHEL-09**: Panel width and height are configurable via attributes
-- [ ] **SHEL-10**: Open/close animations are smooth CSS transitions (200-300ms)
+- [x] **SHEL-08**: Panel position is configurable: `bottom-right` or `bottom-left`
+- [x] **SHEL-09**: Panel width and height are configurable via attributes
+- [x] **SHEL-10**: Open/close animations are smooth CSS transitions (200-300ms)
 
 ### Content Rendering
 
@@ -159,16 +159,16 @@
 | STRM-04 | Phase 3 | Pending |
 | STRM-05 | Phase 3 | Pending |
 | STRM-06 | Phase 3 | Pending |
-| SHEL-01 | Phase 2 | Pending |
-| SHEL-02 | Phase 2 | Pending |
-| SHEL-03 | Phase 2 | Pending |
-| SHEL-04 | Phase 2 | Pending |
+| SHEL-01 | Phase 2 | Complete |
+| SHEL-02 | Phase 2 | Complete |
+| SHEL-03 | Phase 2 | Complete |
+| SHEL-04 | Phase 2 | Complete |
 | SHEL-05 | Phase 2 | Pending |
 | SHEL-06 | Phase 2 | Pending |
 | SHEL-07 | Phase 2 | Pending |
-| SHEL-08 | Phase 2 | Pending |
-| SHEL-09 | Phase 2 | Pending |
-| SHEL-10 | Phase 2 | Pending |
+| SHEL-08 | Phase 2 | Complete |
+| SHEL-09 | Phase 2 | Complete |
+| SHEL-10 | Phase 2 | Complete |
 | CONT-01 | Phase 3 | Pending |
 | CONT-02 | Phase 3 | Pending |
 | CONT-03 | Phase 3 | Pending |
