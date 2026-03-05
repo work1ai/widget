@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v0.1
 milestone_name: milestone
 status: in-progress
-last_updated: "2026-03-05T04:05:00Z"
+last_updated: "2026-03-05T04:05:25Z"
 progress:
   total_phases: 6
   completed_phases: 2
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-03-04)
 Phase: 2 of 6 (UI Shell & Messaging) -- COMPLETE
 Plan: 4 of 4 in current phase -- COMPLETE
 Status: In Progress
-Last activity: 2026-03-05 -- Completed 02-04-PLAN.md (Input Area)
+Last activity: 2026-03-05 -- Completed 02-03-PLAN.md (Message List & Scroll)
 
 Progress: [██████░░░░] 54%
 
@@ -50,6 +50,7 @@ Progress: [██████░░░░] 54%
 | Phase 01-connection-layer P03 | 1min | 2 tasks | 2 files |
 | Phase 02-ui-shell-messaging P01 | 2min | 2 tasks | 3 files |
 | Phase 02-ui-shell-messaging P02 | 2min | 2 tasks | 7 files |
+| Phase 02-ui-shell-messaging P03 | 2min | 2 tasks | 4 files |
 | Phase 02-ui-shell-messaging P04 | 2min | 2 tasks | 4 files |
 
 ## Accumulated Context
@@ -72,6 +73,9 @@ Recent decisions affecting current work:
 - 02-02: Bubble hidden via CSS transform scale(0) when panel is open -- smooth transition
 - 02-02: Width/height overrides use dynamic style element setting CSS custom properties on :host
 - 02-02: DOM event forwarding uses updated() lifecycle to observe ChatStore connection state transitions
+- 02-03: ScrollManager defers observer setup until panel is open and DOM elements exist
+- 02-03: repeat directive with message.id key prevents scroll position loss on re-render
+- 02-03: Sentinel-based IntersectionObserver avoids scroll event listeners for performance
 - 02-04: TextEncoder cached at module level for byte counting performance
 - 02-04: Byte counter appears at 200 bytes from limit, not always visible
 
@@ -88,5 +92,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-05
-Stopped at: Completed 02-04-PLAN.md
-Resume file: .planning/phases/02-ui-shell-messaging/02-04-SUMMARY.md
+Stopped at: Completed 02-03-PLAN.md
+Resume file: .planning/phases/02-ui-shell-messaging/02-03-SUMMARY.md
