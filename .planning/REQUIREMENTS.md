@@ -49,19 +49,19 @@
 
 ### Content Rendering
 
-- [ ] **CONT-01**: Agent messages render markdown (bold, italic, links, code blocks, inline code, lists)
-- [ ] **CONT-02**: All rendered markdown is sanitized via DOMPurify — no raw HTML/script execution
-- [ ] **CONT-03**: Links in agent messages open in new tab (`target="_blank"`)
-- [ ] **CONT-04**: Configurable greeting message displays as first agent message when panel opens
-- [ ] **CONT-05**: "Powered by AI" badge is always visible in header, not configurable
+- [x] **CONT-01**: Agent messages render markdown (bold, italic, links, code blocks, inline code, lists)
+- [x] **CONT-02**: All rendered markdown is sanitized via DOMPurify — no raw HTML/script execution
+- [x] **CONT-03**: Links in agent messages open in new tab (`target="_blank"`)
+- [x] **CONT-04**: Configurable greeting message displays as first agent message when panel opens
+- [x] **CONT-05**: "Powered by AI" badge is always visible in header, not configurable
 
 ### Error Handling
 
-- [ ] **ERR-01**: Connection rejected (code 1008) shows "Unable to connect" with retry button
-- [ ] **ERR-02**: `error` events display as system messages in chat
-- [ ] **ERR-03**: Fatal errors (connection closes after) transition to disconnected state
-- [ ] **ERR-04**: Message too large shows inline validation preventing send
-- [ ] **ERR-05**: Recoverable errors keep input enabled
+- [x] **ERR-01**: Connection rejected (code 1008) shows "Unable to connect" with retry button
+- [x] **ERR-02**: `error` events display as system messages in chat
+- [x] **ERR-03**: Fatal errors (connection closes after) transition to disconnected state
+- [x] **ERR-04**: Message too large shows inline validation preventing send
+- [x] **ERR-05**: Recoverable errors keep input enabled
 
 ### Theming
 
@@ -169,16 +169,16 @@
 | SHEL-08 | Phase 2 | Complete |
 | SHEL-09 | Phase 2 | Complete |
 | SHEL-10 | Phase 2 | Complete |
-| CONT-01 | Phase 3 | Pending |
-| CONT-02 | Phase 3 | Pending |
-| CONT-03 | Phase 3 | Pending |
-| CONT-04 | Phase 3 | Pending |
-| CONT-05 | Phase 3 | Pending |
-| ERR-01 | Phase 3 | Pending |
-| ERR-02 | Phase 3 | Pending |
-| ERR-03 | Phase 3 | Pending |
-| ERR-04 | Phase 3 | Pending |
-| ERR-05 | Phase 3 | Pending |
+| CONT-01 | Phase 3 | Complete |
+| CONT-02 | Phase 3 | Complete |
+| CONT-03 | Phase 3 | Complete |
+| CONT-04 | Phase 3 | Complete |
+| CONT-05 | Phase 3 | Complete |
+| ERR-01 | Phase 3 | Complete |
+| ERR-02 | Phase 3 | Complete |
+| ERR-03 | Phase 3 | Complete |
+| ERR-04 | Phase 3 | Complete |
+| ERR-05 | Phase 3 | Complete |
 | THEM-01 | Phase 4 | Pending |
 | THEM-02 | Phase 4 | Pending |
 | THEM-03 | Phase 4 | Pending |

@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v0.1
 milestone_name: milestone
 status: in-progress
-last_updated: "2026-03-05T04:46:14Z"
+last_updated: "2026-03-05T04:50:00Z"
 progress:
   total_phases: 3
-  completed_phases: 2
-  total_plans: 8
-  completed_plans: 8
+  completed_phases: 3
+  total_plans: 9
+  completed_plans: 9
 ---
 
 # Project State
@@ -22,19 +22,19 @@ See: .planning/PROJECT.md (updated 2026-03-04)
 
 ## Current Position
 
-Phase: 3 of 6 (Streaming & Content)
-Plan: 1 of 2 in current phase -- COMPLETE
+Phase: 3 of 6 (Streaming & Content) -- COMPLETE
+Plan: 2 of 2 in current phase -- COMPLETE
 Status: In Progress
-Last activity: 2026-03-05 -- Completed 03-01-PLAN.md (Streaming Data Layer)
+Last activity: 2026-03-05 -- Completed 03-02-PLAN.md (Streaming UI Components)
 
-Progress: [████████░░] 62%
+Progress: [█████████░] 69%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
+- Total plans completed: 9
 - Average duration: 2min
-- Total execution time: 0.26 hours
+- Total execution time: 0.28 hours
 
 **By Phase:**
 
@@ -53,6 +53,7 @@ Progress: [████████░░] 62%
 | Phase 02-ui-shell-messaging P03 | 2min | 2 tasks | 4 files |
 | Phase 02-ui-shell-messaging P04 | 2min | 2 tasks | 4 files |
 | Phase 03-streaming-content P01 | 2min | 2 tasks | 4 files |
+| Phase 03-streaming-content P02 | 2min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,10 @@ Recent decisions affecting current work:
 - 02-04: Byte counter appears at 200 bytes from limit, not always visible
 - 03-01: @types/dompurify installed as stub -- dompurify v3 ships own types
 - 03-01: Code block max-height set to 250px (middle of 200-300px range)
+- 03-02: System messages always get message--error class for centered colored error styling
+- 03-02: Typing indicator only shown when no streaming message exists (avoids duplicate feedback)
+- 03-02: showNewConversation gated on disconnected + messages + eventsWired (was connected once)
+- 03-02: handleNewConversation does disconnect/clear/reconnect without greeting reset
 
 ### Pending Todos
 
@@ -95,5 +100,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-05
-Stopped at: Completed 03-01-PLAN.md
-Resume file: .planning/phases/03-streaming-content/03-01-SUMMARY.md
+Stopped at: Completed 03-02-PLAN.md
+Resume file: .planning/phases/03-streaming-content/03-02-SUMMARY.md
