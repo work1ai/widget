@@ -98,11 +98,11 @@ Plans:
   2. Input area is touch-friendly and usable on mobile devices
   3. A single script tag loads the widget from CDN and registers the custom element -- no other dependencies needed
   4. npm package exports ESM with TypeScript type declarations
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
+- [ ] 05-01-PLAN.md -- Mobile responsive layout with full-screen panel and visualViewport keyboard handling
+- [ ] 05-02-PLAN.md -- Dual-format build (ESM + IIFE), npm package setup, and comprehensive README
 
 ### Phase 6: Test Suites
 **Goal**: Comprehensive test coverage validates that the connection layer, state management, UI components, and full message flows all work correctly
@@ -131,5 +131,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 2. UI Shell & Messaging | 0/4 | Planning complete | - |
 | 3. Streaming & Content | 0/2 | Planning complete | - |
 | 4. Theming & Encapsulation | 0/3 | Planning complete | - |
-| 5. Responsive & Distribution | 0/0 | Not started | - |
+| 5. Responsive & Distribution | 0/2 | Planning complete | - |
 | 6. Test Suites | 0/0 | Not started | - |
