@@ -14,7 +14,7 @@
 - [ ] **CONN-05**: Widget displays non-blocking "Reconnecting..." banner on `reconnecting` event
 - [ ] **CONN-06**: Widget clears reconnecting banner on `status` "Connection restored" event
 - [ ] **CONN-07**: Widget handles `session_end` event — shows reason, disables input, offers "Start new conversation"
-- [ ] **CONN-08**: Widget ignores unknown/malformed message types gracefully (console warning in dev)
+- [x] **CONN-08**: Widget ignores unknown/malformed message types gracefully (console warning in dev)
 
 ### Messaging
 
@@ -146,7 +146,7 @@
 | CONN-05 | Phase 1 | Pending |
 | CONN-06 | Phase 1 | Pending |
 | CONN-07 | Phase 1 | Pending |
-| CONN-08 | Phase 1 | Pending |
+| CONN-08 | Phase 1 | Complete |
 | MSG-01 | Phase 2 | Pending |
 | MSG-02 | Phase 2 | Pending |
 | MSG-03 | Phase 2 | Pending |
