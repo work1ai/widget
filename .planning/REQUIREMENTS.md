@@ -7,13 +7,13 @@
 
 ### Connection
 
-- [ ] **CONN-01**: Widget connects to `wss://<host>/ws` via WebSocket when user opens chat panel
-- [ ] **CONN-02**: Widget receives and stores `session_id` from `connected` event
-- [ ] **CONN-03**: Widget handles connection rejection (close code 1008) with "unable to connect" UI and retry button
-- [ ] **CONN-04**: Widget handles unexpected WebSocket close with "connection lost" UI and "Start new conversation" button
-- [ ] **CONN-05**: Widget displays non-blocking "Reconnecting..." banner on `reconnecting` event
-- [ ] **CONN-06**: Widget clears reconnecting banner on `status` "Connection restored" event
-- [ ] **CONN-07**: Widget handles `session_end` event — shows reason, disables input, offers "Start new conversation"
+- [x] **CONN-01**: Widget connects to `wss://<host>/ws` via WebSocket when user opens chat panel
+- [x] **CONN-02**: Widget receives and stores `session_id` from `connected` event
+- [x] **CONN-03**: Widget handles connection rejection (close code 1008) with "unable to connect" UI and retry button
+- [x] **CONN-04**: Widget handles unexpected WebSocket close with "connection lost" UI and "Start new conversation" button
+- [x] **CONN-05**: Widget displays non-blocking "Reconnecting..." banner on `reconnecting` event
+- [x] **CONN-06**: Widget clears reconnecting banner on `status` "Connection restored" event
+- [x] **CONN-07**: Widget handles `session_end` event — shows reason, disables input, offers "Start new conversation"
 - [x] **CONN-08**: Widget ignores unknown/malformed message types gracefully (console warning in dev)
 
 ### Messaging
@@ -139,13 +139,13 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CONN-01 | Phase 1 | Pending |
-| CONN-02 | Phase 1 | Pending |
-| CONN-03 | Phase 1 | Pending |
-| CONN-04 | Phase 1 | Pending |
-| CONN-05 | Phase 1 | Pending |
-| CONN-06 | Phase 1 | Pending |
-| CONN-07 | Phase 1 | Pending |
+| CONN-01 | Phase 1 | Complete |
+| CONN-02 | Phase 1 | Complete |
+| CONN-03 | Phase 1 | Complete |
+| CONN-04 | Phase 1 | Complete |
+| CONN-05 | Phase 1 | Complete |
+| CONN-06 | Phase 1 | Complete |
+| CONN-07 | Phase 1 | Complete |
 | CONN-08 | Phase 1 | Complete |
 | MSG-01 | Phase 2 | Pending |
 | MSG-02 | Phase 2 | Pending |

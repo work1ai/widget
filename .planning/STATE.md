@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-03-04)
 ## Current Position
 
 Phase: 1 of 6 (Connection Layer)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: Executing
-Last activity: 2026-03-05 -- Completed 01-01-PLAN.md
+Last activity: 2026-03-05 -- Completed 01-02-PLAN.md
 
-Progress: [█░░░░░░░░░] 5%
+Progress: [██░░░░░░░░] 11%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
+- Total plans completed: 2
 - Average duration: 2min
-- Total execution time: 0.03 hours
+- Total execution time: 0.07 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-connection-layer | 1 | 2min | 2min |
+| 01-connection-layer | 2 | 4min | 2min |
 
 **Recent Trend:**
-- Last 5 plans: 2min
-- Trend: -
+- Last 5 plans: 2min, 2min
+- Trend: stable
 
 *Updated after each plan completion*
 
@@ -46,6 +46,9 @@ Recent decisions affecting current work:
 - Roadmap: Research recommends IIFE over UMD for CDN bundle (Web Components self-register)
 - 01-01: Pinned vitest to ^3.0.0 (not ^4.0.0) for vitest-websocket-mock compatibility
 - 01-01: Exported individual message types alongside ServerMessage union for downstream convenience
+- 01-02: Switched jsdom to happy-dom for test environment (ESM compatibility)
+- 01-02: session_start parsed but not dispatched as public event (user decision)
+- 01-02: disconnect() nulls handlers before close to prevent spurious events
 
 ### Pending Todos
 
@@ -60,5 +63,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-05
-Stopped at: Completed 01-01-PLAN.md
-Resume file: .planning/phases/01-connection-layer/01-01-SUMMARY.md
+Stopped at: Completed 01-02-PLAN.md
+Resume file: .planning/phases/01-connection-layer/01-02-SUMMARY.md
