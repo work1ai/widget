@@ -82,11 +82,12 @@ Plans:
   3. Customer can use ::part() selectors to style individual internal components
   4. Host page CSS does not leak into the widget, and widget CSS does not leak out
   5. Widget works under strict Content-Security-Policy (no inline styles, no eval, no inline scripts)
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
+- [ ] 04-01-PLAN.md -- CSS custom property consolidation and primary-color attribute
+- [ ] 04-02-PLAN.md -- Lucide icon registry and bubble-icon feature
+- [ ] 04-03-PLAN.md -- Security hardening and ::part() verification
 
 ### Phase 5: Responsive & Distribution
 **Goal**: Widget works on mobile devices and is available as both a CDN script tag and an npm package with TypeScript support
@@ -129,6 +130,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 1. Connection Layer | 0/3 | Planning complete | - |
 | 2. UI Shell & Messaging | 0/4 | Planning complete | - |
 | 3. Streaming & Content | 0/2 | Planning complete | - |
-| 4. Theming & Encapsulation | 0/0 | Not started | - |
+| 4. Theming & Encapsulation | 0/3 | Planning complete | - |
 | 5. Responsive & Distribution | 0/0 | Not started | - |
 | 6. Test Suites | 0/0 | Not started | - |
