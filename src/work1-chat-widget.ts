@@ -1,11 +1,15 @@
 import { LitElement, html, nothing } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { ChatStore } from './chat-store.js';
 import { renderBubble } from './components/bubble-button.js';
 import { renderHeader } from './components/chat-header.js';
+import { renderInputArea, getByteLength } from './components/input-area.js';
 import { renderPanel } from './components/chat-panel.js';
+import { ScrollManager, renderMessageList } from './components/message-list.js';
 import { widgetStyles } from './styles/widget.styles.js';
 import { panelStyles } from './styles/panel.styles.js';
+import { inputStyles } from './styles/input.styles.js';
+import { messageStyles } from './styles/messages.styles.js';
 
 /**
  * <work1-chat-widget> - Embeddable chat widget custom element.
@@ -21,7 +25,7 @@ import { panelStyles } from './styles/panel.styles.js';
  */
 @customElement('work1-chat-widget')
 export class Work1ChatWidget extends LitElement {
-  static styles = [widgetStyles, panelStyles];
+  static styles = [widgetStyles, panelStyles, inputStyles, messageStyles];
 
   /**
    * WebSocket server URL. Connection is initiated on first panel open.
@@ -80,7 +84,16 @@ export class Work1ChatWidget extends LitElement {
   height: string = '';
 
   private store = new ChatStore(this);
+  private scrollManager = new ScrollManager();
+  private scrollObserverInitialized = false;
+  private lastMessageCount = 0;
   private eventsWired = false;
+
+  @state()
+  private inputValue: string = '';
+
+  @state()
+  private inputByteCount: number = 0;
 
   /**
    * Current session ID from the ChatStore's client, or null if not connected.
@@ -106,10 +119,21 @@ export class Work1ChatWidget extends LitElement {
         html`
           ${renderHeader(this.title, () => this.handleClose())}
           <div class="message-area" part="message-list">
-            <!-- Message list will be wired in Plan 03 -->
+            ${renderMessageList(
+              this.store.messages,
+              this.scrollManager,
+              () => this.scrollManager.scrollToBottom(),
+            )}
           </div>
-          <div class="input-area" part="input">
-            <!-- Input area will be wired in Plan 04 -->
+          <div class="input-wrapper" part="input">
+            ${renderInputArea({
+              disabled: this.store.inputDisabled,
+              placeholder: this.placeholder,
+              onSend: (content) => this.handleSend(content),
+              onInput: (value) => this.handleInput(value),
+              value: this.inputValue,
+              byteCount: this.inputByteCount,
+            })}
           </div>
         `,
       )}
@@ -126,6 +150,17 @@ export class Work1ChatWidget extends LitElement {
     if (this.width) rules.push(`--w1-panel-width: ${this.width}`);
     if (this.height) rules.push(`--w1-panel-height: ${this.height}`);
     return html`<style>:host { ${rules.join('; ')} }</style>`;
+  }
+
+  private handleInput(value: string): void {
+    this.inputValue = value;
+    this.inputByteCount = getByteLength(value);
+  }
+
+  private handleSend(content: string): void {
+    this.store.send(content);
+    this.inputValue = '';
+    this.inputByteCount = 0;
   }
 
   /**
@@ -174,7 +209,29 @@ export class Work1ChatWidget extends LitElement {
    */
   private lastConnectionState = this.store.connectionState;
 
+  disconnectedCallback(): void {
+    this.scrollManager.destroy();
+    super.disconnectedCallback();
+  }
+
   protected updated(): void {
+    // Initialize scroll observer when panel is open and DOM is ready
+    if (this.store.isOpen && !this.scrollObserverInitialized) {
+      const container = this.renderRoot.querySelector('.message-area') as HTMLElement | null;
+      const sentinel = this.renderRoot.querySelector('.scroll-sentinel') as HTMLElement | null;
+      if (container && sentinel) {
+        this.scrollManager.setup(container, sentinel, this);
+        this.scrollObserverInitialized = true;
+      }
+    }
+
+    // Detect new messages and trigger scroll behavior
+    const currentCount = this.store.messages.length;
+    if (currentCount > this.lastMessageCount) {
+      this.scrollManager.onNewMessage();
+    }
+    this.lastMessageCount = currentCount;
+
     const currentState = this.store.connectionState;
 
     if (currentState !== this.lastConnectionState) {
