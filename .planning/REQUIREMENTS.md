@@ -68,15 +68,15 @@
 - [x] **THEM-01**: Widget exposes CSS custom properties for colors, fonts, sizes, border-radius
 - [x] **THEM-02**: HTML attributes (primary-color, width, height, position) set default CSS custom property values
 - [x] **THEM-03**: CSS custom properties override attribute values when both are set
-- [ ] **THEM-04**: Widget exposes `::part()` selectors for deep styling of individual components
+- [x] **THEM-04**: Widget exposes `::part()` selectors for deep styling of individual components
 - [ ] **THEM-05**: Custom bubble icon support via `bubble-icon` attribute (URL or built-in name)
 
 ### Encapsulation & Security
 
-- [ ] **SEC-01**: All widget DOM and styles are inside Shadow DOM — no leaking to host page
-- [ ] **SEC-02**: Host page CSS does not affect widget rendering
-- [ ] **SEC-03**: Widget is CSP-compatible — no inline styles via `style=""`, no `eval()`, no inline scripts
-- [ ] **SEC-04**: Markdown output is sanitized to prevent XSS from agent responses
+- [x] **SEC-01**: All widget DOM and styles are inside Shadow DOM — no leaking to host page
+- [x] **SEC-02**: Host page CSS does not affect widget rendering
+- [x] **SEC-03**: Widget is CSP-compatible — no inline styles via `style=""`, no `eval()`, no inline scripts
+- [x] **SEC-04**: Markdown output is sanitized to prevent XSS from agent responses
 
 ### Distribution
 
@@ -182,12 +182,12 @@
 | THEM-01 | Phase 4 | Complete |
 | THEM-02 | Phase 4 | Complete |
 | THEM-03 | Phase 4 | Complete |
-| THEM-04 | Phase 4 | Pending |
+| THEM-04 | Phase 4 | Complete |
 | THEM-05 | Phase 4 | Pending |
-| SEC-01 | Phase 4 | Pending |
-| SEC-02 | Phase 4 | Pending |
-| SEC-03 | Phase 4 | Pending |
-| SEC-04 | Phase 4 | Pending |
+| SEC-01 | Phase 4 | Complete |
+| SEC-02 | Phase 4 | Complete |
+| SEC-03 | Phase 4 | Complete |
+| SEC-04 | Phase 4 | Complete |
 | DIST-01 | Phase 5 | Pending |
 | DIST-02 | Phase 5 | Pending |
 | DIST-03 | Phase 5 | Pending |
