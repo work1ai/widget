@@ -31,11 +31,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. ChatClient handles connection rejection (close code 1008), unexpected close, and reconnecting/restored lifecycle
   4. ChatClient silently ignores unknown or malformed message types without crashing
   5. Vite project builds TypeScript successfully and produces a bundle
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01-PLAN.md -- Project scaffolding and protocol type definitions
+- [ ] 01-02-PLAN.md -- ChatClient implementation with TDD
+- [ ] 01-03-PLAN.md -- Widget element shell and build verification
 
 ### Phase 2: UI Shell & Messaging
 **Goal**: Users can open a chat panel, type messages, and see them appear in the conversation -- the complete send-side experience with visual shell
@@ -123,7 +124,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Connection Layer | 0/0 | Not started | - |
+| 1. Connection Layer | 0/3 | Planning complete | - |
 | 2. UI Shell & Messaging | 0/0 | Not started | - |
 | 3. Streaming & Content | 0/0 | Not started | - |
 | 4. Theming & Encapsulation | 0/0 | Not started | - |
