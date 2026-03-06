@@ -87,8 +87,8 @@
 
 ### Responsive
 
-- [ ] **RESP-01**: Chat panel adapts to narrow viewports (full-width/full-height on mobile)
-- [ ] **RESP-02**: Input area is touch-friendly on mobile devices
+- [x] **RESP-01**: Chat panel adapts to narrow viewports (full-width/full-height on mobile)
+- [x] **RESP-02**: Input area is touch-friendly on mobile devices
 
 ### Testing
 
@@ -192,8 +192,8 @@
 | DIST-02 | Phase 5 | Pending |
 | DIST-03 | Phase 5 | Pending |
 | DIST-04 | Phase 5 | Pending |
-| RESP-01 | Phase 5 | Pending |
-| RESP-02 | Phase 5 | Pending |
+| RESP-01 | Phase 5 | Complete |
+| RESP-02 | Phase 5 | Complete |
 | TEST-01 | Phase 6 | Pending |
 | TEST-02 | Phase 6 | Pending |
 | TEST-03 | Phase 6 | Pending |
