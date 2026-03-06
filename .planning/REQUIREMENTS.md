@@ -80,10 +80,10 @@
 
 ### Distribution
 
-- [ ] **DIST-01**: Widget is available as CDN script (`<script src="...">`) that registers `<work1-chat-widget>` custom element
-- [ ] **DIST-02**: Widget is available as npm package with ESM import
-- [ ] **DIST-03**: npm package includes TypeScript type declarations
-- [ ] **DIST-04**: CDN bundle is self-contained (all dependencies bundled)
+- [x] **DIST-01**: Widget is available as CDN script (`<script src="...">`) that registers `<work1-chat-widget>` custom element
+- [x] **DIST-02**: Widget is available as npm package with ESM import
+- [x] **DIST-03**: npm package includes TypeScript type declarations
+- [x] **DIST-04**: CDN bundle is self-contained (all dependencies bundled)
 
 ### Responsive
 
@@ -188,10 +188,10 @@
 | SEC-02 | Phase 4 | Complete |
 | SEC-03 | Phase 4 | Complete |
 | SEC-04 | Phase 4 | Complete |
-| DIST-01 | Phase 5 | Pending |
-| DIST-02 | Phase 5 | Pending |
-| DIST-03 | Phase 5 | Pending |
-| DIST-04 | Phase 5 | Pending |
+| DIST-01 | Phase 5 | Complete |
+| DIST-02 | Phase 5 | Complete |
+| DIST-03 | Phase 5 | Complete |
+| DIST-04 | Phase 5 | Complete |
 | RESP-01 | Phase 5 | Complete |
 | RESP-02 | Phase 5 | Complete |
 | TEST-01 | Phase 6 | Pending |
