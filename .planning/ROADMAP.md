@@ -114,11 +114,12 @@ Plans:
   3. Component tests verify correct DOM output for each UI state (connected, disconnected, streaming, error, session ended)
   4. Integration tests verify a complete message flow (connect, send, stream tokens, finalize) with a mock WebSocket server
   5. Integration tests verify reconnection flow and session end flow produce correct UI transitions
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 06-01: TBD
-- [ ] 06-02: TBD
+- [ ] 06-01-PLAN.md -- Test infrastructure, co-located unit tests, ChatStore gap tests, markdown tests
+- [ ] 06-02-PLAN.md -- Component tests for all 5 UI states through widget element
+- [ ] 06-03-PLAN.md -- Integration tests for message flow, reconnection, and session end
 
 ## Progress
 
@@ -132,4 +133,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 3. Streaming & Content | 0/2 | Planning complete | - |
 | 4. Theming & Encapsulation | 0/3 | Planning complete | - |
 | 5. Responsive & Distribution | 2/2 | Complete | 2026-03-06 |
-| 6. Test Suites | 0/0 | Not started | - |
+| 6. Test Suites | 0/3 | Planning complete | - |
