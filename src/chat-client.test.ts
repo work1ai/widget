@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import WS from 'vitest-websocket-mock';
-import { ChatClient } from '../chat-client.js';
+import { ChatClient } from './chat-client.js';
 
 describe('ChatClient', () => {
   let server: WS;

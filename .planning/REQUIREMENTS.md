@@ -95,8 +95,8 @@
 - [ ] **TEST-01**: Unit tests for ChatClient — WebSocket event parsing, state transitions, message validation
 - [ ] **TEST-02**: Unit tests for ChatStore — state mutations for each event type, token accumulation
 - [ ] **TEST-03**: Component tests — verify DOM output for each UI state
-- [ ] **TEST-04**: Integration tests — full message flow with mock WebSocket server
-- [ ] **TEST-05**: Integration tests — reconnection flow and session end flow
+- [x] **TEST-04**: Integration tests — full message flow with mock WebSocket server
+- [x] **TEST-05**: Integration tests — reconnection flow and session end flow
 
 ## v2 Requirements
 
@@ -197,8 +197,8 @@
 | TEST-01 | Phase 6 | Pending |
 | TEST-02 | Phase 6 | Pending |
 | TEST-03 | Phase 6 | Pending |
-| TEST-04 | Phase 6 | Pending |
-| TEST-05 | Phase 6 | Pending |
+| TEST-04 | Phase 6 | Complete |
+| TEST-05 | Phase 6 | Complete |
 
 **Coverage:**
 - v1 requirements: 60 total

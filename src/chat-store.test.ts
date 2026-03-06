@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { ReactiveControllerHost } from 'lit';
-import type { ChatMessage } from '../chat-store.types.js';
+import type { ChatMessage } from './chat-store.types.js';
 
 // Mock ChatClient before importing ChatStore
-vi.mock('../chat-client.js', () => {
+vi.mock('./chat-client.js', () => {
   class MockChatClient extends EventTarget {
     private _connected = false;
 
@@ -27,7 +27,7 @@ vi.mock('../chat-client.js', () => {
 });
 
 // Import after mock is set up
-const { ChatStore } = await import('../chat-store.js');
+const { ChatStore } = await import('./chat-store.js');
 
 function createMockHost(): ReactiveControllerHost {
   return {
