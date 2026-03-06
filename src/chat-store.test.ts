@@ -233,4 +233,73 @@ describe('ChatStore', () => {
     expect(systemMsg).toBeDefined();
     expect(systemMsg!.content).toContain('Something went wrong');
   });
+
+  describe('streaming and status', () => {
+    beforeEach(() => {
+      store.connect('ws://test', false);
+      fireClientEvent(store, 'connected', { session_id: 'abc' });
+      (host.requestUpdate as ReturnType<typeof vi.fn>).mockClear();
+    });
+
+    it('token accumulation sequence: typing -> token -> token -> message_end', () => {
+      // typing(true)
+      fireClientEvent(store, 'typing', { active: true });
+      expect(store.typingActive).toBe(true);
+
+      // first token
+      fireClientEvent(store, 'token', { content: 'Hello' });
+      expect(store.typingActive).toBe(false);
+      expect(store.messages).toHaveLength(1);
+      expect(store.messages[0].streaming).toBe(true);
+      expect(store.messages[0].content).toBe('Hello');
+
+      // second token
+      fireClientEvent(store, 'token', { content: ' world' });
+      expect(store.messages[0].content).toBe('Hello world');
+      expect(store.messages[0].streaming).toBe(true);
+
+      // message_end
+      fireClientEvent(store, 'message_end');
+      expect(store.messages[0].streaming).toBe(false);
+      expect(store.typingActive).toBe(false);
+    });
+
+    it('status text lifecycle: status -> token -> message_end', () => {
+      // status
+      fireClientEvent(store, 'status', { content: 'Looking up...' });
+      expect(store.statusText).toBe('Looking up...');
+
+      // token clears status
+      fireClientEvent(store, 'token', { content: 'Found it' });
+      expect(store.statusText).toBe('');
+
+      // message_end keeps status cleared
+      fireClientEvent(store, 'message_end');
+      expect(store.statusText).toBe('');
+    });
+
+    it('typing indicator cleared by message_end', () => {
+      fireClientEvent(store, 'typing', { active: true });
+      expect(store.typingActive).toBe(true);
+
+      fireClientEvent(store, 'message_end');
+      expect(store.typingActive).toBe(false);
+    });
+
+    it('multiple streaming rounds produce separate finalized messages', () => {
+      // First round
+      fireClientEvent(store, 'token', { content: 'First' });
+      fireClientEvent(store, 'message_end');
+      expect(store.messages).toHaveLength(1);
+      expect(store.messages[0].streaming).toBe(false);
+      expect(store.messages[0].content).toBe('First');
+
+      // Second round
+      fireClientEvent(store, 'token', { content: 'Second' });
+      fireClientEvent(store, 'message_end');
+      expect(store.messages).toHaveLength(2);
+      expect(store.messages[1].streaming).toBe(false);
+      expect(store.messages[1].content).toBe('Second');
+    });
+  });
 });
