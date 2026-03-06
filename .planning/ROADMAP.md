@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 3: Streaming & Content** - Token streaming, markdown rendering, error handling, and status indicators
 - [ ] **Phase 4: Theming & Encapsulation** - CSS custom properties, CSS parts, Shadow DOM isolation, and XSS prevention
 - [ ] **Phase 5: Responsive & Distribution** - Mobile layout, CDN bundle, npm package, and TypeScript declarations
-- [ ] **Phase 6: Test Suites** - Unit, component, and integration tests across all layers
+- [x] **Phase 6: Test Suites** - Unit, component, and integration tests across all layers (completed 2026-03-06)
 
 ## Phase Details
 
@@ -114,7 +114,7 @@ Plans:
   3. Component tests verify correct DOM output for each UI state (connected, disconnected, streaming, error, session ended)
   4. Integration tests verify a complete message flow (connect, send, stream tokens, finalize) with a mock WebSocket server
   5. Integration tests verify reconnection flow and session end flow produce correct UI transitions
-**Plans:** 1/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 - [ ] 06-01-PLAN.md -- Test infrastructure, co-located unit tests, ChatStore gap tests, markdown tests
@@ -133,4 +133,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 3. Streaming & Content | 0/2 | Planning complete | - |
 | 4. Theming & Encapsulation | 0/3 | Planning complete | - |
 | 5. Responsive & Distribution | 2/2 | Complete | 2026-03-06 |
-| 6. Test Suites | 1/3 | In Progress|  |
+| 6. Test Suites | 3/3 | Complete   | 2026-03-06 |
