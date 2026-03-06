@@ -8,9 +8,17 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/index.ts',
-      name: 'Work1ChatWidget',
-      formats: ['es', 'iife'],
-      fileName: (format) => `work1-chat-widget.${format}.js`,
+      formats: ['es'],
+      fileName: () => 'work1-chat-widget.es.js',
     },
+    rollupOptions: {
+      external: [
+        'lit',
+        /^lit\//,
+        'marked',
+        'dompurify',
+      ],
+    },
+    emptyOutDir: true,
   },
 });

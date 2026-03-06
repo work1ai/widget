@@ -1,10 +1,28 @@
 {
-  "name": "work1-chat-widget",
+  "name": "@work1ai/chat-widget",
   "version": "0.1.0",
   "type": "module",
+  "main": "./dist/work1-chat-widget.es.js",
+  "module": "./dist/work1-chat-widget.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/work1-chat-widget.es.js"
+    }
+  },
+  "unpkg": "./dist/work1-chat-widget.iife.js",
+  "jsdelivr": "./dist/work1-chat-widget.iife.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": true,
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build:esm": "vite build",
+    "build:iife": "vite build --config vite.config.iife.ts",
+    "build": "tsc && npm run build:esm && npm run build:iife && node scripts/report-size.cjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },
