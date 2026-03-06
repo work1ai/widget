@@ -107,6 +107,7 @@ export class Work1ChatWidget extends LitElement {
   private scrollObserverInitialized = false;
   private lastMessageCount = 0;
   private eventsWired = false;
+  private viewportHandler: (() => void) | null = null;
 
   @state()
   private inputValue: string = '';
@@ -209,6 +210,8 @@ export class Work1ChatWidget extends LitElement {
       this.store.connect(this.serverUrl, this.debug);
       this.wireStoreEvents();
     }
+
+    this.setupKeyboardHandler();
   }
 
   /**
@@ -244,7 +247,36 @@ export class Work1ChatWidget extends LitElement {
    */
   private lastConnectionState = this.store.connectionState;
 
+  private setupKeyboardHandler(): void {
+    if (!window.visualViewport || this.viewportHandler) return;
+
+    this.viewportHandler = () => {
+      const vv = window.visualViewport!;
+      const keyboardHeight = window.innerHeight - vv.height;
+      const panel = this.renderRoot.querySelector('.chat-panel') as HTMLElement | null;
+      if (!panel) return;
+
+      if (keyboardHeight > 100) {
+        // Virtual keyboard visible -- shrink panel to visible area
+        panel.style.height = `${vv.height}px`;
+      } else {
+        // Keyboard dismissed -- clear inline override, CSS takes over
+        panel.style.height = '';
+      }
+    };
+
+    window.visualViewport.addEventListener('resize', this.viewportHandler);
+  }
+
+  private teardownKeyboardHandler(): void {
+    if (window.visualViewport && this.viewportHandler) {
+      window.visualViewport.removeEventListener('resize', this.viewportHandler);
+      this.viewportHandler = null;
+    }
+  }
+
   disconnectedCallback(): void {
+    this.teardownKeyboardHandler();
     this.scrollManager.destroy();
     super.disconnectedCallback();
   }
