@@ -74,4 +74,32 @@ export const panelStyles = css`
     opacity: 1;
     background: rgba(255, 255, 255, 0.15);
   }
+
+  @media (max-width: 480px) {
+    .chat-panel {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      border-radius: 0;
+      box-shadow: none;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .chat-panel--right,
+    .chat-panel--left {
+      right: 0;
+      left: 0;
+    }
+
+    .header-close {
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
 `;

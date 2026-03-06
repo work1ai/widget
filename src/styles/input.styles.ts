@@ -90,4 +90,19 @@ export const inputStyles = css`
     color: var(--w1-error-color, #dc3545);
     font-weight: 600;
   }
+
+  @media (max-width: 480px) {
+    .input-textarea {
+      font-size: 16px;
+    }
+
+    .input-grow-wrap::after {
+      font-size: 16px;
+    }
+
+    .send-button {
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
 `;
