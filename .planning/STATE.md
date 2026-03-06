@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v0.1
 milestone_name: milestone
 status: executing
-stopped_at: Completed 06-03-PLAN.md (Integration Tests)
-last_updated: "2026-03-06T20:36:34.442Z"
+stopped_at: Completed 06-02-PLAN.md (Component Tests)
+last_updated: "2026-03-06T20:37:14.350Z"
 last_activity: 2026-03-06 -- Completed 06-03-PLAN.md (Integration Tests)
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 17
-  completed_plans: 15
+  completed_plans: 16
   percent: 88
 ---
 
@@ -62,6 +62,7 @@ Progress: [█████████░] 88%
 | Phase 04 P02 | 2min | 2 tasks | 3 files |
 | Phase 05-responsive-distribution P01 | 1min | 2 tasks | 3 files |
 | Phase 05-responsive-distribution P02 | 2min | 2 tasks | 5 files |
+| Phase 06-test-suites P02 | 1min | 1 tasks | 1 files |
 | Phase 06-test-suites P03 | 1min | 1 tasks | 1 files |
 
 ## Accumulated Context
@@ -107,6 +108,8 @@ Recent decisions affecting current work:
 - [Phase 05-02]: Two separate Vite configs because Rollup external applies to all outputs in a single build
 - [Phase 05-02]: ESM build runs first with emptyOutDir: true, IIFE second with emptyOutDir: false
 - [Phase 05-02]: sideEffects: true because custom element auto-registers on import
+- [Phase 06-02]: Used vi.mock pattern from chat-store.test.ts for ChatClient mocking consistency
+- [Phase 06-02]: Verified streaming-cursor selector (not message--streaming) for streaming state detection
 - [Phase 06-test-suites]: Used vi.waitFor() for async state assertions in integration tests
 
 ### Pending Todos
@@ -121,6 +124,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T20:36:34.440Z
-Stopped at: Completed 06-03-PLAN.md (Integration Tests)
+Last session: 2026-03-06T20:37:14.349Z
+Stopped at: Completed 06-02-PLAN.md (Component Tests)
 Resume file: None
