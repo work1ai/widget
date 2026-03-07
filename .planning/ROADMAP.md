@@ -64,10 +64,11 @@ Plans:
   2. Toggling position, width, height, and bubble icon in the controls reflects instantly on the widget
   3. Entering a WebSocket URL and toggling from mock to real mode connects the widget to a live backend
   4. Clicking a scenario button (greeting, long markdown, error, session end) in the control panel triggers that mock scenario in the chat
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 09-01: TBD
+- [ ] 09-01-PLAN.md — Playground controls Lit component and sidebar layout
+- [ ] 09-02-PLAN.md — Unit tests for playground controls
 
 ## Progress
 
@@ -83,4 +84,4 @@ Plans:
 | 6. Test Suites | v0.1 | 3/3 | Complete | 2026-03-06 |
 | 7. Playground Infrastructure | v0.2 | 0/1 | Not started | - |
 | 8. Mock WebSocket Server | 2/2 | Complete   | 2026-03-07 | - |
-| 9. Control Panel | v0.2 | 0/? | Not started | - |
+| 9. Control Panel | v0.2 | 0/2 | Not started | - |
