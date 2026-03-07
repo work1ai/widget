@@ -103,6 +103,7 @@ export class Work1ChatWidget extends LitElement {
   bubbleIcon: string = '';
 
   private store = new ChatStore(this);
+  _wsConstructor?: new (url: string) => WebSocket;
   private scrollManager = new ScrollManager();
   private scrollObserverInitialized = false;
   private lastMessageCount = 0;
@@ -196,7 +197,7 @@ export class Work1ChatWidget extends LitElement {
   private handleNewConversation(): void {
     this.store.disconnect();
     this.store.messages = [];
-    this.store.connect(this.serverUrl, this.debug);
+    this.store.connect(this.serverUrl, this.debug, { WebSocket: this._wsConstructor });
   }
 
   /**
@@ -207,7 +208,7 @@ export class Work1ChatWidget extends LitElement {
 
     // Connect on first open (lazy connection per research recommendation)
     if (this.store.isOpen && this.serverUrl && this.store.connectionState === 'disconnected') {
-      this.store.connect(this.serverUrl, this.debug);
+      this.store.connect(this.serverUrl, this.debug, { WebSocket: this._wsConstructor });
       this.wireStoreEvents();
     }
 
