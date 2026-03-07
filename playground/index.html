@@ -19,6 +19,22 @@
   <w1-chat-widget></w1-chat-widget>
   <script type="module">
     import '../src/index.ts';
+    import { MockWebSocket } from './mock-ws.ts';
+
+    const widget = document.querySelector('w1-chat-widget');
+    widget.setAttribute('server-url', 'ws://mock');
+    widget.setAttribute('debug', '');
+    widget._wsConstructor = MockWebSocket;
+
+    // Expose for console-based scenario triggering (Phase 9 adds UI controls)
+    window.MockWebSocket = MockWebSocket;
+
+    console.log('[playground] Mock mode active. Trigger scenarios via:');
+    console.log('  MockWebSocket.instance.triggerScenario("long-markdown")');
+    console.log('  MockWebSocket.instance.triggerScenario("error-protocol")');
+    console.log('  MockWebSocket.instance.triggerScenario("error-rejected")');
+    console.log('  MockWebSocket.instance.triggerScenario("error-disconnect")');
+    console.log('  MockWebSocket.instance.triggerScenario("session-end")');
   </script>
 </body>
 </html>
