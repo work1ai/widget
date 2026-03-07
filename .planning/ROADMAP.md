@@ -49,10 +49,11 @@ Plans:
   2. Mock server delivers a greeting message on connection that renders in the chat panel
   3. Mock server can produce a long markdown response that exercises heading, list, code block, and link rendering
   4. Mock server can simulate error and session-end protocol events that trigger the widget's error and session-end UI states
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 08-01: TBD
+- [ ] 08-01-PLAN.md — WebSocket constructor injection into ChatClient, ChatStore, and widget
+- [ ] 08-02-PLAN.md — MockWebSocket class, canned scenarios, and playground wiring
 
 ### Phase 9: Control Panel
 **Goal**: Developers can interactively configure every widget property and trigger test scenarios from a single control surface
@@ -81,5 +82,5 @@ Plans:
 | 5. Responsive & Distribution | v0.1 | 2/2 | Complete | 2026-03-06 |
 | 6. Test Suites | v0.1 | 3/3 | Complete | 2026-03-06 |
 | 7. Playground Infrastructure | v0.2 | 0/1 | Not started | - |
-| 8. Mock WebSocket Server | v0.2 | 0/? | Not started | - |
+| 8. Mock WebSocket Server | v0.2 | 0/2 | Not started | - |
 | 9. Control Panel | v0.2 | 0/? | Not started | - |
