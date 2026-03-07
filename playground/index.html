@@ -16,12 +16,12 @@
   </style>
 </head>
 <body>
-  <w1-chat-widget></w1-chat-widget>
+  <work1-chat-widget></work1-chat-widget>
   <script type="module">
     import '../src/index.ts';
     import { MockWebSocket } from './mock-ws.ts';
 
-    const widget = document.querySelector('w1-chat-widget');
+    const widget = document.querySelector('work1-chat-widget');
     widget.setAttribute('server-url', 'ws://mock');
     widget.setAttribute('debug', '');
     widget._wsConstructor = MockWebSocket;
