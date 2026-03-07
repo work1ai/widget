@@ -9,9 +9,9 @@ Requirements for Dev Playground milestone. Each maps to roadmap phases.
 
 ### Playground Infrastructure
 
-- [ ] **PLAY-01**: Developer can launch playground via `npm run playground` using Vite dev server
-- [ ] **PLAY-02**: Playground page loads the widget from local source (not built bundle)
-- [ ] **PLAY-03**: Playground files are excluded from CDN and npm distribution bundles
+- [x] **PLAY-01**: Developer can launch playground via `npm run playground` using Vite dev server
+- [x] **PLAY-02**: Playground page loads the widget from local source (not built bundle)
+- [x] **PLAY-03**: Playground files are excluded from CDN and npm distribution bundles
 
 ### Visual Controls
 
@@ -75,9 +75,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PLAY-01 | Phase 7 | Pending |
-| PLAY-02 | Phase 7 | Pending |
-| PLAY-03 | Phase 7 | Pending |
+| PLAY-01 | Phase 7 | Complete |
+| PLAY-02 | Phase 7 | Complete |
+| PLAY-03 | Phase 7 | Complete |
 | CTRL-01 | Phase 9 | Pending |
 | CTRL-02 | Phase 9 | Pending |
 | CTRL-03 | Phase 9 | Pending |
