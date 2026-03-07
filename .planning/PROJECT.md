@@ -28,17 +28,14 @@ The widget must reliably connect to the chat backend and stream agent responses 
 - ✓ AI disclosure badge ("Powered by AI") — v0.1
 - ✓ Mobile responsive layout with keyboard handling — v0.1
 - ✓ Unit and integration tests (65 tests passing) — v0.1
+- ✓ Local dev playground page served via Vite dev server — v0.2
+- ✓ Runtime controls panel for visual theming (colors, position, size, bubble icon) — v0.2
+- ✓ Runtime controls for connection settings (WebSocket URL, mock/real toggle) — v0.2
+- ✓ Mock WebSocket server with echo mode and canned scenarios — v0.2
+- ✓ Playground excluded from CDN/npm distribution bundles — v0.2
 
 ### Active
 
-<!-- v0.2 Dev Playground -->
-- [ ] Local dev playground page served via Vite dev server
-- [ ] Runtime controls panel for visual theming (colors, position, size, bubble icon)
-- [ ] Runtime controls for connection settings (WebSocket URL, mock/real toggle)
-- [ ] Mock WebSocket server with echo mode and canned scenarios
-- [ ] Playground excluded from CDN/npm distribution bundles
-
-<!-- Deferred to future milestones -->
 - [ ] Accessibility / WCAG 2.1 AA compliance (keyboard nav, focus trapping, ARIA, contrast)
 - [ ] Copy message content button on agent messages
 - [ ] Health check polling — hide bubble when service is degraded
@@ -63,11 +60,12 @@ The widget must reliably connect to the chat backend and stream agent responses 
 
 ## Context
 
-Shipped v0.1 with 3,085 LOC TypeScript across 6 phases (17 plans) in 3 days.
+Shipped v0.2 with 4,191 LOC TypeScript across 9 phases (22 plans total).
 Tech stack: Lit 3.3, TypeScript 5.9, Vite 6, marked 17, DOMPurify 3.3.
 Three-layer architecture: ChatClient (WebSocket) -> ChatStore (ReactiveController) -> Lit UI components.
 Distribution: IIFE bundle (116 KB self-contained) + ESM (36 KB with externalized deps).
-65 tests passing with 80% coverage thresholds enforced.
+Dev playground with mock WebSocket, runtime controls, and scenario triggers on port 5180.
+79 tests passing with 80% coverage thresholds enforced.
 2 minor integration gaps in host-page API (sessionId null, DOM event forwarding stub).
 
 ## Constraints
@@ -90,18 +88,12 @@ Distribution: IIFE bundle (116 KB self-contained) + ESM (36 KB with externalized
 | CSS parts + custom properties for theming | Allows deep customization without breaking encapsulation | ✓ Good — 10 public CSS vars + ::part() selectors |
 | Three-layer architecture (ChatClient/ChatStore/UI) | Clean separation of concerns, testable | ✓ Good — enabled independent unit testing |
 | DOMPurify for XSS prevention | Industry-standard HTML sanitizer | ✓ Good — verified against script/onerror/iframe |
-| happy-dom over jsdom for tests | ESM compatibility issues with jsdom | ✓ Good — all 65 tests pass |
+| happy-dom over jsdom for tests | ESM compatibility issues with jsdom | ✓ Good — all 79 tests pass |
 | IIFE over UMD for CDN bundle | Web Components self-register, no module system needed | ✓ Good — 116 KB self-contained |
-
-## Current Milestone: v0.2 Dev Playground
-
-**Goal:** Build a local-only dev playground for testing widget configurations and simulating backend interactions.
-
-**Target features:**
-- Dev playground HTML page served via Vite dev server
-- Runtime controls for visual theming and connection settings
-- Mock WebSocket server with echo mode and canned scenario triggers
-- Excluded from production distribution bundles
+| Custom playground over Storybook | Simpler and more tailored to widget testing | ✓ Good — single HTML page with controls sidebar |
+| Options object for connect() | Forward-compatible extensibility for WebSocket injection | ✓ Good — enabled mock/real switching cleanly |
+| Port 5180 for playground | Avoid conflict with default Vite 5173 | ✓ Good — no port conflicts |
+| Console + UI scenario triggers | Console for dev, UI buttons for interactive testing | ✓ Good — MockWebSocket.instance accessible both ways |
 
 ---
-*Last updated: 2026-03-07 after v0.2 milestone started*
+*Last updated: 2026-03-07 after v0.2 milestone*

@@ -1,5 +1,25 @@
 # Milestones
 
+## v0.2 Dev Playground (Shipped: 2026-03-07)
+
+**Phases completed:** 3 phases, 5 plans, 10 tasks
+
+**Key accomplishments:**
+- Vite dev playground on port 5180 with hot reload, fully excluded from production bundles
+- WebSocket constructor injection across ChatClient/ChatStore/Widget chain for mock/real switching
+- MockWebSocket class with token-by-token streaming and 6 triggerable scenarios
+- Playground control panel Lit component with 10-color theme picker, mock/real toggle, and scenario buttons
+- 14 unit tests for playground controls covering all 7 requirement IDs
+
+**Stats:**
+- Lines of code: 4,191 TypeScript (total project)
+- Timeline: 1 day (2026-03-07)
+- Files changed: 34 (4,402 insertions, 66 deletions)
+- Git range: feat(07-01) to test(09-02)
+- Requirements: 15/15 satisfied
+
+---
+
 ## v0.1 Work1 Chat Widget (Shipped: 2026-03-07)
 
 **Phases completed:** 6 phases, 17 plans, 0 tasks
