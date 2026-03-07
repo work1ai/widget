@@ -12,42 +12,55 @@ The widget must reliably connect to the chat backend and stream agent responses 
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ WebSocket connection with full protocol support (8 event types) — v0.1
+- ✓ Streaming message display with real-time token accumulation — v0.1
+- ✓ Floating bubble + slide-up chat panel UI — v0.1
+- ✓ Deep theming via CSS custom properties, CSS parts, and HTML attributes — v0.1
+- ✓ Custom bubble icon support (attribute + slot) — v0.1
+- ✓ Layout configurability (position, width, height) — v0.1
+- ✓ CDN distribution (IIFE bundle via `<script>` tag) — v0.1
+- ✓ npm distribution (ESM package with TypeScript declarations) — v0.1
+- ✓ Markdown rendering with DOMPurify sanitization — v0.1
+- ✓ Error handling for all protocol scenarios — v0.1
+- ✓ Shadow DOM encapsulation — v0.1
+- ✓ CSP-compatible (no inline styles, no eval) — v0.1
+- ✓ XSS prevention via DOMPurify — v0.1
+- ✓ AI disclosure badge ("Powered by AI") — v0.1
+- ✓ Mobile responsive layout with keyboard handling — v0.1
+- ✓ Unit and integration tests (65 tests passing) — v0.1
 
 ### Active
 
-- [ ] WebSocket connection to `wss://<host>/ws` with full protocol support (connected, token, typing, message_end, status, reconnecting, session_end, error)
-- [ ] Streaming message display — tokens append in real time, finalized on message_end
-- [ ] Floating bubble + slide-up chat panel UI
-- [ ] Deep theming via CSS custom properties, CSS parts, and HTML attributes
-- [ ] Custom icons/logo support (bubble icon, header)
-- [ ] Layout configurability (position, width, height)
-- [ ] CDN distribution (UMD bundle via `<script>` tag)
-- [ ] npm distribution (ESM package with TypeScript declarations)
-- [ ] Markdown rendering for agent messages (bold, italic, links, code, lists)
-- [ ] Error handling for all protocol scenarios (rejected connection, reconnecting, session end, message too large)
-- [ ] Shadow DOM encapsulation — no style/DOM leaking to host page
-- [ ] CSP-compatible — works with strict Content-Security-Policy
-- [ ] XSS prevention — sanitize all rendered content, especially agent markdown
-- [ ] AI disclosure badge ("Powered by AI")
-- [ ] Unit and integration tests
+- [ ] Accessibility / WCAG 2.1 AA compliance (keyboard nav, focus trapping, ARIA, contrast)
+- [ ] Copy message content button on agent messages
+- [ ] Health check polling — hide bubble when service is degraded
+- [ ] Pre-chat tooltip on bubble
+- [ ] Bundle size monitoring in CI
+- [ ] Internationalization / externalized string constants
+- [ ] Fix: expose sessionId to host page via ChatStore
+- [ ] Fix: implement setupDOMEventForwarding() for w1-error and w1-session-end events
 
 ### Out of Scope
 
-- Custom message rendering (cards, carousels, product displays) — not needed for v1
-- Accessibility/WCAG compliance — deferred, focus on functionality first
-- i18n / localization — English only for v1
-- Client-side reconnection logic — server handles agent reconnection; widget offers manual reconnect on WebSocket drop
-- Message persistence — conversations are ephemeral, session-only
+- Custom message rendering (cards, carousels) — not needed, protocol only supports text
+- Client-side reconnection logic — server handles agent reconnection
+- Message persistence — conversations are ephemeral by design
 - Mobile native SDKs — web only
+- Pre-chat forms (name/email) — adds friction, protocol has no user identity concept
+- File/image upload — protocol only supports text
+- Sound notifications — hostile UX on third-party sites
+- Proactive/auto-open messages — aggressive UX
+- Chat ratings/feedback — no backend support
+- Offline / leave a message mode — AI is either available or not
 
 ## Context
 
-- **Backend:** The Work1 chat-server (v0.1.0) is live and available for testing. Protocol is WebSocket over TLS, documented in DRAFT.md.
-- **Architecture decision:** Three layers — ChatClient (WebSocket), ChatStore (reactive state), Lit UI components. Defined in the design document.
-- **Build tooling:** Vite producing UMD + ESM bundles with TypeScript declarations.
-- **Target audience:** External customers embedding the widget on their own websites. Must be isolated, secure, and easy to integrate.
-- **Protocol:** Single message type from client (`{"type":"message","content":"..."}`) with 4096 byte limit. Server sends: connected, token, typing, message_end, status, reconnecting, session_end, error events.
+Shipped v0.1 with 3,085 LOC TypeScript across 6 phases (17 plans) in 3 days.
+Tech stack: Lit 3.3, TypeScript 5.9, Vite 6, marked 17, DOMPurify 3.3.
+Three-layer architecture: ChatClient (WebSocket) -> ChatStore (ReactiveController) -> Lit UI components.
+Distribution: IIFE bundle (116 KB self-contained) + ESM (36 KB with externalized deps).
+65 tests passing with 80% coverage thresholds enforced.
+2 minor integration gaps in host-page API (sessionId null, DOM event forwarding stub).
 
 ## Constraints
 
@@ -61,12 +74,16 @@ The widget must reliably connect to the chat backend and stream agent responses 
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Web Components (Lit) over React/framework-specific | Framework-agnostic for external customers — works everywhere | — Pending |
-| Shadow DOM for encapsulation | Prevents style/DOM conflicts on customer sites | — Pending |
-| marked for markdown | Lightweight, well-maintained, supports sanitization | — Pending |
-| Vite for bundling | Fast dev server, handles UMD + ESM output, good Lit support | — Pending |
-| No client-side reconnection | Server handles agent reconnection; simpler widget, less edge cases | — Pending |
-| CSS parts + custom properties for theming | Allows deep customization without breaking encapsulation | — Pending |
+| Web Components (Lit) over React/framework-specific | Framework-agnostic for external customers — works everywhere | ✓ Good — works in any framework context |
+| Shadow DOM for encapsulation | Prevents style/DOM conflicts on customer sites | ✓ Good — full isolation verified |
+| marked for markdown | Lightweight, well-maintained, supports sanitization | ✓ Good — 17.0.4, token-based link renderer works |
+| Vite for bundling | Fast dev server, handles ESM + IIFE output, good Lit support | ✓ Good — two separate configs needed for ESM/IIFE |
+| No client-side reconnection | Server handles agent reconnection; simpler widget | ✓ Good — reduces complexity significantly |
+| CSS parts + custom properties for theming | Allows deep customization without breaking encapsulation | ✓ Good — 10 public CSS vars + ::part() selectors |
+| Three-layer architecture (ChatClient/ChatStore/UI) | Clean separation of concerns, testable | ✓ Good — enabled independent unit testing |
+| DOMPurify for XSS prevention | Industry-standard HTML sanitizer | ✓ Good — verified against script/onerror/iframe |
+| happy-dom over jsdom for tests | ESM compatibility issues with jsdom | ✓ Good — all 65 tests pass |
+| IIFE over UMD for CDN bundle | Web Components self-register, no module system needed | ✓ Good — 116 KB self-contained |
 
 ---
-*Last updated: 2026-03-04 after initialization*
+*Last updated: 2026-03-07 after v0.1 milestone*
