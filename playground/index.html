@@ -8,33 +8,64 @@
     * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
     html, body {
       height: 100%;
+      font-family: system-ui, sans-serif;
+    }
+    .playground-layout {
+      display: flex;
+      height: 100vh;
+    }
+    .playground-sidebar {
+      width: 320px;
+      flex-shrink: 0;
+      overflow-y: auto;
+      border-right: 1px solid #e5e5e5;
+      background: #fafafa;
+    }
+    .sidebar-title {
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      border-bottom: 1px solid #e5e5e5;
+      color: #333;
+    }
+    .playground-main {
+      flex: 1;
+      position: relative;
       background: #fff;
     }
   </style>
 </head>
 <body>
-  <work1-chat-widget></work1-chat-widget>
+  <div class="playground-layout">
+    <aside class="playground-sidebar">
+      <h2 class="sidebar-title">Widget Playground</h2>
+      <playground-controls></playground-controls>
+    </aside>
+    <main class="playground-main">
+      <work1-chat-widget></work1-chat-widget>
+    </main>
+  </div>
   <script type="module">
     import '../src/index.ts';
     import { MockWebSocket } from './mock-ws.ts';
+    import './controls.ts';
 
     const widget = document.querySelector('work1-chat-widget');
     widget.setAttribute('server-url', 'ws://mock');
     widget.setAttribute('debug', '');
     widget._wsConstructor = MockWebSocket;
 
-    // Expose for console-based scenario triggering (Phase 9 adds UI controls)
-    window.MockWebSocket = MockWebSocket;
+    // Wire controls to widget
+    const controls = document.querySelector('playground-controls');
+    controls.widgetEl = widget;
+    controls.setupWidgetListeners();
 
-    console.log('[playground] Mock mode active. Trigger scenarios via:');
-    console.log('  MockWebSocket.instance.triggerScenario("long-markdown")');
-    console.log('  MockWebSocket.instance.triggerScenario("error-protocol")');
-    console.log('  MockWebSocket.instance.triggerScenario("error-rejected")');
-    console.log('  MockWebSocket.instance.triggerScenario("error-disconnect")');
-    console.log('  MockWebSocket.instance.triggerScenario("session-end")');
+    // Keep global for console access
+    window.MockWebSocket = MockWebSocket;
   </script>
 </body>
 </html>
