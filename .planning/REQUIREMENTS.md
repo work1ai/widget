@@ -15,15 +15,15 @@ Requirements for Dev Playground milestone. Each maps to roadmap phases.
 
 ### Visual Controls
 
-- [ ] **CTRL-01**: Developer can change theme colors (primary, background, text) at runtime via control panel
-- [ ] **CTRL-02**: Developer can change widget position (bottom-left, bottom-right) at runtime
-- [ ] **CTRL-03**: Developer can adjust widget dimensions (width, height) at runtime
-- [ ] **CTRL-04**: Developer can set a custom bubble icon at runtime
+- [x] **CTRL-01**: Developer can change theme colors (primary, background, text) at runtime via control panel
+- [x] **CTRL-02**: Developer can change widget position (bottom-left, bottom-right) at runtime
+- [x] **CTRL-03**: Developer can adjust widget dimensions (width, height) at runtime
+- [x] **CTRL-04**: Developer can set a custom bubble icon at runtime
 
 ### Connection
 
-- [ ] **CONN-01**: Developer can enter a WebSocket URL to connect to a real backend
-- [ ] **CONN-02**: Developer can toggle between mock and real WebSocket connection
+- [x] **CONN-01**: Developer can enter a WebSocket URL to connect to a real backend
+- [x] **CONN-02**: Developer can toggle between mock and real WebSocket connection
 
 ### Mock WebSocket
 
@@ -32,7 +32,7 @@ Requirements for Dev Playground milestone. Each maps to roadmap phases.
 - [x] **MOCK-03**: Mock server supports canned long markdown response scenario
 - [x] **MOCK-04**: Mock server supports canned error state scenarios
 - [x] **MOCK-05**: Mock server supports canned session end scenario
-- [ ] **MOCK-06**: Developer can trigger specific scenarios via buttons in the control panel
+- [x] **MOCK-06**: Developer can trigger specific scenarios via buttons in the control panel
 
 ## Future Requirements
 
@@ -78,18 +78,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PLAY-01 | Phase 7 | Complete |
 | PLAY-02 | Phase 7 | Complete |
 | PLAY-03 | Phase 7 | Complete |
-| CTRL-01 | Phase 9 | Pending |
-| CTRL-02 | Phase 9 | Pending |
-| CTRL-03 | Phase 9 | Pending |
-| CTRL-04 | Phase 9 | Pending |
-| CONN-01 | Phase 9 | Pending |
-| CONN-02 | Phase 9 | Pending |
+| CTRL-01 | Phase 9 | Complete |
+| CTRL-02 | Phase 9 | Complete |
+| CTRL-03 | Phase 9 | Complete |
+| CTRL-04 | Phase 9 | Complete |
+| CONN-01 | Phase 9 | Complete |
+| CONN-02 | Phase 9 | Complete |
 | MOCK-01 | Phase 8 | Complete |
 | MOCK-02 | Phase 8 | Complete |
 | MOCK-03 | Phase 8 | Complete |
 | MOCK-04 | Phase 8 | Complete |
 | MOCK-05 | Phase 8 | Complete |
-| MOCK-06 | Phase 9 | Pending |
+| MOCK-06 | Phase 9 | Complete |
 
 **Coverage:**
 - v0.2 requirements: 15 total
