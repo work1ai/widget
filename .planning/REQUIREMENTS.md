@@ -75,27 +75,27 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PLAY-01 | — | Pending |
-| PLAY-02 | — | Pending |
-| PLAY-03 | — | Pending |
-| CTRL-01 | — | Pending |
-| CTRL-02 | — | Pending |
-| CTRL-03 | — | Pending |
-| CTRL-04 | — | Pending |
-| CONN-01 | — | Pending |
-| CONN-02 | — | Pending |
-| MOCK-01 | — | Pending |
-| MOCK-02 | — | Pending |
-| MOCK-03 | — | Pending |
-| MOCK-04 | — | Pending |
-| MOCK-05 | — | Pending |
-| MOCK-06 | — | Pending |
+| PLAY-01 | Phase 7 | Pending |
+| PLAY-02 | Phase 7 | Pending |
+| PLAY-03 | Phase 7 | Pending |
+| CTRL-01 | Phase 9 | Pending |
+| CTRL-02 | Phase 9 | Pending |
+| CTRL-03 | Phase 9 | Pending |
+| CTRL-04 | Phase 9 | Pending |
+| CONN-01 | Phase 9 | Pending |
+| CONN-02 | Phase 9 | Pending |
+| MOCK-01 | Phase 8 | Pending |
+| MOCK-02 | Phase 8 | Pending |
+| MOCK-03 | Phase 8 | Pending |
+| MOCK-04 | Phase 8 | Pending |
+| MOCK-05 | Phase 8 | Pending |
+| MOCK-06 | Phase 9 | Pending |
 
 **Coverage:**
 - v0.2 requirements: 15 total
-- Mapped to phases: 0
-- Unmapped: 15
+- Mapped to phases: 15
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-07*
-*Last updated: 2026-03-07 after initial definition*
+*Last updated: 2026-03-07 after roadmap creation*
