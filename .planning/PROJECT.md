@@ -31,6 +31,14 @@ The widget must reliably connect to the chat backend and stream agent responses 
 
 ### Active
 
+<!-- v0.2 Dev Playground -->
+- [ ] Local dev playground page served via Vite dev server
+- [ ] Runtime controls panel for visual theming (colors, position, size, bubble icon)
+- [ ] Runtime controls for connection settings (WebSocket URL, mock/real toggle)
+- [ ] Mock WebSocket server with echo mode and canned scenarios
+- [ ] Playground excluded from CDN/npm distribution bundles
+
+<!-- Deferred to future milestones -->
 - [ ] Accessibility / WCAG 2.1 AA compliance (keyboard nav, focus trapping, ARIA, contrast)
 - [ ] Copy message content button on agent messages
 - [ ] Health check polling — hide bubble when service is degraded
@@ -85,5 +93,15 @@ Distribution: IIFE bundle (116 KB self-contained) + ESM (36 KB with externalized
 | happy-dom over jsdom for tests | ESM compatibility issues with jsdom | ✓ Good — all 65 tests pass |
 | IIFE over UMD for CDN bundle | Web Components self-register, no module system needed | ✓ Good — 116 KB self-contained |
 
+## Current Milestone: v0.2 Dev Playground
+
+**Goal:** Build a local-only dev playground for testing widget configurations and simulating backend interactions.
+
+**Target features:**
+- Dev playground HTML page served via Vite dev server
+- Runtime controls for visual theming and connection settings
+- Mock WebSocket server with echo mode and canned scenario triggers
+- Excluded from production distribution bundles
+
 ---
-*Last updated: 2026-03-07 after v0.1 milestone*
+*Last updated: 2026-03-07 after v0.2 milestone started*
