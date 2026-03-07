@@ -28,10 +28,10 @@ Requirements for Dev Playground milestone. Each maps to roadmap phases.
 ### Mock WebSocket
 
 - [x] **MOCK-01**: Mock server echoes user messages back with simulated streaming tokens
-- [ ] **MOCK-02**: Mock server supports canned greeting scenario
-- [ ] **MOCK-03**: Mock server supports canned long markdown response scenario
-- [ ] **MOCK-04**: Mock server supports canned error state scenarios
-- [ ] **MOCK-05**: Mock server supports canned session end scenario
+- [x] **MOCK-02**: Mock server supports canned greeting scenario
+- [x] **MOCK-03**: Mock server supports canned long markdown response scenario
+- [x] **MOCK-04**: Mock server supports canned error state scenarios
+- [x] **MOCK-05**: Mock server supports canned session end scenario
 - [ ] **MOCK-06**: Developer can trigger specific scenarios via buttons in the control panel
 
 ## Future Requirements
@@ -85,10 +85,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONN-01 | Phase 9 | Pending |
 | CONN-02 | Phase 9 | Pending |
 | MOCK-01 | Phase 8 | Complete |
-| MOCK-02 | Phase 8 | Pending |
-| MOCK-03 | Phase 8 | Pending |
-| MOCK-04 | Phase 8 | Pending |
-| MOCK-05 | Phase 8 | Pending |
+| MOCK-02 | Phase 8 | Complete |
+| MOCK-03 | Phase 8 | Complete |
+| MOCK-04 | Phase 8 | Complete |
+| MOCK-05 | Phase 8 | Complete |
 | MOCK-06 | Phase 9 | Pending |
 
 **Coverage:**

@@ -22,7 +22,7 @@
 ### v0.2 Dev Playground (In Progress)
 
 - [ ] **Phase 7: Playground Infrastructure** - Dev page served via Vite with local widget source, excluded from distribution
-- [ ] **Phase 8: Mock WebSocket Server** - Client-side mock that simulates backend streaming and protocol scenarios
+- [x] **Phase 8: Mock WebSocket Server** - Client-side mock that simulates backend streaming and protocol scenarios (completed 2026-03-07)
 - [ ] **Phase 9: Control Panel** - Runtime controls for theming, connection, and scenario triggering
 
 ## Phase Details
@@ -82,5 +82,5 @@ Plans:
 | 5. Responsive & Distribution | v0.1 | 2/2 | Complete | 2026-03-06 |
 | 6. Test Suites | v0.1 | 3/3 | Complete | 2026-03-06 |
 | 7. Playground Infrastructure | v0.2 | 0/1 | Not started | - |
-| 8. Mock WebSocket Server | v0.2 | 0/2 | Not started | - |
+| 8. Mock WebSocket Server | 2/2 | Complete   | 2026-03-07 | - |
 | 9. Control Panel | v0.2 | 0/? | Not started | - |
