@@ -75,7 +75,7 @@ describe('ChatStore', () => {
     expect(store.connectionState).toBe('connecting');
     expect(host.requestUpdate).toHaveBeenCalled();
     const client = getClient(store);
-    expect(client.connect).toHaveBeenCalledWith('ws://test');
+    expect(client.connect).toHaveBeenCalledWith('ws://test', { WebSocket: undefined });
   });
 
   it('on ChatClient connected event, connectionState becomes connected, inputDisabled becomes false', () => {

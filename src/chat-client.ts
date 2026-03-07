@@ -5,6 +5,9 @@ import {
   isServerMessage,
 } from './chat-client.types.js';
 
+type WebSocketConstructor = new (url: string) => WebSocket;
+export type { WebSocketConstructor };
+
 /**
  * ChatClient - WebSocket protocol client for chat-server v0.1.0
  *
@@ -35,8 +38,9 @@ export class ChatClient extends (EventTarget as {
   /**
    * Open a WebSocket connection to the given URL.
    */
-  connect(url: string): void {
-    this.ws = new WebSocket(url);
+  connect(url: string, options?: { WebSocket?: WebSocketConstructor }): void {
+    const WS = options?.WebSocket ?? WebSocket;
+    this.ws = new WS(url);
     this.ws.onmessage = (event: MessageEvent) => this.handleMessage(event);
     this.ws.onclose = (event: CloseEvent) => this.handleClose(event);
     this.ws.onerror = () => {}; // errors surface through onclose

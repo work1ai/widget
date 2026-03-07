@@ -1,5 +1,6 @@
 import type { ReactiveController, ReactiveControllerHost } from 'lit';
 import { ChatClient } from './chat-client.js';
+import type { WebSocketConstructor } from './chat-client.js';
 import type { ChatMessage, ConnectionState } from './chat-store.types.js';
 
 /**
@@ -46,14 +47,14 @@ export class ChatStore implements ReactiveController {
   /**
    * Create a ChatClient, wire events, and connect to the given URL.
    */
-  connect(url: string, debug: boolean): void {
+  connect(url: string, debug: boolean, options?: { WebSocket?: WebSocketConstructor }): void {
     if (this.client) {
       this.client.disconnect();
     }
 
     this.client = new ChatClient({ debug });
     this.wireClientEvents();
-    this.client.connect(url);
+    this.client.connect(url, { WebSocket: options?.WebSocket });
     this.connectionState = 'connecting';
     this.host.requestUpdate();
   }
