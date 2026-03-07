@@ -35,10 +35,10 @@
   1. Running `npm run playground` opens a browser page with the chat widget rendered
   2. Changes to widget source files hot-reload in the playground without manual refresh
   3. Running `npm run build` produces CDN and npm bundles that contain zero playground code
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 07-01: TBD
+- [ ] 07-01-PLAN.md — Vite playground config, HTML page, and bundle exclusion verification
 
 ### Phase 8: Mock WebSocket Server
 **Goal**: Developers can test widget behavior against simulated backend responses without a real server
@@ -80,6 +80,6 @@ Plans:
 | 4. Theming & Encapsulation | v0.1 | 3/3 | Complete | 2026-03-05 |
 | 5. Responsive & Distribution | v0.1 | 2/2 | Complete | 2026-03-06 |
 | 6. Test Suites | v0.1 | 3/3 | Complete | 2026-03-06 |
-| 7. Playground Infrastructure | v0.2 | 0/? | Not started | - |
+| 7. Playground Infrastructure | v0.2 | 0/1 | Not started | - |
 | 8. Mock WebSocket Server | v0.2 | 0/? | Not started | - |
 | 9. Control Panel | v0.2 | 0/? | Not started | - |
