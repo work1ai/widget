@@ -256,3 +256,103 @@ describe('Work1ChatWidget UI states', () => {
     expect(timeoutMsg).toBeTruthy();
   });
 });
+
+describe('connection status dot', () => {
+  let widget: WidgetInstance;
+
+  afterEach(() => {
+    widget?.remove();
+  });
+
+  it('CONN-01: shows green dot when connectionState is connected', async () => {
+    widget = createWidget({ 'server-url': 'ws://test' });
+    await widget.updateComplete;
+    await openAndConnect(widget);
+
+    const shadow = widget.shadowRoot!;
+    const dot = shadow.querySelector('.status-dot--connected');
+    expect(dot).toBeTruthy();
+    expect(dot!.classList.contains('status-dot')).toBe(true);
+  });
+
+  it('CONN-02: shows yellow dot when connectionState is connecting', async () => {
+    widget = createWidget({ 'server-url': 'ws://test' });
+    await widget.updateComplete;
+
+    // Open panel to trigger connect (state goes to 'connecting' before 'connected')
+    (widget as any).store.toggleOpen();
+    (widget as any).store.connectionState = 'connecting';
+    (widget as any).store.host.requestUpdate();
+    await widget.updateComplete;
+
+    const shadow = widget.shadowRoot!;
+    const dot = shadow.querySelector('.status-dot--connecting');
+    expect(dot).toBeTruthy();
+    expect(dot!.classList.contains('status-dot')).toBe(true);
+  });
+
+  it('CONN-02: shows yellow dot when connectionState is reconnecting', async () => {
+    widget = createWidget({ 'server-url': 'ws://test' });
+    await widget.updateComplete;
+
+    (widget as any).store.toggleOpen();
+    (widget as any).store.connectionState = 'reconnecting';
+    (widget as any).store.host.requestUpdate();
+    await widget.updateComplete;
+
+    const shadow = widget.shadowRoot!;
+    // Reconnecting should map to the same yellow 'connecting' class
+    const dot = shadow.querySelector('.status-dot--connecting');
+    expect(dot).toBeTruthy();
+    expect(dot!.classList.contains('status-dot')).toBe(true);
+  });
+
+  it('CONN-03: shows red dot when connectionState is disconnected', async () => {
+    widget = createWidget();
+    await widget.updateComplete;
+
+    (widget as any).store.toggleOpen();
+    await widget.updateComplete;
+
+    const shadow = widget.shadowRoot!;
+    const dot = shadow.querySelector('.status-dot--disconnected');
+    expect(dot).toBeTruthy();
+    expect(dot!.classList.contains('status-dot')).toBe(true);
+  });
+});
+
+describe('branding badge', () => {
+  let widget: WidgetInstance;
+
+  afterEach(() => {
+    widget?.remove();
+  });
+
+  it('BRAND-01: badge text reads "Powered by work1.ai"', async () => {
+    widget = createWidget();
+    await widget.updateComplete;
+
+    (widget as any).store.toggleOpen();
+    await widget.updateComplete;
+
+    const shadow = widget.shadowRoot!;
+    const badge = shadow.querySelector('.header-badge');
+    expect(badge).toBeTruthy();
+    expect(badge!.textContent!.trim()).toBe('Powered by work1.ai');
+  });
+
+  it('BRAND-02: badge is an anchor linking to https://work1.ai in new tab', async () => {
+    widget = createWidget();
+    await widget.updateComplete;
+
+    (widget as any).store.toggleOpen();
+    await widget.updateComplete;
+
+    const shadow = widget.shadowRoot!;
+    const badge = shadow.querySelector('a.header-badge') as HTMLAnchorElement | null;
+    expect(badge).toBeTruthy();
+    expect(badge!.href).toBe('https://work1.ai/');
+    expect(badge!.target).toBe('_blank');
+    expect(badge!.rel).toBe('noopener noreferrer');
+  });
+});
