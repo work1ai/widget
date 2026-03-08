@@ -85,30 +85,30 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CUST-01 | — | Pending |
-| CUST-02 | — | Pending |
-| CUST-03 | — | Pending |
-| CUST-04 | — | Pending |
-| CONN-01 | — | Pending |
-| CONN-02 | — | Pending |
-| CONN-03 | — | Pending |
-| BRAND-01 | — | Pending |
-| BRAND-02 | — | Pending |
-| DOCS-01 | — | Pending |
-| DOCS-02 | — | Pending |
-| DOCS-03 | — | Pending |
-| DOCS-04 | — | Pending |
-| DOCS-05 | — | Pending |
-| CICD-01 | — | Pending |
-| CICD-02 | — | Pending |
-| CICD-03 | — | Pending |
-| CICD-04 | — | Pending |
+| CUST-01 | Phase 10 | Pending |
+| CUST-02 | Phase 10 | Pending |
+| CUST-03 | Phase 10 | Pending |
+| CUST-04 | Phase 10 | Pending |
+| CONN-01 | Phase 11 | Pending |
+| CONN-02 | Phase 11 | Pending |
+| CONN-03 | Phase 11 | Pending |
+| BRAND-01 | Phase 11 | Pending |
+| BRAND-02 | Phase 11 | Pending |
+| DOCS-01 | Phase 12 | Pending |
+| DOCS-02 | Phase 12 | Pending |
+| DOCS-03 | Phase 12 | Pending |
+| DOCS-04 | Phase 12 | Pending |
+| DOCS-05 | Phase 12 | Pending |
+| CICD-01 | Phase 13 | Pending |
+| CICD-02 | Phase 13 | Pending |
+| CICD-03 | Phase 13 | Pending |
+| CICD-04 | Phase 13 | Pending |
 
 **Coverage:**
 - v0.3 requirements: 18 total
-- Mapped to phases: 0
-- Unmapped: 18 ⚠️
+- Mapped to phases: 18
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-07*
-*Last updated: 2026-03-07 after initial definition*
+*Last updated: 2026-03-07 after roadmap creation*
