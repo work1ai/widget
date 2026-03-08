@@ -27,6 +27,9 @@ export class ChatStore implements ReactiveController {
   statusText = '';
   typingActive = false;
 
+  /** Greeting text to inject as agent message after WebSocket connects. */
+  greeting = '';
+
   constructor(host: ReactiveControllerHost) {
     this.host = host;
     host.addController(this);
@@ -69,6 +72,7 @@ export class ChatStore implements ReactiveController {
     }
     this.connectionState = 'disconnected';
     this.inputDisabled = true;
+    this.greetingAdded = false;
     this.host.requestUpdate();
   }
 
@@ -106,24 +110,9 @@ export class ChatStore implements ReactiveController {
 
   /**
    * Toggle the chat panel open/close.
-   * On first open, if greeting is provided and messages are empty, add an agent greeting message.
    */
-  toggleOpen(greeting?: string): void {
+  toggleOpen(): void {
     this.isOpen = !this.isOpen;
-
-    if (this.isOpen && greeting && !this.greetingAdded) {
-      this.greetingAdded = true;
-      this.messages = [
-        ...this.messages,
-        {
-          id: crypto.randomUUID(),
-          role: 'agent',
-          content: greeting,
-          timestamp: Date.now(),
-        },
-      ];
-    }
-
     this.host.requestUpdate();
   }
 
@@ -135,6 +124,20 @@ export class ChatStore implements ReactiveController {
     this.client.addEventListener('connected', () => {
       this.connectionState = 'connected';
       this.inputDisabled = false;
+
+      if (this.greeting && !this.greetingAdded) {
+        this.greetingAdded = true;
+        this.messages = [
+          ...this.messages,
+          {
+            id: crypto.randomUUID(),
+            role: 'agent',
+            content: this.greeting,
+            timestamp: Date.now(),
+          },
+        ];
+      }
+
       this.host.requestUpdate();
     });
 

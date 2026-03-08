@@ -186,26 +186,69 @@ describe('ChatStore', () => {
     expect(store.isOpen).toBe(false);
   });
 
-  it('on first open with greeting text, greeting is added as agent message', () => {
-    store.toggleOpen('Welcome!');
+  describe('greeting (post-connect timing)', () => {
+    it('greeting does NOT appear when panel opens (before WebSocket connects)', () => {
+      store.greeting = 'Welcome!';
+      store.toggleOpen();
+      expect(store.messages).toHaveLength(0);
+    });
 
-    expect(store.messages).toHaveLength(1);
-    const msg: ChatMessage = store.messages[0];
-    expect(msg.role).toBe('agent');
-    expect(msg.content).toBe('Welcome!');
-    expect(msg.id).toBeTruthy();
-  });
+    it('greeting appears as agent message after connected event fires', () => {
+      store.greeting = 'Welcome!';
+      store.connect('ws://test', false);
+      fireClientEvent(store, 'connected', { session_id: 'abc' });
 
-  it('greeting is only added once (second toggle does not duplicate)', () => {
-    store.toggleOpen('Welcome!');
-    expect(store.messages).toHaveLength(1);
+      expect(store.messages).toHaveLength(1);
+      const msg: ChatMessage = store.messages[0];
+      expect(msg.role).toBe('agent');
+      expect(msg.content).toBe('Welcome!');
+      expect(msg.id).toBeTruthy();
+    });
 
-    // Close
-    store.toggleOpen('Welcome!');
-    // Reopen
-    store.toggleOpen('Welcome!');
+    it('greeting is not duplicated on reconnect within same conversation', () => {
+      store.greeting = 'Welcome!';
+      store.connect('ws://test', false);
+      fireClientEvent(store, 'connected', { session_id: 'abc' });
+      expect(store.messages).toHaveLength(1);
 
-    expect(store.messages).toHaveLength(1);
+      // Simulate reconnect (connected fires again)
+      fireClientEvent(store, 'connected', { session_id: 'abc' });
+      expect(store.messages).toHaveLength(1);
+    });
+
+    it('greeting re-appears after disconnect + new connect (new conversation)', () => {
+      store.greeting = 'Welcome!';
+      store.connect('ws://test', false);
+      fireClientEvent(store, 'connected', { session_id: 'abc' });
+      expect(store.messages).toHaveLength(1);
+
+      // Disconnect resets greetingAdded
+      store.disconnect();
+      store.messages = [];
+
+      // New conversation
+      store.connect('ws://test', false);
+      fireClientEvent(store, 'connected', { session_id: 'def' });
+      expect(store.messages).toHaveLength(1);
+      expect(store.messages[0].content).toBe('Welcome!');
+    });
+
+    it('greeting is never sent via client.send()', () => {
+      store.greeting = 'Welcome!';
+      store.connect('ws://test', false);
+      fireClientEvent(store, 'connected', { session_id: 'abc' });
+
+      const client = getClient(store);
+      expect(client.send).not.toHaveBeenCalled();
+    });
+
+    it('no greeting injected when store.greeting is empty string', () => {
+      store.greeting = '';
+      store.connect('ws://test', false);
+      fireClientEvent(store, 'connected', { session_id: 'abc' });
+
+      expect(store.messages).toHaveLength(0);
+    });
   });
 
   it('on session_end event, adds system message with reason', () => {

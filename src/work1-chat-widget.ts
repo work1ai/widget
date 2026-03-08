@@ -205,6 +205,7 @@ export class Work1ChatWidget extends LitElement {
   private handleNewConversation(): void {
     this.store.disconnect();
     this.store.messages = [];
+    this.store.greeting = this.greeting;
     this.store.connect(this.serverUrl, this.debug, { WebSocket: this._wsConstructor });
   }
 
@@ -212,7 +213,8 @@ export class Work1ChatWidget extends LitElement {
    * Handle bubble click: open panel, connect on first open if server-url is set.
    */
   private handleOpen(): void {
-    this.store.toggleOpen(this.greeting);
+    this.store.greeting = this.greeting;
+    this.store.toggleOpen();
 
     // Connect on first open (lazy connection per research recommendation)
     if (this.store.isOpen && this.serverUrl && this.store.connectionState === 'disconnected') {
