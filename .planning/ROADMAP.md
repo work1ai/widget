@@ -76,7 +76,11 @@ Plans:
   3. The API reference lists every HTML attribute and CSS custom property with descriptions and defaults
   4. The theming guide shows how to customize colors, position, and size with visual examples
   5. The connection/events page documents WebSocket lifecycle and DOM events the host page can listen for
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 12-01-PLAN.md — VitePress infrastructure, landing page, and integration guide
+- [ ] 12-02-PLAN.md — API reference and theming guide with live demo
+- [ ] 12-03-PLAN.md — Events & connection page and visual site verification
 
 ### Phase 13: CI/CD Pipeline
 **Goal**: Widget builds, tests, publishes, and deploys docs automatically via GitHub Actions
@@ -105,7 +109,7 @@ Phases execute in numeric order: 10 -> 11 -> 12 -> 13
 | 7. Playground Infrastructure | v0.2 | 1/1 | Complete | 2026-03-07 |
 | 8. Mock WebSocket Server | v0.2 | 2/2 | Complete | 2026-03-07 |
 | 9. Control Panel | v0.2 | 2/2 | Complete | 2026-03-07 |
-| 10. Content Customization | 1/1 | Complete    | 2026-03-08 | - |
-| 11. Connection Status & Branding | 1/1 | Complete    | 2026-03-08 | - |
-| 12. Documentation Site | v0.3 | 0/? | Not started | - |
+| 10. Content Customization | v0.3 | 1/1 | Complete | 2026-03-08 |
+| 11. Connection Status & Branding | v0.3 | 1/1 | Complete | 2026-03-08 |
+| 12. Documentation Site | v0.3 | 0/3 | Not started | - |
 | 13. CI/CD Pipeline | v0.3 | 0/? | Not started | - |
