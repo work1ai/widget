@@ -89,6 +89,48 @@
 
 ---
 
+## Milestone: v0.3 — Customization, Docs & CI/CD
+
+**Shipped:** 2026-03-08
+**Phases:** 4 | **Plans:** 6
+
+### What Was Built
+- Configurable chat title, subtitle, and greeting message via HTML attributes (no native tooltip conflict)
+- Real-time connection status indicator (green/yellow/red dot) in title bar
+- "Powered by work1.ai" branding badge with link to https://work1.ai
+- VitePress documentation site: integration guide, API reference, theming guide, events/connection page
+- GitHub Actions CI/CD: build/test on push/PR, npm publish with provenance, docs deployment to GitHub Pages
+
+### What Worked
+- Small, focused phases (1 plan each for phases 10, 11, 13) kept scope tight and execution fast
+- Phase 12 (docs) naturally split into 3 plans covering infrastructure, content, and verification
+- VitePress custom element compiler option solved Lit component rendering in docs
+- Dynamic import with onMounted pattern cleanly avoided SSR issues for live widget demo
+- Self-contained publish workflow (own build+test) made CI/CD independent and reliable
+
+### What Was Inefficient
+- Nyquist VALIDATION.md still only partial across all 4 phases — same pattern as v0.1 and v0.2
+- ROADMAP.md progress table had formatting issue in Phase 13 row (missing milestone column)
+- Had to create stub pages for VitePress sidebar links to avoid dead link build errors — could have planned content structure upfront
+
+### Patterns Established
+- Custom attribute name pattern: use `chat-title` (not `title`) to avoid HTMLElement native property conflicts
+- Post-connect injection: greeting message appears after WebSocket connects, not on panel open
+- VitePress `vue.template.compilerOptions.isCustomElement` for Lit components in docs
+- Self-contained CI workflows: each workflow runs its own build+test, no cross-workflow dependencies
+
+### Key Lessons
+1. HTMLElement has many native properties (`title`, `style`, `id`) — always check for conflicts when naming Web Component attributes
+2. VitePress works well for component library docs but needs custom element compiler hints for Web Components
+3. Self-contained CI workflows are more reliable than chained workflows — each should independently verify
+4. Documentation planning should include content structure upfront to avoid stub page workarounds
+
+### Cost Observations
+- Sessions: ~5
+- Notable: Entire v0.3 (4 phases, 6 plans, 49 files changed) completed in 2 days
+
+---
+
 ## Cross-Milestone Trends
 
 ### Process Evolution
@@ -97,6 +139,7 @@
 |-----------|--------|-------|------------|
 | v0.1 | 6 | 17 | Initial delivery — established bottom-up architecture pattern |
 | v0.2 | 3 | 5 | Dev tooling — reused v0.1 architecture for playground and mock system |
+| v0.3 | 4 | 6 | Polish & infra — customization, docs site, CI/CD pipeline |
 
 ### Cumulative Quality
 
@@ -104,9 +147,11 @@
 |-----------|-------|----------|-----|
 | v0.1 | 65 | 80%+ | 3,085 |
 | v0.2 | 79 | 80%+ | 4,191 |
+| v0.3 | 79+ | 80%+ | ~43,000 (incl. docs) |
 
 ### Top Lessons (Verified Across Milestones)
 
-1. ROADMAP.md progress table falls out of sync — happened in both v0.1 and v0.2. Consider automating or removing manual table.
-2. Nyquist VALIDATION.md consistently skipped — incomplete in both milestones. Needs workflow integration or explicit decision to drop.
-3. Bottom-up architecture enables fast iteration — v0.1 patterns (three-layer, separate configs) directly accelerated v0.2.
+1. ROADMAP.md progress table falls out of sync — happened in v0.1, v0.2, and v0.3. Consider automating or removing manual table.
+2. Nyquist VALIDATION.md consistently skipped — incomplete across all 3 milestones. Needs workflow integration or explicit decision to drop.
+3. Bottom-up architecture enables fast iteration — v0.1 patterns (three-layer, separate configs) directly accelerated v0.2 and v0.3.
+4. Self-contained workflows (Vite configs, CI workflows) are more maintainable than chained/shared configurations.

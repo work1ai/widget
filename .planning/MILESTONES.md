@@ -1,5 +1,25 @@
 # Milestones
 
+## v0.3 Customization, Docs & CI/CD (Shipped: 2026-03-08)
+
+**Phases completed:** 4 phases, 6 plans, 0 tasks
+
+**Key accomplishments:**
+- Configurable chat title, subtitle, and greeting message via HTML attributes (no native tooltip conflict)
+- Real-time connection status indicator (green/yellow/red dot) in title bar
+- Updated "Powered by work1.ai" branding badge with link to https://work1.ai
+- VitePress documentation site with integration guide, API reference, theming guide, and events page
+- GitHub Actions CI/CD pipeline: build/test on push/PR, npm publish with provenance, docs deployment
+
+**Stats:**
+- Lines of code: ~43,000 (total project including docs)
+- Timeline: 2 days (2026-03-07 to 2026-03-08)
+- Files changed: 49 (6,951 insertions, 142 deletions)
+- Git range: feat(10-01) to feat(13-01)
+- Requirements: 18/18 satisfied
+
+---
+
 ## v0.2 Dev Playground (Shipped: 2026-03-07)
 
 **Phases completed:** 3 phases, 5 plans, 10 tasks

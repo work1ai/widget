@@ -33,14 +33,15 @@ The widget must reliably connect to the chat backend and stream agent responses 
 - ✓ Runtime controls for connection settings (WebSocket URL, mock/real toggle) — v0.2
 - ✓ Mock WebSocket server with echo mode and canned scenarios — v0.2
 - ✓ Playground excluded from CDN/npm distribution bundles — v0.2
+- ✓ Configurable chat title, subtitle, and greeting message via HTML attributes — v0.3
+- ✓ Connection status indicator (green/yellow/red dot) in chat title bar — v0.3
+- ✓ "Powered by work1.ai" branding badge with link — v0.3
+- ✓ VitePress documentation site published to GitHub Pages — v0.3
+- ✓ GitHub Actions CI/CD: build/test, npm publish with provenance, docs deployment — v0.3
 
 ### Active
 
-- [ ] Configurable chat title, subtitle, and initial greeting message via HTML attributes
-- [ ] Connection status indicator (green/yellow/red dot) in chat title bar
-- [ ] "Powered by work1.ai" branding badge with link to https://work1.ai
-- [ ] Widget documentation site published via GitHub Pages
-- [ ] GitHub Actions CI/CD pipeline for publishing @work1ai/chat-widget to npm
+(None — define next milestone requirements with `/gsd:new-milestone`)
 
 ### Backlog
 
@@ -66,25 +67,15 @@ The widget must reliably connect to the chat backend and stream agent responses 
 - Chat ratings/feedback — no backend support
 - Offline / leave a message mode — AI is either available or not
 
-## Current Milestone: v0.3 Customization, Docs & CI/CD
-
-**Goal:** Add content customization (title, subtitle, greeting), connection status feedback, updated branding, a documentation site, and CI/CD for npm publishing.
-
-**Target features:**
-- Configurable chat title, subtitle, greeting message (HTML attributes)
-- Connection status dot (green=connected, yellow=connecting, red=disconnected) in title bar
-- "Powered by work1.ai" badge linking to https://work1.ai
-- Documentation site for widget usage (published via gh-pages)
-- GitHub Actions CI/CD for @work1ai/chat-widget npm publishing
-
 ## Context
 
-Shipped v0.2 with 4,191 LOC TypeScript across 9 phases (22 plans total).
-Tech stack: Lit 3.3, TypeScript 5.9, Vite 6, marked 17, DOMPurify 3.3.
+Shipped v0.3 with ~43,000 LOC (TypeScript + docs) across 13 phases (28 plans total).
+Tech stack: Lit 3.3, TypeScript 5.9, Vite 6, marked 17, DOMPurify 3.3, VitePress (docs).
 Three-layer architecture: ChatClient (WebSocket) -> ChatStore (ReactiveController) -> Lit UI components.
 Distribution: IIFE bundle (116 KB self-contained) + ESM (36 KB with externalized deps).
 Dev playground with mock WebSocket, runtime controls, and scenario triggers on port 5180.
-79 tests passing with 80% coverage thresholds enforced.
+Documentation site with integration guide, API reference, theming guide, and events page.
+CI/CD: GitHub Actions for build/test, npm publish with provenance, docs deployment.
 2 minor integration gaps in host-page API (sessionId null, DOM event forwarding stub).
 
 ## Constraints
@@ -113,6 +104,11 @@ Dev playground with mock WebSocket, runtime controls, and scenario triggers on p
 | Options object for connect() | Forward-compatible extensibility for WebSocket injection | ✓ Good — enabled mock/real switching cleanly |
 | Port 5180 for playground | Avoid conflict with default Vite 5173 | ✓ Good — no port conflicts |
 | Console + UI scenario triggers | Console for dev, UI buttons for interactive testing | ✓ Good — MockWebSocket.instance accessible both ways |
+| Rename title to chat-title | Avoid HTMLElement.title native tooltip conflict | ✓ Good — no tooltip, clean attribute name |
+| Greeting injection post-connect | Show greeting after WebSocket connects, not on panel open | ✓ Good — greeting only appears when backend is ready |
+| Reconnecting = connecting (yellow) | No separate visual state needed for reconnecting | ✓ Good — simpler UI, same user intent |
+| VitePress for docs | Lightweight, Vue-native, good for component docs | ✓ Good — fast build, custom element support |
+| Self-contained publish workflow | Publish workflow runs own build+test, not dependent on CI | ✓ Good — independent, reliable releases |
 
 ---
-*Last updated: 2026-03-07 after v0.3 milestone start*
+*Last updated: 2026-03-08 after v0.3 milestone*
