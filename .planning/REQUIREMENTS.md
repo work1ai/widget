@@ -29,8 +29,8 @@ Requirements for v0.3 Customization, Docs & CI/CD. Each maps to roadmap phases.
 
 - [x] **DOCS-01**: Documentation site built with VitePress and published to GitHub Pages
 - [x] **DOCS-02**: Integration guide covering script tag and npm installation methods
-- [ ] **DOCS-03**: API reference documenting all HTML attributes and CSS custom properties
-- [ ] **DOCS-04**: Theming guide with examples for customizing colors, position, and size
+- [x] **DOCS-03**: API reference documenting all HTML attributes and CSS custom properties
+- [x] **DOCS-04**: Theming guide with examples for customizing colors, position, and size
 - [x] **DOCS-05**: Connection and event handling documentation
 
 ### CI/CD
@@ -96,8 +96,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BRAND-02 | Phase 11 | Complete |
 | DOCS-01 | Phase 12 | Complete |
 | DOCS-02 | Phase 12 | Complete |
-| DOCS-03 | Phase 12 | Pending |
-| DOCS-04 | Phase 12 | Pending |
+| DOCS-03 | Phase 12 | Complete |
+| DOCS-04 | Phase 12 | Complete |
 | DOCS-05 | Phase 12 | Complete |
 | CICD-01 | Phase 13 | Pending |
 | CICD-02 | Phase 13 | Pending |

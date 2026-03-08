@@ -35,7 +35,7 @@
 
 - [x] **Phase 10: Content Customization** - Configurable chat title, subtitle, and greeting message via HTML attributes (completed 2026-03-08)
 - [x] **Phase 11: Connection Status & Branding** - Connection state indicator in title bar and updated branding badge (completed 2026-03-08)
-- [ ] **Phase 12: Documentation Site** - VitePress documentation published to GitHub Pages
+- [x] **Phase 12: Documentation Site** - VitePress documentation published to GitHub Pages (completed 2026-03-08)
 - [ ] **Phase 13: CI/CD Pipeline** - GitHub Actions for build/test, npm publish, and docs deployment
 
 ## Phase Details
@@ -76,7 +76,7 @@ Plans:
   3. The API reference lists every HTML attribute and CSS custom property with descriptions and defaults
   4. The theming guide shows how to customize colors, position, and size with visual examples
   5. The connection/events page documents WebSocket lifecycle and DOM events the host page can listen for
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 Plans:
 - [ ] 12-01-PLAN.md — VitePress infrastructure, landing page, and integration guide
 - [ ] 12-02-PLAN.md — API reference and theming guide with live demo
@@ -111,5 +111,5 @@ Phases execute in numeric order: 10 -> 11 -> 12 -> 13
 | 9. Control Panel | v0.2 | 2/2 | Complete | 2026-03-07 |
 | 10. Content Customization | v0.3 | 1/1 | Complete | 2026-03-08 |
 | 11. Connection Status & Branding | v0.3 | 1/1 | Complete | 2026-03-08 |
-| 12. Documentation Site | 2/3 | In Progress|  | - |
+| 12. Documentation Site | 3/3 | Complete   | 2026-03-08 | - |
 | 13. CI/CD Pipeline | v0.3 | 0/? | Not started | - |

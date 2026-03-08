@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v0.3
 milestone_name: Customization, Docs & CI/CD
 status: executing
-stopped_at: Completed 12-01 documentation site setup
-last_updated: "2026-03-08T15:53:39.763Z"
-last_activity: 2026-03-08 — Completed 12-01 VitePress docs site with landing page and integration guide
+stopped_at: Completed 12-02 API reference and theming guide
+last_updated: "2026-03-08T15:54:41.135Z"
+last_activity: 2026-03-08 — Completed 12-03 events and connection documentation page
 progress:
   total_phases: 4
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 5
-  completed_plans: 4
+  completed_plans: 5
   percent: 84
 ---
 
@@ -51,6 +51,7 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - [Phase 12]: Created stub pages for sidebar links to avoid VitePress dead link build errors
 - [Phase 12]: Used VitePress top-level vue key for custom element compiler options
 - [Phase 12]: Added connection status banner recipe as practical event listener example
+- [Phase 12]: Used dynamic import with onMounted for live widget demo to avoid SSR issues
 
 ### Pending Todos
 
@@ -63,6 +64,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-08T15:53:10Z
-Stopped at: Completed 12-03 events and connection documentation
-Resume file: .planning/phases/12-documentation-site/12-03-SUMMARY.md
+Last session: 2026-03-08T15:54:41.133Z
+Stopped at: Completed 12-02 API reference and theming guide
+Resume file: None
