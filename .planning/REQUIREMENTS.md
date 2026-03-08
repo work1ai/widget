@@ -31,7 +31,7 @@ Requirements for v0.3 Customization, Docs & CI/CD. Each maps to roadmap phases.
 - [x] **DOCS-02**: Integration guide covering script tag and npm installation methods
 - [ ] **DOCS-03**: API reference documenting all HTML attributes and CSS custom properties
 - [ ] **DOCS-04**: Theming guide with examples for customizing colors, position, and size
-- [ ] **DOCS-05**: Connection and event handling documentation
+- [x] **DOCS-05**: Connection and event handling documentation
 
 ### CI/CD
 
@@ -98,7 +98,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DOCS-02 | Phase 12 | Complete |
 | DOCS-03 | Phase 12 | Pending |
 | DOCS-04 | Phase 12 | Pending |
-| DOCS-05 | Phase 12 | Pending |
+| DOCS-05 | Phase 12 | Complete |
 | CICD-01 | Phase 13 | Pending |
 | CICD-02 | Phase 13 | Pending |
 | CICD-03 | Phase 13 | Pending |
