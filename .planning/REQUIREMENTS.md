@@ -9,10 +9,10 @@ Requirements for v0.3 Customization, Docs & CI/CD. Each maps to roadmap phases.
 
 ### Content Customization
 
-- [ ] **CUST-01**: User can configure the chat header title via `chat-title` HTML attribute
-- [ ] **CUST-02**: Existing `title` property renamed to `chat-title` to avoid native browser tooltip conflict
-- [ ] **CUST-03**: User can configure a subtitle below the title via `chat-subtitle` HTML attribute
-- [ ] **CUST-04**: User can configure an initial greeting message via `greeting` attribute that displays as an agent message after WebSocket connects (not sent to server)
+- [x] **CUST-01**: User can configure the chat header title via `chat-title` HTML attribute
+- [x] **CUST-02**: Existing `title` property renamed to `chat-title` to avoid native browser tooltip conflict
+- [x] **CUST-03**: User can configure a subtitle below the title via `chat-subtitle` HTML attribute
+- [x] **CUST-04**: User can configure an initial greeting message via `greeting` attribute that displays as an agent message after WebSocket connects (not sent to server)
 
 ### Connection Feedback
 
@@ -85,10 +85,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CUST-01 | Phase 10 | Pending |
-| CUST-02 | Phase 10 | Pending |
-| CUST-03 | Phase 10 | Pending |
-| CUST-04 | Phase 10 | Pending |
+| CUST-01 | Phase 10 | Complete |
+| CUST-02 | Phase 10 | Complete |
+| CUST-03 | Phase 10 | Complete |
+| CUST-04 | Phase 10 | Complete |
 | CONN-01 | Phase 11 | Pending |
 | CONN-02 | Phase 11 | Pending |
 | CONN-03 | Phase 11 | Pending |

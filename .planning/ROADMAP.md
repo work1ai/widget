@@ -33,7 +33,7 @@
 
 **Milestone Goal:** Add content customization (title, subtitle, greeting), connection status feedback, updated branding, a documentation site, and CI/CD for npm publishing.
 
-- [ ] **Phase 10: Content Customization** - Configurable chat title, subtitle, and greeting message via HTML attributes
+- [x] **Phase 10: Content Customization** - Configurable chat title, subtitle, and greeting message via HTML attributes (completed 2026-03-08)
 - [ ] **Phase 11: Connection Status & Branding** - Connection state indicator in title bar and updated branding badge
 - [ ] **Phase 12: Documentation Site** - VitePress documentation published to GitHub Pages
 - [ ] **Phase 13: CI/CD Pipeline** - GitHub Actions for build/test, npm publish, and docs deployment
@@ -49,7 +49,7 @@
   2. The native browser tooltip no longer appears on hover over the widget (title property renamed to chat-title)
   3. Setting `chat-subtitle="We usually reply in minutes"` displays subtitle text below the title in the header
   4. Setting `greeting="Hello! How can I help?"` displays that text as the first agent message after WebSocket connects, without sending it to the server
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
 - [ ] 10-01-PLAN.md — Rename title to chat-title, add subtitle, move greeting to post-connect
 
@@ -103,7 +103,7 @@ Phases execute in numeric order: 10 -> 11 -> 12 -> 13
 | 7. Playground Infrastructure | v0.2 | 1/1 | Complete | 2026-03-07 |
 | 8. Mock WebSocket Server | v0.2 | 2/2 | Complete | 2026-03-07 |
 | 9. Control Panel | v0.2 | 2/2 | Complete | 2026-03-07 |
-| 10. Content Customization | v0.3 | 0/1 | In progress | - |
+| 10. Content Customization | 1/1 | Complete   | 2026-03-08 | - |
 | 11. Connection Status & Branding | v0.3 | 0/? | Not started | - |
 | 12. Documentation Site | v0.3 | 0/? | Not started | - |
 | 13. CI/CD Pipeline | v0.3 | 0/? | Not started | - |
