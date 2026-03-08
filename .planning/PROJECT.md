@@ -36,6 +36,14 @@ The widget must reliably connect to the chat backend and stream agent responses 
 
 ### Active
 
+- [ ] Configurable chat title, subtitle, and initial greeting message via HTML attributes
+- [ ] Connection status indicator (green/yellow/red dot) in chat title bar
+- [ ] "Powered by work1.ai" branding badge with link to https://work1.ai
+- [ ] Widget documentation site published via GitHub Pages
+- [ ] GitHub Actions CI/CD pipeline for publishing @work1ai/chat-widget to npm
+
+### Backlog
+
 - [ ] Accessibility / WCAG 2.1 AA compliance (keyboard nav, focus trapping, ARIA, contrast)
 - [ ] Copy message content button on agent messages
 - [ ] Health check polling — hide bubble when service is degraded
@@ -57,6 +65,17 @@ The widget must reliably connect to the chat backend and stream agent responses 
 - Proactive/auto-open messages — aggressive UX
 - Chat ratings/feedback — no backend support
 - Offline / leave a message mode — AI is either available or not
+
+## Current Milestone: v0.3 Customization, Docs & CI/CD
+
+**Goal:** Add content customization (title, subtitle, greeting), connection status feedback, updated branding, a documentation site, and CI/CD for npm publishing.
+
+**Target features:**
+- Configurable chat title, subtitle, greeting message (HTML attributes)
+- Connection status dot (green=connected, yellow=connecting, red=disconnected) in title bar
+- "Powered by work1.ai" badge linking to https://work1.ai
+- Documentation site for widget usage (published via gh-pages)
+- GitHub Actions CI/CD for @work1ai/chat-widget npm publishing
 
 ## Context
 
@@ -96,4 +115,4 @@ Dev playground with mock WebSocket, runtime controls, and scenario triggers on p
 | Console + UI scenario triggers | Console for dev, UI buttons for interactive testing | ✓ Good — MockWebSocket.instance accessible both ways |
 
 ---
-*Last updated: 2026-03-07 after v0.2 milestone*
+*Last updated: 2026-03-07 after v0.3 milestone start*

@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v0.2
-milestone_name: Dev Playground
-status: archived
-stopped_at: Milestone v0.2 archived
-last_updated: "2026-03-07T23:30:00.000Z"
-last_activity: 2026-03-07 — Milestone v0.2 archived
+milestone: v0.3
+milestone_name: Customization, Docs & CI/CD
+status: defining_requirements
+stopped_at: Defining requirements
+last_updated: "2026-03-07T23:45:00.000Z"
+last_activity: 2026-03-07 — Milestone v0.3 started
 progress:
-  total_phases: 3
-  completed_phases: 3
-  total_plans: 5
-  completed_plans: 5
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -21,12 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-07)
 
 **Core value:** The widget must reliably connect to the chat backend and stream agent responses in real time
-**Current focus:** Planning next milestone
+**Current focus:** Defining requirements for v0.3
 
 ## Current Position
 
-Status: v0.2 Dev Playground archived. Ready for next milestone.
-Last activity: 2026-03-07 — Milestone v0.2 archived
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-03-07 — Milestone v0.3 started
 
 ## Performance Metrics
 
