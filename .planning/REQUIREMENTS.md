@@ -35,10 +35,10 @@ Requirements for v0.3 Customization, Docs & CI/CD. Each maps to roadmap phases.
 
 ### CI/CD
 
-- [ ] **CICD-01**: GitHub Actions CI workflow runs build and tests on every push and PR
-- [ ] **CICD-02**: GitHub Actions publish workflow publishes @work1ai/chat-widget to npm on GitHub Release
-- [ ] **CICD-03**: npm package published with --provenance flag for supply chain transparency
-- [ ] **CICD-04**: GitHub Actions workflow deploys documentation site to GitHub Pages
+- [x] **CICD-01**: GitHub Actions CI workflow runs build and tests on every push and PR
+- [x] **CICD-02**: GitHub Actions publish workflow publishes @work1ai/chat-widget to npm on GitHub Release
+- [x] **CICD-03**: npm package published with --provenance flag for supply chain transparency
+- [x] **CICD-04**: GitHub Actions workflow deploys documentation site to GitHub Pages
 
 ## Future Requirements
 
@@ -99,10 +99,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DOCS-03 | Phase 12 | Complete |
 | DOCS-04 | Phase 12 | Complete |
 | DOCS-05 | Phase 12 | Complete |
-| CICD-01 | Phase 13 | Pending |
-| CICD-02 | Phase 13 | Pending |
-| CICD-03 | Phase 13 | Pending |
-| CICD-04 | Phase 13 | Pending |
+| CICD-01 | Phase 13 | Complete |
+| CICD-02 | Phase 13 | Complete |
+| CICD-03 | Phase 13 | Complete |
+| CICD-04 | Phase 13 | Complete |
 
 **Coverage:**
 - v0.3 requirements: 18 total

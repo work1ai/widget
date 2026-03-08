@@ -36,7 +36,7 @@
 - [x] **Phase 10: Content Customization** - Configurable chat title, subtitle, and greeting message via HTML attributes (completed 2026-03-08)
 - [x] **Phase 11: Connection Status & Branding** - Connection state indicator in title bar and updated branding badge (completed 2026-03-08)
 - [x] **Phase 12: Documentation Site** - VitePress documentation published to GitHub Pages (completed 2026-03-08)
-- [ ] **Phase 13: CI/CD Pipeline** - GitHub Actions for build/test, npm publish, and docs deployment
+- [x] **Phase 13: CI/CD Pipeline** - GitHub Actions for build/test, npm publish, and docs deployment (completed 2026-03-08)
 
 ## Phase Details
 
@@ -91,7 +91,7 @@ Plans:
   2. Creating a GitHub Release triggers npm publish of @work1ai/chat-widget with the release version
   3. Published npm packages include provenance attestation (--provenance flag)
   4. Documentation site automatically deploys to GitHub Pages when docs content changes
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
 - [ ] 13-01-PLAN.md — CI, npm publish, and docs deployment GitHub Actions workflows
 
@@ -114,4 +114,4 @@ Phases execute in numeric order: 10 -> 11 -> 12 -> 13
 | 10. Content Customization | v0.3 | 1/1 | Complete | 2026-03-08 |
 | 11. Connection Status & Branding | v0.3 | 1/1 | Complete | 2026-03-08 |
 | 12. Documentation Site | v0.3 | 3/3 | Complete | 2026-03-08 |
-| 13. CI/CD Pipeline | v0.3 | 0/1 | Not started | - |
+| 13. CI/CD Pipeline | 1/1 | Complete   | 2026-03-08 | - |
