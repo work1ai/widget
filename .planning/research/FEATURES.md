@@ -1,14 +1,12 @@
 # Feature Research
 
-**Domain:** Embeddable AI chat widget (customer-facing, website-embedded)
-**Researched:** 2026-03-04
-**Confidence:** MEDIUM (based on training data knowledge of Intercom, Crisp, Drift, Tidio, LiveChat, Zendesk, tawk.to, Olark, HubSpot Chat; no live verification available)
+**Domain:** Embeddable chat widget -- v0.3 customization, documentation, and CI/CD
+**Researched:** 2026-03-07
+**Confidence:** HIGH
 
 ## Scope
 
-This analysis covers **widget-side features only** -- what the end user sees and interacts with in the embedded chat window. Backend/admin panel features (agent dashboards, analytics, routing rules) are out of scope.
-
-The Work1 widget is specifically an **AI agent chat widget** (not human live chat), which narrows the feature set: no agent avatars, no queue positions, no "leave a message" flows. The protocol is fixed (DRAFT.md) and ephemeral (no persistence).
+This analysis covers the **v0.3 milestone features only** -- configurable content (title/subtitle/greeting), connection status indicator, branding update, documentation site, and CI/CD for npm publishing. Features already shipped in v0.1/v0.2 are treated as existing infrastructure, not re-analyzed.
 
 ---
 
@@ -16,157 +14,113 @@ The Work1 widget is specifically an **AI agent chat widget** (not human live cha
 
 ### Table Stakes (Users Expect These)
 
-Features users assume exist. Missing these = product feels broken or amateurish.
+Features that v0.3 must deliver. Without these, the milestone is incomplete.
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| Floating bubble launcher | Every chat widget uses this pattern. Users scan bottom-right for chat. | LOW | Already in design doc. Support bottom-right and bottom-left positions. |
-| Slide-up chat panel | Standard interaction model. Click bubble, panel slides up. | LOW | Already in design doc. Must animate smoothly (CSS transitions, not JS). |
-| Real-time message streaming | Users expect ChatGPT-style token-by-token text appearance for AI. | MEDIUM | Core value. Protocol supports via `token` + `message_end` events. |
-| Typing indicator | Every chat product shows "..." or animation while response is being generated. | LOW | Protocol supports via `typing` events. Use animated dots. |
-| Markdown rendering in agent messages | AI responses use markdown (bold, lists, code blocks, links). Must render properly. | MEDIUM | Use `marked` with DOMPurify/sanitization. Support: bold, italic, links, code, lists. |
-| Message input with send button | Text input area + send action. Enter to send, Shift+Enter for newline. | LOW | Standard pattern. Must disable when disconnected. |
-| Connection state feedback | Users need to know if chat is connected, reconnecting, or broken. | LOW | Show banners/indicators for reconnecting, errors, session ended states. |
-| Error messages | When things break, tell the user clearly. Don't silently fail. | LOW | Protocol provides error events. Show as system messages in chat. |
-| Greeting/welcome message | First-time message before user types anything. Sets context. | LOW | Config attribute `greeting`. Display as agent message on panel open. |
-| Close/minimize button | Users must be able to dismiss the panel and return to the page. | LOW | Standard X button in header. Returns to bubble state. |
-| Auto-scroll to newest message | Chat should scroll to bottom as new tokens/messages arrive. | LOW | Must handle edge case: don't auto-scroll if user has scrolled up to read history. |
-| Mobile responsive | Widget must work on mobile screens (full-width panel, appropriate sizing). | MEDIUM | Panel should go full-width/full-height on narrow viewports. Touch-friendly input. |
-| Shadow DOM encapsulation | Host page CSS must not break widget. Widget CSS must not leak out. | MEDIUM | Already decided (Lit + Shadow DOM). Non-negotiable for embeddable widgets. |
-| CSP compatibility | Many enterprise sites have strict Content-Security-Policy. Widget must work. | MEDIUM | No inline styles via `style=""`, no `eval()`, no inline scripts. Lit handles this if configured. |
-| XSS prevention | Agent markdown could contain malicious content. Must sanitize all rendered HTML. | MEDIUM | Sanitize `marked` output. Never use `innerHTML` with unsanitized content. |
+| Configurable title via HTML attribute | Every embeddable widget lets you set a header title. Already partially exists (`title` property defaults to "Chat"). | LOW | Property exists on `Work1ChatWidget` and is passed to `renderHeader()`. Current code uses `override title` since `title` is a global HTML attribute. Works but shows browser tooltip on hover -- acceptable tradeoff, standard Lit pattern. |
+| Configurable subtitle | Chat widgets universally show a subtitle like "We're online" or "Ask me anything". Microsoft Dynamics, LiveChat, Intercom, Crisp all support this. Adds context beneath the title. | LOW | New `subtitle` string property on widget, passed to `renderHeader()`. Renders as a `<span class="header-subtitle">` below the title. Empty string = hidden (no wasted vertical space). Requires minor header layout change from single-line to stacked title/subtitle. |
+| Configurable greeting message | First message shown when user opens chat. Standard pattern across Intercom, Drift, Crisp, and every major chat widget. | LOW | Already wired: `greeting` attribute exists on `Work1ChatWidget` and `ChatStore.toggleOpen(greeting)` adds it as an agent message. `greetingAdded` flag prevents duplicates. Needs verification, testing, and playground integration -- not a new feature build. |
+| Connection status indicator (3-state dot) | Users need feedback about whether their messages will be delivered. A colored dot (green/yellow/red) is the universal semaphore for connection state in chat UIs. Without it, users type into a disconnected widget with no visual feedback. | MEDIUM | `ConnectionState` type already has 4 values: `disconnected`, `connecting`, `connected`, `reconnecting`. Map: green = connected, yellow = connecting OR reconnecting, red = disconnected. Render as a small dot (8-10px) in the header next to the title. Requires CSS transitions for smooth state changes. Must be accessible: color alone is insufficient per WCAG -- add `aria-label` with text ("Connected"/"Connecting"/"Disconnected"). |
+| "Powered by work1.ai" branding badge with link | Replaces current "Powered by AI" badge. Standard for free/embedded widgets (Intercom, Drift, Crisp all show branding). Links to company site for attribution and marketing. | LOW | Current `renderHeader()` has `<span class="header-badge">Powered by AI</span>`. Replace with "Powered by work1.ai" wrapped in `<a href="https://work1.ai" target="_blank" rel="noopener noreferrer">`. Consider relocating badge from header to panel footer to reduce header clutter now that subtitle + status dot are being added. |
+| Documentation site on GitHub Pages | npm packages without docs are not adopted. Users need installation instructions, attribute reference, theming guide, and examples. Required deliverable per milestone spec. | MEDIUM | Static site with: installation (CDN + npm), quick start, attribute/property reference, CSS custom properties list, CSS parts list, event reference, and examples. Content is straightforward -- widget API surface is small (~10 attributes, ~10 CSS vars, ~4 events). |
+| GitHub Actions CI/CD for npm publishing | Manual npm publishing is error-prone and blocks releases. Automated publishing on release is industry standard. | MEDIUM | npm deprecated classic tokens December 2025. Trusted publishing with OIDC is now the only path. Workflow needs: lint, test, build, publish with auto-provenance. Trigger on GitHub Release creation. Requires one-time manual setup on npmjs.com to configure trusted publisher. |
 
 ### Differentiators (Competitive Advantage)
 
-Features that set the product apart. Not required, but create meaningful value.
+Features that go beyond table stakes and make v0.3 polished.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| Deep theming via CSS custom properties + CSS parts | Most widgets offer color picker at best. CSS custom properties let developers match their brand exactly without iframe limitations. | MEDIUM | Already in design doc. Expose `::part()` selectors for advanced customization. This is a genuine advantage over iframe-based widgets like Intercom. |
-| Zero-dependency Web Component | Works in React, Vue, Angular, vanilla -- no framework lock-in. Competitors often ship React-only or require adapters. | LOW | Already decided. The Web Component approach itself is the differentiator. |
-| Lightweight bundle size | Intercom loads 200-300KB+ of JS. A sub-50KB widget loads faster and doesn't tank page performance. | MEDIUM | Lit is ~5KB. Target total bundle under 50KB gzipped. Actively monitor with bundlesize or similar. |
-| Status messages for tool use | "Looking up service details..." shows the AI is doing work, not just slow. Competitors show generic "typing" only. | LOW | Protocol already sends `status` events with tool-specific messages. Display as transient indicator above typing dots. |
-| Health check before showing bubble | Don't show chat bubble if service is down. Avoids frustrated users clicking dead buttons. | LOW | Optional `GET /health` endpoint exists. Poll on page load, hide bubble if degraded. |
-| Smooth open/close animations | Professional polish. Many budget widgets snap open with no transition. | LOW | CSS transitions on panel. 200-300ms ease-out. No JS animation libraries needed. |
-| Keyboard accessibility | Tab navigation, Enter to send, Escape to close. Not standard in most widgets. | MEDIUM | Important for professional sites. Focus trapping when panel is open. aria-labels on interactive elements. |
-| Pre-chat greeting with delayed appearance | Bubble appears immediately, but a "tooltip" greeting pops up after 3-5 seconds. Draws attention without being invasive. | LOW | Crisp and Tidio do this well. Small notification-style tooltip near the bubble. |
-| Start new conversation action | After session ends (idle timeout, error), clearly offer to start fresh. | LOW | Already in design doc for session_end handling. Clean UX for session reset. |
-| Copy message content | Users often want to copy AI responses (especially code blocks). | LOW | Copy button on hover for agent messages. Essential for code-heavy responses. |
+| Custom Elements Manifest (custom-elements.json) | Machine-readable API documentation. Enables IDE autocomplete in VS Code, JetBrains, and documentation tool integration. Most serious web component libraries ship this. Sets work1-chat-widget apart from widgets that only have README docs. | LOW | Use `@custom-elements-manifest/analyzer` with `--litelement` flag. One script in package.json: `"analyze": "cem analyze --litelement"`. Add `custom-elements.json` to `files` array and `"customElements": "./custom-elements.json"` field in package.json. One-time setup, then auto-generates on build. |
+| Playground controls for new attributes | v0.2 playground already has runtime controls for colors, position, size, bubble icon, and WebSocket settings. Adding title/subtitle/greeting/status controls makes the playground a live documentation and demo tool. | LOW | Add text inputs for title, subtitle, greeting to existing controls panel. Add connection status simulation via mock scenarios. Leverages existing v0.2 infrastructure directly. |
+| Provenance attestations on npm package | npm provenance proves the package was built from a specific commit in a specific repo via a verified CI pipeline. Builds trust with security-conscious adopters. Shows a green checkmark on npmjs.com package page. | LOW | Free with OIDC trusted publishing -- npm CLI auto-generates provenance attestations without the `--provenance` flag. Zero extra configuration. |
+| Interactive documentation examples | Live widget demos embedded in documentation pages. Users can see and interact with the widget before installing, not just read code snippets. | MEDIUM | Embed the IIFE bundle in docs pages via `<script>` tag and render live `<work1-chat-widget>` instances with mock mode. VitePress supports custom Vue components that can wrap this. Depends on having a demo/mock endpoint or bundling mock server. |
 
 ### Anti-Features (Commonly Requested, Often Problematic)
 
-Features that seem good but create problems -- especially for an AI-only, ephemeral chat widget.
-
 | Feature | Why Requested | Why Problematic | Alternative |
 |---------|---------------|-----------------|-------------|
-| Pre-chat forms (name/email collection) | "We need to know who we're talking to" | Adds friction before conversation. Kills conversion rates. AI chat doesn't need identity to help. The protocol has no concept of user identity. | If needed later, collect info mid-conversation via the AI agent itself asking naturally. |
-| Chat history persistence (localStorage) | "Users should see past conversations" | PROJECT.md explicitly says ephemeral. Adding persistence creates data privacy obligations (GDPR right-to-delete), stale conversation UX issues, and storage quota problems. Protocol has no session resume. | Show "Conversations are not saved" in UI. Keep it simple and privacy-friendly. |
-| File/image upload | "Users need to share screenshots" | Requires backend file handling, storage, virus scanning, CDN. Protocol only supports text messages. Massive scope increase. | Defer entirely. If needed, add as protocol v2 feature with backend support. |
-| Sound notifications | "Play a ding when agent responds" | Annoying. Unexpected audio on websites is hostile UX. Different user contexts (office, public, headphones). Auto-play audio policies in browsers. | Never auto-play sound. If added, must be opt-in and off by default. |
-| Emoji picker | "Users love emojis" | Significant bundle size increase for emoji data/images. Users can type emoji on their own keyboards (OS-level). | Support rendering emojis in messages (they already render). Don't add a picker UI. |
-| Proactive/triggered messages | "Pop open chat automatically based on page behavior" | Aggressive. Users hate unsolicited popups. Creates negative brand association. Intercom moved away from aggressive triggers. | Allow the bubble tooltip as gentle attention, but never auto-open the panel or inject messages without user action. |
-| Multi-language auto-detection | "Detect user language and switch UI" | i18n is high complexity for small teams. Locale detection is unreliable. PROJECT.md says English only for v1. | English v1. Add i18n framework in v2 if demand warrants. Use simple string constants so i18n is addable later. |
-| Rich message types (cards, carousels, buttons) | "The AI should show product cards and quick-reply buttons" | Requires complex rendering engine, protocol extensions, and tight backend coupling. PROJECT.md explicitly defers this. | Stick with markdown for v1. Markdown can render links, lists, formatted text -- covers 90% of needs. |
-| Avatar/profile customization | "Show agent photo and name" | It's an AI, not a human. Showing a human avatar for AI is deceptive. Adding avatar support is complexity for no v1 value. | Show a simple bot/AI icon. "Powered by AI" badge handles disclosure. |
-| Offline mode / leave a message | "What if no one is available?" | This is an AI agent, not human support. The AI is either available (service up) or not (service down). "Leave a message" implies human follow-up that doesn't exist. | Use health check to hide bubble when service is down. Show clear error when connection fails. |
-| Chat ratings / feedback buttons | "Let users rate the conversation" | Requires backend support for storing ratings. Protocol has no feedback mechanism. Premature optimization -- get the chat working first, then measure. | Defer to v2. When added, submit via separate REST endpoint, not WebSocket. |
+| Configurable status dot colors | Developers want to match status colors to their brand palette. | Green/yellow/red is a universal semaphore. Custom colors break user expectations and accessibility patterns. A blue "connected" dot means nothing to users. | Keep green/yellow/red as fixed semantic colors. Allow hiding the dot entirely via a `hide-status` boolean attribute if they do not want it. |
+| Rich HTML in title/subtitle | Developers want to embed links, bold text, or images in header text. | XSS risk. Allowing HTML in attributes opens injection vectors on customer sites. Increased complexity for marginal value -- header text is 3-5 words. | Plain text only for title/subtitle. The greeting message already renders through the markdown pipeline (as an agent message bubble), so it gets markdown formatting for free. |
+| Auto-generated API docs from source comments | Seems efficient -- write docs once in code, publish everywhere. | Generated docs are consistently terrible for user-facing products. They document implementation, not usage. Users need guides, examples, and context -- not a JSDoc dump of internal methods. | Hand-written documentation with curated examples. Use Custom Elements Manifest for structured metadata (IDE integration), but write the docs site content manually. |
+| Semantic versioning automation (semantic-release) | Automatic version bumping from commit messages. Zero-touch releases. | Adds significant complexity (commit message conventions, release plugins, changelog generation, monorepo config). Overkill for a 3-dependency widget with 5 active requirements and < 100 users. | Manual version bump in package.json before creating a GitHub Release. Simple, predictable, zero tooling overhead. CI publishes whatever version is in package.json when a release is tagged. |
+| Multi-page documentation with versioning | Versioned docs for each release (v0.1, v0.2, v0.3). | Only one version matters -- the latest. Versioned docs are for libraries with breaking changes across maintained LTS lines. This widget is pre-1.0. | Single unversioned documentation site. Add versioning only if/when 1.0 ships with a SemVer commitment and multiple supported major versions. |
+| Storybook for component documentation | Industry standard for component library docs and visual testing. | Storybook is heavy (large dependency tree, complex config). Designed for component libraries with dozens of components. This project has one public custom element (`<work1-chat-widget>`). The existing v0.2 playground already serves the same interactive demo purpose with zero added dependencies. | Keep the dev playground for interactive testing. Use a lightweight SSG for public-facing documentation. |
+| Complex multi-job CI pipeline | Separate jobs for lint, typecheck, unit test, integration test, build, publish. | Over-engineering for the current scale. More jobs = more YAML, more failure points, longer feedback loops. The entire build + test runs in under 60 seconds. | Two jobs maximum: quality-gate (build + test) and publish (on release, needs quality-gate). Add complexity only when build times warrant it. |
 
 ---
 
 ## Feature Dependencies
 
 ```
-Shadow DOM Encapsulation
-    └──required-by──> CSS Custom Properties Theming
-    └──required-by──> CSP Compatibility
+[renderHeader() refactor]
+    unlocks: configurable subtitle
+    unlocks: connection status dot
+    unlocks: branding badge relocation
+    (shared dependency -- do header changes together)
 
-WebSocket Connection (ChatClient)
-    └──required-by──> Message Streaming (token events)
-    └──required-by──> Typing Indicator (typing events)
-    └──required-by──> Status Messages (status events)
-    └──required-by──> Connection State Feedback (reconnecting/error/session_end)
-    └──required-by──> Send Messages (chat-input)
+[Configurable subtitle]
+    requires: renderHeader() refactor (add subtitle parameter)
 
-Message Streaming
-    └──required-by──> Markdown Rendering (renders finalized message content)
-    └──required-by──> Auto-scroll (scrolls as tokens arrive)
+[Connection status indicator]
+    requires: renderHeader() refactor (add status dot to header layout)
+    reads from: ConnectionState in ChatStore (already exists, no changes needed)
 
-Markdown Rendering
-    └──required-by──> XSS Prevention (sanitize rendered HTML)
-    └──required-by──> Copy Message Content (copy rendered/raw content)
+[Branding badge update]
+    requires: renderHeader() refactor (replace text, add link, optionally relocate)
 
-Floating Bubble
-    └──required-by──> Chat Panel (bubble toggles panel)
-    └──required-by──> Pre-chat Tooltip (tooltip anchors to bubble)
+[Greeting message verification]
+    independent: already wired in ChatStore.toggleOpen(greeting)
+    just needs: testing and playground integration
 
-Chat Panel
-    └──required-by──> Mobile Responsive (panel adapts to viewport)
-    └──required-by──> Greeting Message (displays in panel)
+[Documentation site]
+    enhances: all widget features (documents them for users)
+    should follow: widget feature completion (document what actually shipped)
+    independent of: CI/CD pipeline
 
-Connection State Feedback
-    └──required-by──> Start New Conversation (shown after session_end)
+[CI/CD pipeline]
+    independent: can be built in parallel with widget features
+    requires: npm trusted publisher configuration on npmjs.com (one-time manual step)
+    independent of: documentation site
 
-Health Check ──enhances──> Floating Bubble (hide bubble when service down)
-Keyboard Accessibility ──enhances──> Chat Panel (tab navigation, focus trapping)
-Copy Message ──enhances──> Markdown Rendering (copy button on messages)
-Animations ──enhances──> Chat Panel + Floating Bubble (polish)
+[Custom Elements Manifest]
+    enhances: documentation site (structured API reference)
+    enhances: npm package (IDE autocomplete for consumers)
+    independent: can be added at any time
 ```
 
 ### Dependency Notes
 
-- **WebSocket is the foundation:** Everything depends on the connection layer working. Build and test ChatClient first, in isolation.
-- **Markdown requires sanitization:** These are inseparable. Never render markdown without sanitization in the same implementation pass.
-- **Shadow DOM enables theming:** CSS custom properties pierce shadow DOM by design. CSS parts expose internals for advanced styling. Both depend on Shadow DOM being in place.
-- **Mobile responsive depends on panel existing:** Responsive behavior is a CSS concern on top of the panel component, not a separate component.
+- **Header refactor is the critical shared dependency.** Title, subtitle, status indicator, and branding badge all modify `renderHeader()`. The current signature is `renderHeader(title, onClose)` -- it needs to expand. Refactor to an options object (`HeaderConfig`) to avoid parameter bloat. Do all header changes in one pass to prevent repeated refactoring.
+- **Greeting is already implemented.** The `greeting` attribute, `ChatStore.toggleOpen(greeting)` call, and `greetingAdded` dedup flag all exist. This is a testing/verification task, not a feature build. Add playground controls and ensure it renders correctly as an agent message.
+- **Documentation should follow features.** Write docs after widget features are complete so documentation reflects the actual API. Do not write docs for features that might change during implementation.
+- **CI/CD is fully independent.** Can be developed in parallel with everything else. The only blocking dependency is the npm trusted publisher configuration on npmjs.com, which is a manual one-time step by a package admin.
 
 ---
 
-## MVP Definition
+## v0.3 Milestone Definition
 
-### Launch With (v1)
+### Must Ship (Milestone Exit Criteria)
 
-Minimum viable product -- what's needed to ship a working, professional chat widget.
+- [ ] Configurable subtitle attribute -- new property, renders below title in header
+- [ ] Connection status dot (green/yellow/red) in header -- maps to existing `ConnectionState`
+- [ ] "Powered by work1.ai" badge with link to https://work1.ai -- replaces "Powered by AI"
+- [ ] Greeting message verified working + tested -- already wired, needs test coverage
+- [ ] Documentation site published on GitHub Pages -- installation, attributes, theming, events
+- [ ] GitHub Actions CI/CD pipeline -- build, test, publish to npm on release with OIDC
 
-- [ ] Floating bubble launcher (bottom-right/left, configurable) -- the entry point
-- [ ] Chat panel with open/close animation -- the container
-- [ ] WebSocket connection to chat-server -- the foundation
-- [ ] Real-time message streaming (token accumulation) -- the core experience
-- [ ] Typing indicator -- expected AI chat behavior
-- [ ] Markdown rendering with XSS sanitization -- AI responses need formatting
-- [ ] Message input with Enter-to-send -- how users interact
-- [ ] Connection state feedback (connecting, reconnecting, errors, session end) -- trust signals
-- [ ] Greeting message -- sets first-time context
-- [ ] Shadow DOM encapsulation -- non-negotiable for embeddable widgets
-- [ ] CSS custom properties theming (primary color, fonts, sizes) -- customers must brand it
-- [ ] CDN script tag distribution -- lowest friction integration
-- [ ] npm package distribution -- developer-friendly integration
-- [ ] AI disclosure badge -- ethical/legal requirement
-- [ ] Auto-scroll with scroll-lock on user scroll-up -- usability basic
-- [ ] Mobile responsive panel -- significant traffic comes from mobile
+### Should Ship (Polish)
 
-### Add After Validation (v1.x)
+- [ ] Custom Elements Manifest generation (`custom-elements.json` in npm package)
+- [ ] Playground controls for title, subtitle, greeting, and connection status simulation
+- [ ] Provenance attestations on published npm package (free with OIDC)
 
-Features to add once core is working and deployed to real customers.
+### Defer to Later
 
-- [ ] CSS parts for advanced theming -- when customers request deeper customization
-- [ ] Health check integration -- when service reliability is proven and monitoring shows dead-button issues
-- [ ] Keyboard accessibility (tab, escape, focus trapping) -- when enterprise customers require it
-- [ ] Copy message content button -- when users report needing to copy AI responses
-- [ ] Pre-chat tooltip on bubble -- when conversion optimization begins
-- [ ] Status messages for tool use -- when agent tool use is common enough to warrant UI
-- [ ] Configurable bubble icon (URL or built-in set) -- when branding requests come in
-- [ ] Bundle size optimization pass -- when performance metrics show issues
-
-### Future Consideration (v2+)
-
-Features to defer until product-market fit is established.
-
-- [ ] i18n / localization framework -- when non-English markets are targeted
-- [ ] Rich message types (cards, buttons, quick replies) -- when protocol v2 supports them
-- [ ] File upload -- when backend file handling exists
-- [ ] Chat ratings/feedback -- when there's a backend to receive and act on feedback
-- [ ] WCAG 2.1 AA compliance -- when accessibility audit is prioritized
-- [ ] Message persistence / conversation history -- only if protocol adds session resume
+- [ ] Interactive live widget demos in documentation pages
+- [ ] Bundle size monitoring in CI
+- [ ] Automated changelog generation
 
 ---
 
@@ -174,79 +128,169 @@ Features to defer until product-market fit is established.
 
 | Feature | User Value | Implementation Cost | Priority |
 |---------|------------|---------------------|----------|
-| WebSocket connection + streaming | HIGH | MEDIUM | P1 |
-| Floating bubble + panel | HIGH | LOW | P1 |
-| Markdown rendering + sanitization | HIGH | MEDIUM | P1 |
-| Message input (Enter/Shift+Enter) | HIGH | LOW | P1 |
-| Typing indicator | HIGH | LOW | P1 |
-| Connection state feedback | HIGH | LOW | P1 |
-| Shadow DOM encapsulation | HIGH | LOW | P1 |
-| Greeting message | MEDIUM | LOW | P1 |
-| CSS custom properties theming | HIGH | MEDIUM | P1 |
-| Auto-scroll | MEDIUM | LOW | P1 |
-| AI disclosure badge | MEDIUM | LOW | P1 |
-| CDN + npm distribution | HIGH | MEDIUM | P1 |
-| Mobile responsive | HIGH | MEDIUM | P1 |
-| CSP compatibility | MEDIUM | LOW | P1 |
-| XSS prevention | HIGH | LOW | P1 |
-| Open/close animations | MEDIUM | LOW | P1 |
-| Status messages (tool use) | MEDIUM | LOW | P2 |
-| Copy message button | MEDIUM | LOW | P2 |
-| Health check integration | LOW | LOW | P2 |
-| Keyboard accessibility | MEDIUM | MEDIUM | P2 |
-| CSS parts (advanced theming) | LOW | LOW | P2 |
-| Pre-chat tooltip | LOW | LOW | P2 |
-| Custom bubble icon (URL) | LOW | LOW | P2 |
-| Bundle size monitoring | MEDIUM | LOW | P2 |
-| i18n framework | LOW | HIGH | P3 |
-| Rich message types | MEDIUM | HIGH | P3 |
-| WCAG compliance | MEDIUM | HIGH | P3 |
-| File upload | LOW | HIGH | P3 |
-| Chat feedback/ratings | LOW | MEDIUM | P3 |
+| Connection status indicator | HIGH | MEDIUM | P1 |
+| Configurable subtitle | HIGH | LOW | P1 |
+| "Powered by work1.ai" badge | HIGH | LOW | P1 |
+| Greeting message verification | MEDIUM | LOW | P1 |
+| Documentation site | HIGH | MEDIUM | P1 |
+| CI/CD npm publishing | HIGH | MEDIUM | P1 |
+| Custom Elements Manifest | MEDIUM | LOW | P2 |
+| Playground controls for new attrs | MEDIUM | LOW | P2 |
+| Interactive docs demos | LOW | MEDIUM | P3 |
+| Bundle size monitoring | MEDIUM | LOW | P3 |
 
 **Priority key:**
-- P1: Must have for launch -- the widget is incomplete without these
-- P2: Should have, add when possible -- improves quality and adoption
-- P3: Nice to have, future consideration -- wait for demand signals
+- P1: Must ship for v0.3 milestone completion
+- P2: Should ship, adds polish and developer experience
+- P3: Nice to have, defer if timeline is tight
 
 ---
 
-## Competitor Feature Analysis
+## Implementation Notes
 
-Analysis based on training data knowledge of major embeddable chat widgets (MEDIUM confidence -- not verified against live products as of 2026-03-04).
+### Header Refactor Strategy
 
-| Feature | Intercom | Crisp | Tidio | Our Approach |
-|---------|----------|-------|-------|--------------|
-| Launcher style | Bubble (bottom-right) | Bubble (bottom-right/left) | Bubble (bottom-right) | Bubble, configurable position |
-| Panel style | Slide-up panel, large | Slide-up panel | Slide-up panel | Slide-up panel, configurable size |
-| Theming | Limited color config via admin | Color config + some CSS | Admin panel config | Deep CSS custom properties + CSS parts |
-| Framework approach | React (iframe) | Custom JS (iframe) | React (iframe) | Web Component (Shadow DOM) -- no iframe |
-| Bundle size | 200-300KB+ | ~100KB+ | 150KB+ | Target sub-50KB gzipped |
-| Markdown | Limited formatting | Basic markdown | Basic formatting | Full markdown via marked |
-| Typing indicator | Yes (dots animation) | Yes (dots) | Yes (dots) | Yes, animated dots |
-| Rich messages | Cards, carousels, buttons | Some rich types | Cards, quick replies | Markdown only (v1) |
-| File upload | Yes | Yes | Yes | No (v1) |
-| Pre-chat form | Yes (configurable) | Yes | Yes | No (anti-feature) |
-| Offline mode | Leave a message | Leave a message | Leave a message | Hide bubble (health check) |
-| Sound | Configurable ding | Optional sound | Sound on message | No (anti-feature) |
-| Chat history | Persisted (account-based) | Persisted (cookie) | Persisted | Ephemeral (by design) |
-| Mobile UX | Full-screen panel | Full-screen panel | Full-screen panel | Responsive full-width panel |
-| CSP compatible | Iframe (mostly) | Iframe (mostly) | Iframe (mostly) | Native Shadow DOM (fully) |
-| Encapsulation method | iframe | iframe | iframe | Shadow DOM |
+Current `renderHeader()` signature:
+```typescript
+renderHeader(title: string, onClose: () => void): TemplateResult
+```
 
-**Key insight:** Most competitors use iframes for encapsulation, which provides strong isolation but limits theming and creates accessibility barriers. Our Shadow DOM + Web Component approach gives equal isolation with superior theming capability and native DOM integration. This is the primary technical differentiator.
+Proposed expanded signature:
+```typescript
+interface HeaderConfig {
+  title: string;
+  subtitle: string;
+  connectionState: ConnectionState;
+  onClose: () => void;
+}
+renderHeader(config: HeaderConfig): TemplateResult
+```
+
+This avoids positional parameter bloat and is forward-compatible for adding more header features later (e.g., agent avatar, unread count).
+
+### Connection Status Dot Specification
+
+| ConnectionState value | Dot color | aria-label | CSS class |
+|----------------------|-----------|------------|-----------|
+| `connected` | Green (#22c55e) | "Connected" | `.status-dot--connected` |
+| `connecting` | Yellow (#eab308) | "Connecting" | `.status-dot--connecting` |
+| `reconnecting` | Yellow (#eab308) | "Reconnecting" | `.status-dot--reconnecting` |
+| `disconnected` | Red (#ef4444) | "Disconnected" | `.status-dot--disconnected` |
+
+- Size: 8px diameter circle
+- Position: inline next to title text, vertically centered
+- Transition: `background-color 300ms ease` for smooth state changes
+- Optional pulse animation on `connecting`/`reconnecting` states to indicate activity
+
+### Branding Badge Placement Decision
+
+With subtitle and status dot being added to the header, the header is getting crowded. Two options:
+
+1. **Keep in header** (simpler): Badge stays right-aligned in header row. Risk of visual clutter with title + subtitle + dot + badge + close button.
+2. **Move to panel footer** (cleaner): Badge renders below the input area as a small footer line. Frees header space. More common pattern in competitor widgets (Intercom, Crisp both put branding at bottom).
+
+Recommendation: **Move to panel footer.** The header should focus on title, subtitle, status, and close. Branding is secondary information that belongs at the periphery.
+
+### Documentation Site Technology
+
+Use **VitePress** because:
+- Built on Vite (same build tool as the widget -- team already knows Vite config patterns)
+- Excellent GitHub Pages deployment with a built-in GitHub Actions workflow template
+- Markdown-first with optional Vue component embedding for live demos later
+- Beautiful default theme needs zero customization to look professional
+- Lighter weight than Docusaurus (no React dependency, faster builds)
+- Active maintenance by the Vue.js team
+
+Documentation structure:
+```
+docs/
+  .vitepress/config.ts
+  index.md              (hero page with install snippet)
+  guide/
+    installation.md     (CDN script tag + npm install)
+    quick-start.md      (minimal working example)
+    attributes.md       (title, subtitle, greeting, position, etc.)
+    theming.md          (CSS custom properties + CSS parts reference)
+    events.md           (w1-connected, w1-disconnected, etc.)
+  examples/
+    basic.md            (minimal setup)
+    themed.md           (custom colors and branding)
+    framework.md        (React, Vue, Angular integration)
+```
+
+### CI/CD Pipeline Architecture
+
+```
+Trigger: GitHub Release published (tag pattern: v*)
+
+Job 1: quality-gate
+  - actions/checkout@v4
+  - actions/setup-node@v4 (Node 20)
+  - npm ci
+  - npm run build
+  - npm test
+  - npm audit --audit-level=moderate
+
+Job 2: publish (needs: quality-gate, environment: npm)
+  permissions:
+    id-token: write    # OIDC for trusted publishing
+    contents: read
+  - actions/checkout@v4
+  - actions/setup-node@v4 (Node 20, registry-url: 'https://registry.npmjs.org')
+  - npm ci
+  - npm run build
+  - npm publish        # No NODE_AUTH_TOKEN needed, OIDC handles auth
+                       # Provenance attestations auto-generated
+```
+
+**Setup requirement:** A package admin must configure the trusted publisher on npmjs.com before the first CI publish. Settings: org = repo owner, repo = widget, workflow = exact filename (e.g., `publish.yml`), environment = `npm`.
+
+### Greeting Message -- What Already Works
+
+From code review of `work1-chat-widget.ts` and `chat-store.ts`:
+- `greeting` property is declared with `@property({ type: String })`
+- `handleOpen()` calls `this.store.toggleOpen(this.greeting)`
+- `ChatStore.toggleOpen(greeting)` adds the greeting as an agent message with `greetingAdded` dedup flag
+- The greeting renders as a normal agent message bubble with markdown support
+
+What needs verification:
+- Does it render correctly in the message list? (visual check)
+- Does the `greetingAdded` flag persist across close/reopen? (it should -- flag is on ChatStore instance)
+- Is there test coverage for greeting display?
+- Is there a playground control to set the greeting at runtime?
+
+---
+
+## Competitor Feature Analysis (v0.3-specific features)
+
+| Feature | Intercom | Crisp | Drift | Our v0.3 Approach |
+|---------|----------|-------|-------|--------------------|
+| Configurable title | JS config object | Settings panel | JS config | HTML attribute `title` (framework-agnostic, no JS required) |
+| Subtitle / tagline | "We typically reply in..." | Agent online status | "Online" / "Away" | HTML attribute `subtitle`, developer-controlled plain text |
+| Connection status | Implicit (shows agent availability) | Green dot on agent avatar | "Online" text label | Explicit 3-state dot in header with aria-label for accessibility |
+| Greeting message | Rules engine with triggers and targeting | Auto-message with delay | Playbook-driven sequences | Simple `greeting` attribute, appears once on first panel open |
+| Branding badge | "We run on Intercom" (paid plans remove it) | "Powered by Crisp" (paid removes) | Drift logo | "Powered by work1.ai" with link, not removable |
+| Documentation | Extensive developer docs site | API reference docs | Developer hub | VitePress site on GitHub Pages |
+| npm package | No (script tag only) | No (script tag only) | No (script tag only) | Both CDN and npm -- genuine differentiator |
+| CI/CD publishing | Internal (not open source) | Internal | Internal | GitHub Actions with OIDC trusted publishing + provenance |
+
+**Key v0.3 insight:** Most competitor widgets do not publish as npm packages or provide machine-readable API manifests. The combination of npm distribution + Custom Elements Manifest + public documentation site positions work1-chat-widget as a developer-first tool rather than a marketing-first widget. This is a meaningful differentiator for the developer audience.
 
 ---
 
 ## Sources
 
-- Training data knowledge of Intercom Messenger, Crisp Chat, Tidio, LiveChat, Zendesk Web Widget, tawk.to, Olark, HubSpot Chat (MEDIUM confidence -- not verified against live products)
-- Project DRAFT.md (WebSocket protocol specification) (HIGH confidence -- primary source)
-- Project design document `docs/plans/2026-03-04-chat-widget-design.md` (HIGH confidence -- primary source)
-- PROJECT.md constraints and scope (HIGH confidence -- primary source)
-
-**Note:** Web search and web fetch tools were unavailable during this research. Feature landscape is based on extensive training data about these products but should be considered MEDIUM confidence. The competitor feature matrix in particular may have shifted since training cutoff (May 2025). Core conclusions about table stakes vs differentiators are stable patterns unlikely to have changed.
+- [npm Trusted Publishing docs](https://docs.npmjs.com/trusted-publishers/) -- OIDC setup, classic token deprecation (HIGH confidence)
+- [npm Provenance Statements](https://docs.npmjs.com/generating-provenance-statements/) -- automatic with trusted publishing (HIGH confidence)
+- [GitHub blog: npm trusted publishing GA (July 2025)](https://github.blog/changelog/2025-07-31-npm-trusted-publishing-with-oidc-is-generally-available/) -- confirms OIDC is generally available (HIGH confidence)
+- [Custom Elements Manifest analyzer](https://custom-elements-manifest.open-wc.org/analyzer/getting-started/) -- `@custom-elements-manifest/analyzer` with Lit support (HIGH confidence)
+- [Custom Elements Manifest spec](https://github.com/webcomponents/custom-elements-manifest) -- file format for describing custom elements (HIGH confidence)
+- [VitePress](https://vitepress.dev/) -- Vite-powered static site generator (HIGH confidence)
+- [VitePress GitHub Pages deployment guide](https://vitepress.dev/guide/deploy) -- built-in deployment workflow (HIGH confidence)
+- [Chat UI Design Patterns 2025](https://bricxlabs.com/blogs/message-screen-ui-deisgn) -- status indicator best practices (MEDIUM confidence)
+- [status-indicator web component](https://github.com/tnhu/status-indicator) -- reference implementation for colored status dots (MEDIUM confidence)
+- Existing codebase: `chat-header.ts`, `work1-chat-widget.ts`, `chat-store.ts`, `chat-store.types.ts` (HIGH confidence -- primary source)
 
 ---
-*Feature research for: Embeddable AI Chat Widget*
-*Researched: 2026-03-04*
+*Feature research for: work1-chat-widget v0.3 customization, docs, and CI/CD*
+*Researched: 2026-03-07*

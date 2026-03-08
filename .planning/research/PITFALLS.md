@@ -1,285 +1,269 @@
-# Pitfalls Research
+# Domain Pitfalls
 
-**Domain:** Embeddable chat widget (Web Component, Shadow DOM, WebSocket streaming)
-**Researched:** 2026-03-04
-**Confidence:** MEDIUM (based on well-documented patterns; web search and doc fetch unavailable for live verification)
+**Domain:** Adding configurable content attributes, connection status indicators, docs site, and npm CI/CD publishing to a Lit Web Component chat widget
+**Researched:** 2026-03-07
+**Milestone:** v0.3 Customization, Docs & CI/CD
+
+## Scope
+
+This document covers pitfalls specific to v0.3 features being added to the existing widget. Core widget pitfalls (XSS, streaming jank, CSP, Shadow DOM isolation) were addressed in v0.1/v0.2 and remain valid.
 
 ---
 
 ## Critical Pitfalls
 
-### Pitfall 1: Shadow DOM Blocks Host Page Styles From Reaching Internal Elements — By Design, But Causes Theming Failures
+Mistakes that cause rewrites, broken releases, or user-facing bugs that are expensive to fix.
 
-**What goes wrong:**
-Shadow DOM provides style isolation, which is the entire point. But developers underestimate how complete this isolation is. Google Fonts loaded on the host page will not apply inside the shadow root. The host page's CSS reset will not reach widget internals. `font-family: inherit` does nothing because there is no inheritance chain through the shadow boundary for most properties. Customers set `body { font-family: 'Inter' }` and expect the widget to match — it will not.
+### Pitfall 1: `title` Property Overrides HTMLElement.title, Causing Native Browser Tooltips
 
-**Why it happens:**
-Only CSS inherited properties that are set on the host element itself (or its ancestors) cross the shadow boundary. `font-family`, `color`, and `line-height` do inherit, but only if the host page sets them on an ancestor of `<work1-chat-widget>` — not via class selectors targeting body/html. Font-face declarations defined in the light DOM are not available inside the shadow root; the font files must be loaded independently or the `@font-face` must be duplicated inside the shadow root or in an adoptedStyleSheet.
+**What goes wrong:** The widget already declares `override title: string = 'Chat'` as a `@property()` at line 49 of `work1-chat-widget.ts`. The native `HTMLElement.title` property controls the browser's tooltip popup -- hovering anywhere over the `<work1-chat-widget>` element shows an ugly native tooltip with the chat title text ("Chat" by default). This is invisible during development (developers click, not hover) but immediately noticed by end users.
 
-**How to avoid:**
-- Define all `@font-face` rules in the shadow root's styles OR use `document.adoptedStyleSheets` to share font definitions.
-- For the default font, use `system-ui, sans-serif` which requires no font loading.
-- Use CSS custom properties (`--w1-font-family`) as the theming mechanism, since custom properties DO inherit through shadow boundaries.
-- Document clearly that custom fonts require the customer to also load the font file on their page (the widget inherits the font-family custom property, but needs the font-face to be resolvable).
-- Test the widget embedded on a page with a restrictive CSS reset to catch missing defaults early.
+**Why it happens:** `title` is an inherited property from `HTMLElement`. Lit allows overriding it and the TypeScript `override` keyword is type-correct, but the browser still reads `HTMLElement.title` for native tooltip behavior. The existing code sets the property value which the browser interprets as the element's tooltip text.
 
-**Warning signs:**
-- Widget text renders in Times New Roman or serif fallback on customer sites.
-- Customer reports that "fonts don't match our site."
-- Custom properties work for colors but not for fonts.
+**Consequences:** Every customer site shows a browser-native tooltip on hover. Users report it as a bug. Fixing it later by renaming the attribute is a breaking API change for anyone already using `title="..."` in their HTML.
 
-**Phase to address:**
-Phase 1 (core UI). Theming architecture with CSS custom properties and `system-ui` defaults must be established from the start.
+**Prevention:**
+- Rename the attribute to `chat-title` (property: `chatTitle`) NOW, before v0.3 ships and before external consumers adopt the `title` attribute. The widget is pre-1.0, so this is the right time.
+- For subtitle, use `chat-subtitle` (property: `chatSubtitle`) for naming consistency.
+- After renaming, set `this.title = ''` in `connectedCallback()` to clear any residual native tooltip behavior.
+
+**Detection:** Hover over the widget custom element in any browser. If a yellow/white native tooltip appears, the pitfall is active. **This bug exists in the current codebase right now.**
+
+**Confidence:** HIGH -- verified against existing code and [LitElement issue #133](https://github.com/lit/lit-element/issues/133).
 
 ---
 
-### Pitfall 2: CSP Violations on Customer Sites Block Widget Loading or Functionality
+### Pitfall 2: npm Classic Tokens Revoked -- OIDC Trusted Publishing Now Required
 
-**What goes wrong:**
-Many enterprise and security-conscious sites deploy strict Content-Security-Policy headers. Common CSP issues for embeddable widgets:
-1. `script-src` blocks the CDN-loaded widget script unless the customer adds the CDN domain or a nonce/hash.
-2. `style-src 'unsafe-inline'` is often absent — Lit's default behavior of using `<style>` tags inside shadow DOM can trigger CSP violations on pages that disallow inline styles.
-3. `connect-src` blocks WebSocket connections to `wss://chat.example.com` unless explicitly allowed.
-4. `font-src` blocks loading custom fonts from the widget's CDN if used.
-5. `img-src` blocks icons/images served from the widget CDN.
+**What goes wrong:** Setting up CI/CD with a traditional `NPM_TOKEN` secret stored as a GitHub repo secret either fails immediately (if using a Classic token, which are all revoked) or creates a recurring maintenance burden (Granular tokens expire every 90 days max).
 
-The worst outcome: the widget silently fails to render or connect, with errors only visible in the browser console. Customers blame the widget, not their CSP.
+**Why it happens:** npm permanently deprecated and revoked all Classic Tokens on December 9, 2025. Most GitHub Actions npm publishing tutorials from before late 2025 use the Classic token pattern. Granular tokens still work but require manual rotation every 90 days with mandatory 2FA.
 
-**Why it happens:**
-Widget developers test on their own sites with permissive CSP (or none). CSP violations are silent from the user's perspective — no visible error, just a broken widget. Lit uses constructable stylesheets (`adoptedStyleSheets`) where supported, which avoids `style-src` issues in modern browsers, but falls back to inline `<style>` tags in older browsers. The WebSocket connection being blocked by `connect-src` is particularly insidious because the widget loads fine but cannot connect.
+**Consequences:** Publishing breaks silently after token expiry with a "401 Unauthorized" error. Or: OIDC is set up incorrectly and fails on first publish with unhelpful errors.
 
-**How to avoid:**
-- Use Lit's `adoptedStyleSheets` (the default in modern browsers) — this does NOT violate `style-src` because constructable stylesheets are not inline styles. Verify this works without `'unsafe-inline'` in `style-src`.
-- Never use inline `style` attributes programmatically on elements (use CSS classes or custom properties instead).
-- Never use `eval()`, `new Function()`, or `innerHTML` with script content.
-- Document CSP requirements clearly: customers must add the CDN domain to `script-src` and the WebSocket host to `connect-src`.
-- Provide a CSP troubleshooting guide with exact directives needed.
-- Test with a maximally restrictive CSP: `default-src 'none'; script-src 'self' cdn.example.com; style-src 'self'; connect-src wss://chat.example.com; img-src 'self'`.
-- Bundle all icons as inline SVG within templates (no external image loads needed).
+**Prevention:**
+- Use OIDC Trusted Publishing from the start -- it eliminates token management entirely.
+- Critical OIDC requirements (all must be met):
+  1. `permissions: { id-token: write }` in the GitHub Actions publish job
+  2. npm CLI >= 11.5.1 (add `npm install -g npm@latest` step)
+  3. `--provenance` flag on `npm publish` command
+  4. `repository.url` in `package.json` must exactly match `git+https://github.com/owner/widget.git`
+  5. Configure trusted publisher at `npmjs.com/package/@work1ai/chat-widget/access`
+  6. `setup-node` must include `registry-url: 'https://registry.npmjs.org'` explicitly (triggers .npmrc write)
+- **Bootstrap problem:** First publish must use a Granular token because OIDC requires the package to already exist. Plan this one-time manual step.
+- **Fallback option:** If OIDC complexity is blocking, use a Granular token with a calendar reminder for rotation. But OIDC is strictly better long-term.
 
-**Warning signs:**
-- Widget works in development but fails on customer staging environments.
-- Console errors mentioning "Refused to apply inline style" or "Refused to connect."
-- Customer opens a support ticket saying "widget doesn't appear" — first question should be about CSP.
+**Detection:** Set up a dry-run workflow first: `npm publish --dry-run --provenance --access public`. If it fails with auth errors, debug each requirement above sequentially.
 
-**Phase to address:**
-Phase 1 (core build). CSP compatibility must be validated from the first build output. Add a CI test that loads the widget under strict CSP.
+**Confidence:** HIGH -- [npm Trusted Publishing docs](https://docs.npmjs.com/trusted-publishers/), [OIDC GA July 2025](https://github.blog/changelog/2025-07-31-npm-trusted-publishing-with-oidc-is-generally-available/), [practical gotchas](https://philna.sh/blog/2026/01/28/trusted-publishing-npm/).
 
 ---
 
-### Pitfall 3: Markdown Rendering Enables XSS via Unsanitized HTML in Agent Responses
+### Pitfall 3: Publishing a Broken Package That Cannot Be Unpublished After 24 Hours
 
-**What goes wrong:**
-The agent's responses are rendered as markdown. `marked` by default converts markdown to HTML, including raw HTML passthrough. If an agent response contains `<img onerror="alert(1)">` or `<a href="javascript:void(0)">`, it will execute in the customer's page context. Even within Shadow DOM, JavaScript execution happens in the main document's context — Shadow DOM is NOT a security boundary. A compromised or prompt-injected agent could inject scripts that steal customer page data, session tokens, or perform actions as the user.
+**What goes wrong:** The npm package publishes with missing `dist/` files, wrong `exports` paths, or missing type declarations. Consumers install the package and get module-not-found errors. After 24 hours, npm blocks unpublish -- the only recourse is `npm deprecate` plus a new version.
 
-**Why it happens:**
-Developers assume Shadow DOM provides security isolation (it does not — only style/DOM isolation). They also assume `marked` sanitizes by default (it does not — `marked` is a parser, not a sanitizer). The combination creates a false sense of security.
+**Why it happens:** The current `package.json` has no `prepublishOnly` script. Running `npm publish` without building first ships an empty or stale `dist/`. The `files` field is `["dist", "README.md"]` which is correct, but only if `dist/` contains the right files.
 
-**How to avoid:**
-- Use `marked` with `{async: false}` and configure it to strip all raw HTML: set the `renderer` to escape HTML entities or use `marked`'s built-in sanitization options.
-- Apply DOMPurify as a post-processing step on the HTML output from `marked`. DOMPurify is ~7KB gzipped and purpose-built for this.
-- Configure DOMPurify strictly: `DOMPurify.sanitize(html, { ALLOWED_TAGS: ['p', 'strong', 'em', 'a', 'code', 'pre', 'ul', 'ol', 'li', 'br', 'h1', 'h2', 'h3', 'blockquote'], ALLOWED_ATTR: ['href', 'class'], ALLOW_DATA_ATTR: false })`.
-- Force all `<a>` tags to have `target="_blank"` and `rel="noopener noreferrer"` via DOMPurify hooks or marked renderer overrides.
-- Never use Lit's `unsafeHTML` directive without sanitization first.
-- Write explicit tests with XSS payloads: `<script>alert(1)</script>`, `<img onerror=alert(1)>`, `[link](javascript:alert(1))`, and markdown-based injection like `[click](data:text/html,<script>alert(1)</script>)`.
+**Consequences:** Broken first impression. The `@work1ai/chat-widget` name is "burned" with a broken version. Consumers who pin `^0.x.0` get the broken version.
 
-**Warning signs:**
-- Using `innerHTML` or Lit's `unsafeHTML` anywhere in the rendering pipeline without DOMPurify.
-- Tests only verify "markdown renders correctly" but never test "malicious markdown is neutralized."
-- `marked` used with default options and no post-sanitization step.
+**Prevention:**
+- Add `"prepublishOnly": "npm run build && npm test"` to `package.json` scripts.
+- Add a CI step that runs `npm pack --dry-run` and verifies the tarball includes: `dist/work1-chat-widget.es.js`, `dist/work1-chat-widget.iife.js`, `dist/index.d.ts`.
+- Before first real publish, test locally: `npm pack` then install the tarball in a scratch project. Verify `import '@work1ai/chat-widget'` resolves.
+- **Scoped package gotcha:** `@work1ai/chat-widget` is a scoped package. Scoped packages are private by default. Must use `--access public` on first publish, or set `"publishConfig": { "access": "public" }` in `package.json`.
 
-**Phase to address:**
-Phase 1 (message rendering). Sanitization must be built into the markdown pipeline from the first line of code, not added retroactively.
+**Detection:** `npm pack --dry-run` shows exactly what will be published. If `dist/` is empty or missing key files, the build was skipped.
+
+**Confidence:** HIGH -- verified against current `package.json` (no `prepublishOnly`, no `publishConfig`).
 
 ---
 
-### Pitfall 4: Lit Re-renders Entire Message List on Every Streaming Token, Causing Jank
+### Pitfall 4: Connection Status Indicator Exposes Existing Race Conditions
 
-**What goes wrong:**
-Tokens arrive character-by-character (per the protocol: `{"type":"token","content":"<string>"}`). Each token appends to `currentStreamContent` in the store. If this triggers a reactive update that re-renders the entire message list, you get: DOM thrashing on every character, layout recalculations, broken scroll position, high CPU usage, and visible stuttering — especially on long conversations with many messages.
+**What goes wrong:** The connection status dot shows the wrong color during rapid state transitions. Example: open panel -> connecting (yellow) -> server rejects -> user retries -> connecting again. The indicator gets stuck on green or yellow because stale event handlers from a previous ChatClient instance fire and overwrite the current state.
 
-**Why it happens:**
-Lit's reactive property system triggers `requestUpdate()` when any reactive property changes. If `messages` and `currentStreamContent` are reactive properties on the same component (e.g., `message-list`), every token causes a full re-render of the list. Lit's `repeat` directive with proper keys helps, but only if the existing message items are truly unchanged. The real problem is architecture: streaming state mixed with stable message state in the same rendering scope.
+**Why it happens:** In `chat-store.ts`, `connect()` creates a new ChatClient and wires event handlers via `wireClientEvents()`. But the event handlers are closures that reference `this` (the store), not the specific client instance. If client A fires `connected` after client B has been created, the store's `connectionState` is incorrectly set to `connected`. Before v0.3, this race was invisible because there was no visual indicator. The status dot makes it user-facing.
 
-**How to avoid:**
-- Isolate streaming state to a dedicated component. The `message-list` should render finalized messages and delegate the current streaming message to a separate `<streaming-message>` component. Only that component re-renders on token events.
-- Use `requestAnimationFrame` batching for token updates. Accumulate tokens and update the DOM at most once per frame (60fps = ~16ms intervals). Do not re-render on every individual token event.
-- Use Lit's `repeat` directive with stable keys for the finalized message list so Lit can skip unchanged items.
-- For the streaming message, consider direct DOM manipulation (`this.renderRoot.querySelector('.streaming-content').textContent += token`) instead of reactive re-rendering. This is the one case where breaking out of Lit's reactive model is justified for performance.
-- Profile with Chrome DevTools Performance tab during a long streaming response to verify frame times stay under 16ms.
+**Consequences:** Users see a green dot when disconnected, or a permanently yellow dot. Trust in the widget is eroded.
 
-**Warning signs:**
-- Scrollbar jumps during streaming.
-- CPU spikes visible during agent responses.
-- `requestUpdate` called hundreds of times per second in Lit dev tools.
-- Message list "flickers" during streaming.
+**Prevention:**
+- Add a connection generation counter to ChatStore. Increment on each `connect()`. Capture the current generation in each event handler closure. If generation has changed when the event fires, ignore it.
+- In `disconnect()`, null the client reference BEFORE calling `client.disconnect()` so stale handlers find null.
+- Write a test: `store.connect()`, `store.disconnect()`, `store.connect()` in rapid succession -- verify final `connectionState` settles correctly.
 
-**Phase to address:**
-Phase 1 (streaming display). The architecture decision to isolate streaming from finalized messages must be made before building the message list component.
+**Detection:** Add the status indicator to the dev playground and rapidly click connect/disconnect while watching the dot color.
+
+**Confidence:** MEDIUM -- race is structurally present in the code but may not manifest under normal network conditions.
 
 ---
 
-### Pitfall 5: WebSocket Connection Drops Silently Without Recovery Path
+## Moderate Pitfalls
 
-**What goes wrong:**
-The WebSocket connection drops and the widget shows no indication. Common causes: user's network switches (WiFi to cellular), laptop sleep/wake, corporate proxy timeout, server deploy/restart. The widget appears functional (UI is visible, input is enabled) but messages go nowhere. The user types a message, hits send, and nothing happens — or worse, the send appears to succeed (message shows in the chat) but the backend never receives it.
+### Pitfall 5: GitHub Pages Base Path Misconfiguration
 
-**Why it happens:**
-The browser WebSocket API does not reliably fire `onclose` in all network-loss scenarios. Mobile browsers may suspend the WebSocket without firing events. The `readyState` property may still show `OPEN` even when the TCP connection is dead (no heartbeat mechanism). The design doc says "no client-side reconnection" — server handles agent reconnection — but if the WebSocket itself drops (not the agent connection), there is no recovery mechanism beyond a manual "Reconnect" button that the user must notice.
+**What goes wrong:** Docs site deploys to GitHub Pages (green CI check) but all assets return 404. The page is blank or completely unstyled.
 
-**How to avoid:**
-- Implement a client-side heartbeat/ping mechanism: send a lightweight message (or rely on WebSocket protocol pings) on a timer (e.g., every 30 seconds). If no response within a timeout (e.g., 10 seconds), treat the connection as dead.
-- Immediately disable the input and show a "Connection lost" banner when the connection drops.
-- On `send()`, check `ws.readyState === WebSocket.OPEN` before sending. If not open, queue the message and show connection error.
-- Detect browser visibility changes (`document.visibilitychange`). When the page becomes visible again after being hidden, verify the WebSocket is still alive (send a ping or check readyState).
-- Consider automatic reconnection with exponential backoff (1s, 2s, 4s, max 30s) for WebSocket-level drops. The design doc says no client-side reconnection for *agent* reconnection, but WebSocket transport-level reconnection is different and user-expected.
-- Cap reconnection attempts (e.g., 3-5 tries) then fall back to the manual "Start new conversation" button.
+**Why it happens:** GitHub Pages serves project sites from `https://user.github.io/repo-name/`, not the root. If VitePress is not configured with `base: '/widget/'`, asset paths resolve to the wrong URL. Additionally, GitHub's default Jekyll processing removes files starting with `_` or `.`, which VitePress uses.
 
-**Warning signs:**
-- Users report "the chat just stops working" without error messages.
-- Widget works fine on fast connections but fails on mobile/flaky networks.
-- No `onclose` event fires during testing with network throttling.
+**Prevention:**
+- Set `base: '/widget/'` in `.vitepress/config.ts` from the start.
+- Add `.nojekyll` file to deployed output (VitePress does this automatically, but verify).
+- In repo Settings > Pages, set source to "GitHub Actions" (not "Deploy from a branch").
+- Use a separate workflow for docs deployment, not appended to the main CI workflow.
 
-**Phase to address:**
-Phase 1 (connection layer). The ChatClient must handle WebSocket health monitoring from the start. Revisit the "no client-side reconnection" decision — it should apply to agent-level reconnection (which the server handles) but NOT to transport-level WebSocket recovery.
+**Detection:** After deployment, check browser Network tab. If assets load from `/assets/` instead of `/widget/assets/`, base path is wrong.
+
+**Confidence:** HIGH -- [VitePress deploy docs](https://vitepress.dev/guide/deploy).
 
 ---
 
-### Pitfall 6: Bundle Size Exceeds Acceptable Limits for a Third-Party Embed
+### Pitfall 6: Greeting + Connecting State Creates Contradictory UX
 
-**What goes wrong:**
-The widget ships at 150KB+ gzipped, which is unacceptable for a third-party embed that customers add to every page of their site. Common bloat sources: `marked` (~40KB min), `DOMPurify` (~7KB gzip), Lit itself (~16KB gzip), plus application code. Add full emoji support, syntax highlighting for code blocks, or a rich text editor and it balloons further. Customers complain about page load performance impact, or simply refuse to embed it.
+**What goes wrong:** Widget shows greeting message ("Hi! How can I help?") immediately on panel open, but the connection status dot shows yellow (connecting). User sees an "agent message" plus a "not connected" indicator simultaneously, creating confusion about whether the agent is ready.
 
-**Why it happens:**
-In a standalone app, 150KB is nothing. For a third-party widget loaded on every page of a customer's site alongside their own app bundle, every kilobyte matters. Developers add dependencies without tracking total size. Tree-shaking helps but only if libraries are ESM and side-effect-free. `marked` is a particularly large dependency for what amounts to rendering bold, italic, links, code, and lists.
+**Why it happens:** The greeting is added in `toggleOpen()` before `connect()` is called. This is intentional for perceived speed. But adding both a greeting AND a visible status indicator in the same milestone surfaces the visual contradiction.
 
-**How to avoid:**
-- Set a hard bundle size budget: target under 50KB gzipped for the UMD bundle. Track it in CI with `bundlesize` or Vite's `rollup-plugin-visualizer`.
-- Consider replacing `marked` (~40KB) with a minimal markdown subset parser. The widget only needs: bold, italic, links, code/code blocks, lists, and line breaks. A purpose-built parser for this subset can be under 2KB.
-- Alternatively, use `marked` but configure it to only include needed extensions and verify tree-shaking removes unused code.
-- Lit is ~16KB gzipped which is reasonable for what it provides. Do not try to replace it.
-- Lazy-load DOMPurify only when rendering markdown (it is only needed for agent messages, not for the widget chrome).
-- Use Vite's `build.rollupOptions.output.manualChunks` to analyze what is going into the bundle.
-- Avoid adding runtime dependencies for things that can be done with CSS (animations, transitions, layout).
-- Inline SVG icons in templates instead of shipping an icon font or icon library.
+**Prevention:**
+- Keep greeting behavior as-is (it provides good perceived speed).
+- Style the status dot to be subtle and informational (small dot in header), not alarming (no banner).
+- Consider showing "Connecting..." as the subtitle text during the connecting phase, transitioning to the actual subtitle once connected.
+- Do NOT delay the greeting until connection -- that defeats the purpose.
 
-**Warning signs:**
-- Bundle exceeds 50KB gzipped without anyone noticing.
-- `npm install` adds transitive dependencies nobody reviewed.
-- Adding "just one more library" for a minor feature (e.g., date formatting, emoji picker).
+**Detection:** Open panel on throttled network ("Slow 3G" in dev tools). Observe whether the greeting + yellow dot feels natural or contradictory.
 
-**Phase to address:**
-Phase 1 (build setup). Set the bundle size budget in CI from day one. Measure after every dependency addition.
+**Confidence:** MEDIUM -- UX judgment, not a technical bug.
 
 ---
 
-## Technical Debt Patterns
+### Pitfall 7: Missing `reflect: true` on New Attributes
 
-| Shortcut | Immediate Benefit | Long-term Cost | When Acceptable |
-|----------|-------------------|----------------|-----------------|
-| Using `unsafeHTML` without sanitization during prototyping | Faster markdown integration | XSS vulnerability in production | Never — always sanitize, even in prototypes |
-| Skipping `requestAnimationFrame` batching for tokens | Simpler streaming code | Jank on long messages, performance complaints | Never — the overhead of batching is trivial |
-| Hardcoding the WebSocket URL | Faster initial testing | Cannot deploy to multiple environments | Only in the first day of development |
-| Inlining all styles in component files | No separate style architecture needed | Style duplication, harder theming, larger bundle | Phase 1 only — extract to shared styles before Phase 2 |
-| Skipping CSP testing | Faster CI | Silent failures on customer sites with strict CSP | Never — add CSP test in Phase 1 |
-| Not setting a bundle size budget | No CI config needed | Gradual bloat goes unnoticed | Never — takes 5 minutes to configure |
+**What goes wrong:** New attributes like `chat-title` and `chat-subtitle` are added without `reflect: true`. Setting the property via JavaScript (`widget.chatTitle = 'New'`) does not update the HTML attribute, breaking CSS attribute selectors and `getAttribute()`.
 
-## Integration Gotchas
+**Why it happens:** Lit's default is one-way binding: HTML attribute -> JS property. Without `reflect: true`, changes to the property are not written back to the DOM attribute.
+
+**Prevention:**
+- Add `reflect: true` for all content attributes: `chat-title`, `chat-subtitle`, `greeting`.
+- If exposing connection status as an attribute, `reflect: true` is essential so CSS like `work1-chat-widget[connection-status="connected"]` works.
+- Follow the existing `debug` property pattern which already uses `reflect: true`.
+
+**Detection:** Set property via JS, then call `getAttribute()`. If null or stale, reflection is missing.
+
+**Confidence:** HIGH -- [Lit properties docs](https://lit.dev/docs/components/properties/).
+
+---
+
+### Pitfall 8: Version/Tag Mismatch Causes Failed or Duplicate Publishes
+
+**What goes wrong:** CI publishes to npm but `package.json` version does not match git tag, or same version is published twice. npm rejects with "403 Forbidden."
+
+**Prevention:**
+- Trigger publish workflow ONLY on tag push: `on: push: tags: ['v*']`.
+- Validate version match in workflow: `if [ "v$(node -p 'require("./package.json").version')" != "$GITHUB_REF_NAME" ]; then exit 1; fi`.
+- Document release process: `npm version patch/minor` -> push -> push tags -> CI publishes.
+
+**Detection:** npm publish fails with 403. Compare `npm view @work1ai/chat-widget version` against `package.json`.
+
+**Confidence:** HIGH -- standard CI/CD pattern.
+
+---
+
+### Pitfall 9: Duplicate Greeting on Panel Re-open
+
+**What goes wrong:** User opens panel (greeting appears), closes it, opens again -- greeting appears a second time. Chat has duplicate greetings.
+
+**Why it happens:** If the greeting insertion does not check whether it was already added, each `toggleOpen()` call adds another greeting message.
+
+**Prevention:** The current code already has a `greetingAdded` boolean guard in ChatStore. Verify this guard works correctly when the greeting attribute value changes dynamically (e.g., host page updates `greeting` attribute). If the greeting text changes, should it add a new greeting? Probably not -- the guard should be "greeting was added, period" not "this specific greeting text was added."
+
+**Detection:** Open/close the panel three times. Count greeting messages.
+
+**Confidence:** HIGH -- guard already exists in code but needs verification for attribute-change scenarios.
+
+---
+
+## Minor Pitfalls
+
+### Pitfall 10: Branding Badge Link Implemented as `<span>` Instead of `<a>`
+
+**What goes wrong:** "Powered by work1.ai" badge is a `<span>` with click handler. Not keyboard navigable, screen readers ignore it, right-click "Open in new tab" missing.
+
+**Prevention:** Use `<a href="https://work1.ai" target="_blank" rel="noopener noreferrer">`. The existing "Powered by AI" badge at `chat-header.ts:18` is a `<span>` -- the replacement needs to be an `<a>`.
+
+**Confidence:** HIGH.
+
+---
+
+### Pitfall 11: VitePress and Widget Vite Builds Interfere
+
+**What goes wrong:** VitePress build picks up widget's `vite.config.ts` or vice versa, causing errors.
+
+**Prevention:** Keep VitePress in `docs/` or `site/` with its own `.vitepress/config.ts`. VitePress has its own build pipeline independent of the widget's Vite config. Do not place VitePress files in the project root.
+
+**Confidence:** HIGH.
+
+---
+
+### Pitfall 12: CI Runs Full Build on Docs-Only Changes
+
+**What goes wrong:** Editing markdown in `docs/` triggers full CI (build + test), wasting minutes.
+
+**Prevention:** Add path filters: `paths-ignore: ['docs/**', '*.md', '.planning/**']` on the CI workflow. But DO run docs build on docs changes (separate workflow). CI minutes are free for public repos, so this is low priority.
+
+**Confidence:** HIGH.
+
+---
+
+### Pitfall 13: Bundle Size Regression Not Caught by CI
+
+**What goes wrong:** Adding connection status UI or branding CSS increases bundle size beyond 116 KB IIFE without anyone noticing.
+
+**Prevention:** The status dot should be pure CSS (colored circle, no icon library). Promote `scripts/report-size.cjs` to a CI gate: fail if IIFE > 125 KB. Since CI/CD is being added in v0.3, this is a natural fit.
+
+**Confidence:** HIGH -- `scripts/report-size.cjs` exists but has no CI gate.
+
+---
+
+## Phase-Specific Warnings
+
+| Phase Topic | Likely Pitfall | Mitigation |
+|-------------|---------------|------------|
+| Configurable attributes | **P1:** `title` conflicts with HTMLElement.title | Rename to `chat-title` before any consumers adopt it |
+| Configurable attributes | **P7:** Missing `reflect: true` | Add reflection for all content attributes |
+| Configurable attributes | **P9:** Duplicate greeting on re-open | Verify existing `greetingAdded` guard handles attribute changes |
+| Connection status indicator | **P4:** Race conditions in state transitions | Add connection generation counter |
+| Connection status indicator | **P6:** Greeting + connecting UX contradiction | Design indicator as subtle, not alarming |
+| Connection status indicator | **P13:** Bundle size from status UI | Pure CSS dots only, no icon libraries |
+| Branding badge | **P10:** Badge not a real link | Use `<a>` with `target="_blank"` |
+| Documentation site | **P5:** GitHub Pages base path | Set `base` to repo name in config |
+| Documentation site | **P11:** VitePress/widget build interference | Isolate in `docs/` or `site/` directory |
+| CI/CD npm publishing | **P2:** Token deprecation / OIDC setup | Use OIDC Trusted Publishing; plan bootstrap |
+| CI/CD npm publishing | **P3:** Broken package on npm | Add `prepublishOnly`, verify with `npm pack`, set `publishConfig.access` |
+| CI/CD npm publishing | **P8:** Version/tag mismatch | Trigger on tag push only, validate match |
+| CI/CD npm publishing | **P12:** CI runs on docs changes | Add path filters to workflows |
+
+## Integration Gotchas for v0.3
 
 | Integration | Common Mistake | Correct Approach |
 |-------------|----------------|------------------|
-| WebSocket to chat-server | Not handling close code `1008` (pre-accept rejection) — the `onopen` never fires but neither does a useful `onerror` | Check `onclose` with `code === 1008` and show "Unable to connect" immediately. Do not wait for a timeout. |
-| WebSocket to chat-server | Sending messages before `connected` event is received | Queue or disable input until the `connected` event sets `sessionId`. The server may not process messages sent before the agent connection is established. |
-| WebSocket to chat-server | Not enforcing 4096-byte limit client-side | Check `new TextEncoder().encode(JSON.stringify(msg)).length` before sending. Using `string.length` is wrong — it counts UTF-16 code units, not bytes. Multi-byte characters (emoji, CJK) will be under-counted. |
-| Markdown (marked) | Passing raw `marked()` output to `unsafeHTML` | Always pipe through DOMPurify: `unsafeHTML(DOMPurify.sanitize(marked.parse(content)))` |
-| Customer site DOM | Assuming `document.body` is available and writable | The widget is a custom element — it should never touch `document.body` or any DOM outside its own shadow root |
-| Customer site events | Widget click handlers use `stopPropagation()` on composed events, breaking customer site interactions | Only stop propagation on events that must not leak. Most events should be allowed to propagate naturally. |
-
-## Performance Traps
-
-| Trap | Symptoms | Prevention | When It Breaks |
-|------|----------|------------|----------------|
-| Re-rendering entire message list on every token | Scroll jitter, CPU spikes during streaming | Isolate streaming content to its own component; batch token updates with `requestAnimationFrame` | Noticeable at ~20+ messages in history |
-| Parsing markdown on every token arrival | Lag between tokens, visible stutter | Only parse markdown on `message_end` (finalized messages). During streaming, render as plain text or parse on a debounced timer (e.g., every 200ms) | Noticeable with code blocks or complex markdown |
-| Auto-scrolling with `scrollIntoView` on every token | Layout thrashing, scroll fights if user scrolled up | Use `scrollTop` assignment instead. Only auto-scroll if user is already at bottom (within threshold). Detect user scroll-up and pause auto-scroll. | Immediately noticeable |
-| Creating new DOM nodes for each token | GC pressure, memory growth during long responses | Append to existing text node: `textNode.data += token` or update `textContent` on a container | Long streaming responses (100+ tokens) |
-| No cleanup on disconnect | WebSocket stays open, event listeners leak, timers keep running | Implement `disconnectedCallback` in Lit components. Close WebSocket, clear intervals, remove global listeners. | When widget is dynamically added/removed from DOM |
-
-## Security Mistakes
-
-| Mistake | Risk | Prevention |
-|---------|------|------------|
-| Rendering markdown without sanitization | XSS — attacker-controlled content executes scripts in customer page context. Shadow DOM is NOT a security boundary. | Use DOMPurify on all HTML output from `marked`. Whitelist allowed tags and attributes explicitly. |
-| Using `javascript:` URLs in markdown links | XSS via link clicks | DOMPurify strips these by default. Also override `marked`'s link renderer to validate `href` starts with `http://` or `https://`. |
-| Logging sensitive data to console in production | Customer data visible in browser console to any page script | Strip console.log/debug in production builds. Use Vite's `define` to set `__DEV__` flag. |
-| Trusting `Origin` header alone for security | Origin can be spoofed outside browsers | This is the server's problem, not the widget's. But the widget should never include API keys or secrets — the WebSocket URL is the only credential. |
-| Not validating server message types | Malformed server messages could cause rendering errors or unexpected behavior | Parse with a strict type guard. Unknown types should be silently dropped (already in design doc). |
-| Exposing internal APIs on the custom element | Customer page scripts can call methods on the widget element | Only expose documented public methods. Keep internal methods private/protected. Use TypeScript access modifiers. |
-
-## UX Pitfalls
-
-| Pitfall | User Impact | Better Approach |
-|---------|-------------|-----------------|
-| No visual feedback during WebSocket connection | User clicks chat bubble, nothing happens for 1-3 seconds | Show a connecting spinner immediately on bubble click. Transition to chat panel only after `connected` event. |
-| Auto-scroll overrides user scroll position | User scrolls up to re-read a message, streaming token yanks them back to bottom | Track whether user has scrolled up. Only auto-scroll when user is at/near bottom. Show a "scroll to bottom" button when new messages arrive and user is scrolled up. |
-| No character count feedback near 4096 limit | User types a long message, hits send, gets an error | Show remaining characters when content exceeds 80% of limit. Disable send at limit. |
-| Widget panel opens and covers critical page content | Customer's "Buy Now" button or navigation is hidden | Allow position configuration (bottom-right/bottom-left). Keep panel width/height within reasonable bounds. Consider a minimize/maximize toggle. |
-| No distinction between "connection lost" and "session ended" | User does not know whether to wait or start over | "Connection lost" = show retry/reconnect option. "Session ended" = show "Start new conversation" option. Different UI treatments for different states. |
-| Greeting message appears as an agent message | User thinks the agent has already responded and waits | Display greeting as a system/welcome message with distinct styling, not as an agent chat bubble. |
-
-## "Looks Done But Isn't" Checklist
-
-- [ ] **Markdown rendering:** Tests include XSS payloads (`<script>`, `onerror=`, `javascript:` URLs, data URLs) — not just "bold renders bold"
-- [ ] **Shadow DOM isolation:** Widget tested on a page with aggressive CSS (`* { box-sizing: border-box; margin: 0; }`, Bootstrap, Tailwind reset) — verify no style leaks in or out
-- [ ] **CSP compatibility:** Widget loaded under `style-src 'self'; script-src 'self' cdn.example.com` — verify no console errors
-- [ ] **WebSocket error handling:** Tested with connection rejection (code 1008), mid-session drop, idle timeout, and malformed server messages
-- [ ] **Streaming performance:** Profiled with 50+ messages and a 2000-token streaming response — verify < 16ms frame times
-- [ ] **Bundle size:** Measured gzipped size of UMD output — verify under 50KB
-- [ ] **Mobile behavior:** Tested on iOS Safari (unique WebSocket behavior, different viewport handling for keyboard)
-- [ ] **Multiple instances:** Two `<work1-chat-widget>` elements on the same page do not conflict (separate WebSocket connections, separate state)
-- [ ] **Cleanup:** Widget removed from DOM via `element.remove()` — verify WebSocket closes, no leaked timers/listeners
-- [ ] **Font rendering:** Widget tested on a page with no Google Fonts — verify system-ui fallback looks acceptable
-
-## Recovery Strategies
-
-| Pitfall | Recovery Cost | Recovery Steps |
-|---------|---------------|----------------|
-| XSS via unsanitized markdown | HIGH | Add DOMPurify, audit all `unsafeHTML` usage, test with XSS payloads, issue security patch to all CDN consumers |
-| Bundle size bloat (>100KB gzip) | MEDIUM | Run bundle analyzer, identify largest deps, replace `marked` with minimal parser, lazy-load optional features |
-| CSP violations on customer sites | LOW | Document required CSP directives, verify `adoptedStyleSheets` usage, remove any inline style attributes |
-| Streaming performance jank | MEDIUM | Refactor to isolate streaming component, add `requestAnimationFrame` batching, profile and verify |
-| WebSocket silent drops | LOW | Add heartbeat ping, add `visibilitychange` listener, add connection health indicator |
-| Shadow DOM style leakage | MEDIUM | Audit all styles for `:host` specificity, verify no global selectors, test on customer-like pages |
-
-## Pitfall-to-Phase Mapping
-
-| Pitfall | Prevention Phase | Verification |
-|---------|------------------|--------------|
-| Shadow DOM font/style isolation | Phase 1 (UI foundation) | Test widget on page with CSS reset and no custom fonts — text renders correctly with system-ui |
-| CSP violations | Phase 1 (build setup) | CI test loads widget under strict CSP — no console violations |
-| Markdown XSS | Phase 1 (message rendering) | Test suite includes 10+ XSS payloads — all neutralized |
-| Streaming rendering jank | Phase 1 (streaming display) | Performance profile shows < 16ms frames during 2000-token stream |
-| WebSocket silent drops | Phase 1 (connection layer) | Test with network disconnect — widget shows error within 30 seconds |
-| Bundle size bloat | Phase 1 (build setup) | CI gate rejects builds over 50KB gzipped |
-| Auto-scroll hijacking | Phase 1 (message list) | Manual test: scroll up during streaming, position holds |
-| Event propagation leaks | Phase 2 (polish) | Widget click/input events do not trigger host page handlers |
-| Multiple instances conflict | Phase 2 (hardening) | Two widgets on same page maintain independent state |
-| Cleanup on removal | Phase 2 (hardening) | Memory profiling shows no leaks after widget add/remove cycles |
+| `chat-title` + `renderHeader()` | Forgetting to pass subtitle to header | Update `renderHeader()` signature to accept title, subtitle, and status; keep it a pure render function |
+| Connection status + `ConnectionState` type | Only handling 3 states (connected/connecting/disconnected) | The existing `ConnectionState` type includes `'reconnecting'` -- the status dot needs 4 visual states |
+| OIDC + scoped packages | Scoped packages are private by default on npm | Add `"publishConfig": { "access": "public" }` to `package.json` or use `--access public` |
+| Docs site + widget playground | Trying to embed live playground in docs | Do not embed -- different build/deploy pipelines. Link to playground or use static code examples |
+| Dual CI workflows | Docs and publish both trigger on same event | Docs deploys on push to main (content). Publishing deploys on tag push only (versions) |
 
 ## Sources
 
-- Lit documentation on Shadow DOM (lit.dev/docs/components/shadow-dom/) — MEDIUM confidence (training data, could not fetch live)
-- Lit documentation on rendering (lit.dev/docs/components/rendering/) — MEDIUM confidence (training data)
-- DOMPurify documentation (github.com/cure53/DOMPurify) — MEDIUM confidence (training data, well-established library)
-- marked documentation (github.com/markedjs/marked) — MEDIUM confidence (training data)
-- W3C Shadow DOM specification — HIGH confidence (stable spec, well-documented)
-- CSP specification (MDN/W3C) — HIGH confidence (stable, well-documented)
-- WebSocket API specification (MDN) — HIGH confidence (stable API)
-- Project design document (docs/plans/2026-03-04-chat-widget-design.md) — HIGH confidence (primary source)
-- Project protocol contract (DRAFT.md) — HIGH confidence (primary source)
-
-*Note: WebSearch and WebFetch were unavailable during research. All external findings are based on training data (cutoff ~May 2025). Confidence levels reflect this limitation. Core findings are well-established domain knowledge unlikely to have changed, but specific library version details should be verified against current documentation during implementation.*
+- [LitElement title/global attribute conflict - Issue #133](https://github.com/lit/lit-element/issues/133) -- HIGH confidence
+- [Lit Reactive Properties Documentation](https://lit.dev/docs/components/properties/) -- HIGH confidence
+- [HTMLElement.title - MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/title) -- HIGH confidence
+- [npm Trusted Publishing Docs](https://docs.npmjs.com/trusted-publishers/) -- HIGH confidence
+- [npm OIDC GA Announcement July 2025](https://github.blog/changelog/2025-07-31-npm-trusted-publishing-with-oidc-is-generally-available/) -- HIGH confidence
+- [Trusted Publishing Practical Guide](https://philna.sh/blog/2026/01/28/trusted-publishing-npm/) -- HIGH confidence
+- [npm Classic Token Deprecation](https://dev.to/zhangjintao/from-deprecated-npm-classic-tokens-to-oidc-trusted-publishing-a-cicd-troubleshooting-journey-4h8b) -- HIGH confidence
+- [VitePress GitHub Pages Deployment](https://vitepress.dev/guide/deploy) -- HIGH confidence
+- [npm Provenance with GitHub Actions](https://www.thecandidstartup.org/2026/01/26/bootstrapping-npm-provenance-github-actions.html) -- MEDIUM confidence
 
 ---
-*Pitfalls research for: Work1 Chat Widget (embeddable, Shadow DOM, WebSocket streaming)*
-*Researched: 2026-03-04*
+*Pitfalls research for: Work1 Chat Widget v0.3 (customization, docs, CI/CD)*
+*Researched: 2026-03-07*

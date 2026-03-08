@@ -1,170 +1,192 @@
 # Technology Stack
 
-**Project:** Work1 Chat Widget
-**Researched:** 2026-03-04
+**Project:** Work1 Chat Widget v0.3 - Customization, Docs & CI/CD
+**Researched:** 2026-03-07
 
-## Recommended Stack
+## Existing Stack (DO NOT CHANGE)
 
-### Core Framework
+Already validated in v0.1/v0.2 -- not re-researched:
 
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| Lit | 3.3.2 | Web Component rendering with Shadow DOM | The standard library for building Web Components. Tiny runtime (~5KB gzipped), native Shadow DOM encapsulation, reactive properties, and decorators. No framework lock-in — the output is a standard custom element. | HIGH |
-| TypeScript | 5.9.x | Type safety and developer experience | Required by project constraints. Lit has first-class TypeScript support with typed reactive properties and decorator support. Use 5.9.x for latest features. | HIGH |
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Lit | ^3.3.0 | Web Component framework |
+| TypeScript | ^5.7.0 | Type safety |
+| Vite | ^6.0.0 | Build tooling |
+| marked | ^17.0.4 | Markdown rendering |
+| DOMPurify | ^3.3.1 | XSS sanitization |
+| Vitest | ^3.0.0 | Unit testing |
+| happy-dom | ^20.8.3 | DOM testing environment |
 
-### Build Tooling
+## New Stack Additions for v0.3
 
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| Vite | 6.4.x | Build tool, dev server, library bundling | Vite 6 is the recommended stable branch (LTS). Vite 7 (7.3.1) is current latest but very new. Use Vite 6 for stability — it has mature library mode support for ESM and IIFE/UMD output. Fast HMR dev server works well with Lit. | MEDIUM |
-| vite-plugin-dts | 4.5.x | TypeScript declaration generation | Generates `.d.ts` files alongside ESM output for npm consumers. Peer-depends on vite and typescript with no version constraints — works with Vite 6. | HIGH |
+### Documentation Site Generator
 
-**Important note on Vite and UMD:** Vite's library mode uses Rollup under the hood. As of Vite 5+, the `umd` format in library mode requires specifying `build.lib.name` for the global variable. For CDN `<script>` tag usage, IIFE format is actually preferable to UMD because:
+| Technology | Version | Purpose | Why |
+|------------|---------|---------|-----|
+| VitePress | ^1.6.4 | Documentation site | Shares Vite tooling with widget, zero-config Markdown, built-in search, dark mode, GitHub Pages deploy workflow provided officially |
 
-1. IIFE is simpler and lighter — no module loader detection overhead
-2. Web Components self-register via `customElements.define()` — there is no exported module to consume via AMD/CommonJS
-3. The widget auto-registers on script load, so IIFE behavior (execute immediately) is exactly what we want
+**Why VitePress over alternatives:**
 
-**Recommendation:** Use `formats: ['es', 'iife']` instead of `['es', 'umd']`. The IIFE bundle is the CDN script tag artifact. The ESM bundle is the npm package artifact.
+- **Over Starlight (Astro):** VitePress shares the Vite build pipeline already in use. Adding Astro would introduce an entirely separate framework and build system. VitePress is purpose-built for documentation and stays simple. The widget is not an Astro project, so Starlight's component island architecture adds no value.
+- **Over Docusaurus:** Docusaurus is React-based, adding 40+ MB of React dependencies to a Lit project. Its versioning and i18n features are overkill for a single-package widget library. VitePress produces faster sites with smaller bundles.
+- **Over plain Markdown/GitHub wiki:** No search, no theming, no structured navigation. Professional docs site matters for developer adoption of the widget.
 
-### Markdown Rendering
+**VitePress integration points:**
+- Lives in a `site/` directory (separate from the existing `docs/plans/` which contains milestone plans). This avoids confusion between internal planning documents and the public documentation site.
+- Uses `vitepress` as a devDependency only -- not bundled into widget distribution.
+- Build output goes to `site/.vitepress/dist/`.
+- Shares the same Node.js and npm toolchain.
+- `base` config must be set to `/<repo-name>/` for GitHub Pages subdirectory deployment.
+- Add `docs:dev`, `docs:build`, `docs:preview` scripts to package.json.
 
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| marked | 17.0.4 | Markdown to HTML conversion | Lightweight (~40KB), fast, well-maintained, extensible via plugins. Supports all needed features: bold, italic, links, code blocks, inline code, lists. v17 is current stable. Synchronous API by default, which is ideal for real-time streaming token rendering. | HIGH |
-| DOMPurify | 3.3.1 | HTML sanitization (XSS prevention) | The industry standard for HTML sanitization. Must sanitize marked's HTML output before inserting into DOM. Critical for security — agent messages could contain malicious content. CSP-compatible when configured correctly. | HIGH |
+**Confidence:** HIGH -- VitePress 1.x is stable (1.6.4 released ~7 months ago), widely used, officially recommended by Vue/Vite team. No breaking changes expected before 2.0 (currently alpha).
 
-### Testing
+### GitHub Actions CI/CD
 
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| Vitest | 4.0.x | Unit and component testing | Fast, Vite-native test runner. Shares Vite config, so no duplicate build configuration. Jest-compatible API. Design doc already specifies Vitest. | HIGH |
-| @open-wc/testing | 4.0.0 | Web Component test utilities | Provides `fixture()`, `html` tagged template literals, and assertion helpers specifically for testing custom elements. The standard testing library for Web Components. Works with any test runner. | MEDIUM |
-| happy-dom | 20.x | DOM environment for unit tests | Faster than jsdom for Web Component testing. Supports Shadow DOM, custom elements, and MutationObserver. Use for ChatClient and ChatStore unit tests that don't need a real browser. | MEDIUM |
-| Playwright | 1.58.x | Integration/E2E testing | For full integration tests with real browser rendering. Tests the complete widget with a mock WebSocket server. Verifies Shadow DOM rendering, CSS custom properties, and real user interactions. | HIGH |
+| Technology | Version | Purpose | Why |
+|------------|---------|---------|-----|
+| GitHub Actions | N/A (platform) | CI/CD pipeline | Already using GitHub for hosting; native integration, free for public repos |
+| actions/checkout | v5 | Repository checkout | Standard action, latest stable |
+| actions/setup-node | v4 | Node.js environment | Configures Node + npm registry URL + .npmrc |
+| actions/upload-pages-artifact | v3 | GitHub Pages deployment artifact | Official action for Pages deployment |
+| actions/deploy-pages | v4 | GitHub Pages deployment | Official action for Pages deployment |
 
-### Supporting Libraries
+**npm Publishing approach: Token-based with provenance (not OIDC trusted publishing)**
 
-| Library | Version | Purpose | When to Use | Confidence |
-|---------|---------|---------|-------------|------------|
-| marked-highlight | 2.2.3 | Code syntax highlighting in markdown | Only if code block highlighting is desired. Pairs with marked to add syntax highlighting via a highlight function. Can be deferred — not needed for MVP. | MEDIUM |
+Use the traditional `NODE_AUTH_TOKEN` secret approach with `--provenance --access public` flags. Reasoning:
 
-## What NOT to Use
+- **OIDC trusted publishing requires npm >= 11.5.1 or Node >= 24.** The project currently targets Node 20.x (LTS). Upgrading to Node 24 solely for OIDC is premature and may introduce compatibility issues with the existing toolchain.
+- **Token-based publishing is well-established** and the GitHub official docs still show it as the primary approach. An npm granular access token scoped to the `@work1ai/chat-widget` package provides sufficient security.
+- **Migration path:** When the project moves to Node 24 LTS, switch to OIDC trusted publishing by removing the token and configuring the trusted publisher on npmjs.com.
 
-| Technology | Why Not |
-|------------|---------|
-| **React/Preact inside the widget** | Adds framework dependency, increases bundle size, defeats the purpose of framework-agnostic Web Components. Lit is purpose-built for this. |
-| **markdown-it** (v14.1.1) | Heavier than marked (~100KB vs ~40KB), plugin ecosystem is more complex. marked is sufficient for the subset of markdown needed (bold, italic, links, code, lists). |
-| **Stencil** | Adds a compiler layer on top of Web Components. Lit is lighter and more direct — we write standard Web Component code, not a framework abstraction. |
-| **socket.io-client** | The backend uses raw WebSocket, not Socket.IO. Using socket.io-client would add ~45KB for protocol features we don't need. Use the native `WebSocket` API directly. |
-| **jsdom** (for testing) | Historically poor Shadow DOM and custom element support. happy-dom is faster and has better Web Component support. Use jsdom only as a fallback. |
-| **Vite 7.x** | Too new (released recently). Vite 6.x is the stable, well-documented choice. Upgrade to 7 after it matures. |
-| **Any state management library** (Redux, MobX, etc.) | Overkill for a chat widget. Lit's reactive properties + a simple reactive controller pattern (ChatStore) handle all state needs with zero dependencies. |
-| **Tailwind CSS / CSS frameworks** | Cannot use utility-class CSS frameworks inside Shadow DOM without complexity. Use plain CSS with custom properties — this is what Shadow DOM is designed for. |
-| **sanitize-html** | Server-side focused, much heavier than DOMPurify. DOMPurify is browser-native and purpose-built for client-side sanitization. |
+**CI/CD workflow structure (three workflows):**
+
+1. **`ci.yml`** -- Runs on every push and PR to `master`:
+   - Checkout, setup Node 20.x, `npm ci`
+   - `npm run build` (TypeScript + Vite ESM + IIFE)
+   - `npm test` (Vitest)
+   - Validates package can be packed (`npm pack --dry-run`)
+
+2. **`publish.yml`** -- Runs on GitHub Release `published` event:
+   - Same build + test steps as CI
+   - `npm publish --provenance --access public` with `NODE_AUTH_TOKEN` secret
+   - Requires `permissions: { contents: read, id-token: write }` for provenance attestation
+
+3. **`docs.yml`** -- Runs on push to `master` when `site/**` files change:
+   - Checkout, setup Node 20.x, `npm ci`
+   - Build VitePress: `npm run docs:build`
+   - Upload artifact via `actions/upload-pages-artifact`
+   - Deploy via `actions/deploy-pages`
+   - Requires `permissions: { contents: read, pages: write, id-token: write }`
+
+**Confidence:** HIGH -- GitHub Actions patterns for npm publishing are extremely well-documented. The workflow structures are standard.
+
+### Connection Status Indicator
+
+**No new dependencies needed.** The connection status indicator is a pure UI feature using existing stack:
+
+| What | Implementation | Why No New Deps |
+|------|---------------|-----------------|
+| Status dot (green/yellow/red) | CSS with Lit reactive properties | Simple colored circle via CSS `background-color` + `border-radius` |
+| Connection state tracking | Already exists in `ChatClient` WebSocket lifecycle | `onopen`, `onclose`, `onerror` events already handled |
+| State propagation to UI | `ChatStore` ReactiveController already manages state | Add a `connectionStatus` property to the store |
+
+The three states map directly to existing WebSocket lifecycle:
+- **green (connected):** WebSocket `onopen` fired, actively connected
+- **yellow (connecting):** WebSocket created but `onopen` not yet fired
+- **red (disconnected):** WebSocket `onclose`/`onerror` fired, or never connected
+
+**Confidence:** HIGH -- Purely internal state management and CSS. No external libraries needed.
+
+### Configurable Title/Subtitle/Greeting
+
+**No new dependencies needed.** Pure Lit component attributes:
+
+| What | Implementation |
+|------|---------------|
+| `chat-title` attribute | Lit `@property()` with default value |
+| `chat-subtitle` attribute | Lit `@property()` with default value |
+| `greeting-message` attribute | Lit `@property()`, rendered as first message on open |
+
+Standard Lit reactive properties reflected from HTML attributes. The existing theming system (CSS custom properties + `::part()`) already supports visual customization.
+
+**Confidence:** HIGH -- Standard Lit patterns, already used throughout the widget.
+
+### Branding Badge
+
+**No new dependencies needed.** A "Powered by work1.ai" text link at the bottom of the chat panel, styled with existing CSS architecture.
+
+**Confidence:** HIGH -- Simple HTML/CSS addition.
+
+## Complete New Dependencies Summary
+
+### Production Dependencies
+
+**None.** All new features (status indicator, title/subtitle/greeting, branding) use existing Lit + CSS capabilities.
+
+### Dev Dependencies
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| vitepress | ^1.6.4 | Documentation site generator |
+| vue | ^3.5.0 | Peer dependency required by VitePress |
+
+### Installation
+
+```bash
+npm install -D vitepress vue
+```
+
+**Note:** Vue is a required peer dependency of VitePress. It will NOT be bundled into the widget distribution -- it is devDependencies only, used solely for building the docs site.
 
 ## Alternatives Considered
 
-| Category | Recommended | Alternative | Why Not Alternative |
-|----------|-------------|-------------|---------------------|
-| Framework | Lit 3.3.2 | Stencil 4.x | Stencil adds a compilation step and framework abstraction. Lit produces standard Web Components with less magic. |
-| Framework | Lit 3.3.2 | Vanilla JS | Lit saves significant boilerplate for reactive properties, Shadow DOM templates, and lifecycle. The ~5KB cost is worth it. |
-| Markdown | marked 17.x | markdown-it 14.x | marked is lighter, faster, and sufficient for our subset. markdown-it's plugin ecosystem is overkill. |
-| Markdown | marked 17.x | micromark | Lower-level, requires more assembly. marked is batteries-included for our use case. |
-| Sanitizer | DOMPurify 3.3.x | Sanitizer API (native) | The browser-native Sanitizer API is not yet widely supported. DOMPurify is the proven, universal solution. |
-| Build | Vite 6.x | Rollup (direct) | Vite wraps Rollup with a superior dev server and simpler config. No reason to use Rollup directly. |
-| Build | Vite 6.x | esbuild | esbuild lacks Rollup's mature plugin ecosystem needed for library mode output. |
-| Testing | Vitest 4.x | Jest | Jest requires separate config from Vite. Vitest shares the Vite pipeline — zero additional build config. |
-| Testing | Vitest + happy-dom | @web/test-runner 0.20.x | @web/test-runner runs tests in a real browser (good for WC), but Vitest + happy-dom is faster for unit tests. Use Playwright for real-browser integration tests instead. |
-| WebSocket | Native WebSocket API | ws (npm) | ws is a Node.js package. Browsers have a native WebSocket API — no library needed. |
+| Category | Recommended | Alternative | Why Not |
+|----------|-------------|-------------|---------|
+| Docs generator | VitePress | Starlight (Astro) | Introduces separate framework; no shared tooling with Vite config |
+| Docs generator | VitePress | Docusaurus | React dependency bloat; overkill features (versioning, i18n) |
+| Docs generator | VitePress | GitHub Wiki | No search, no theming, unprofessional for developer tools |
+| npm auth | Token + provenance | OIDC trusted publishing | Requires Node >= 24 or npm >= 11.5.1; premature upgrade |
+| Status indicator | CSS dot | External status library | Over-engineered for a colored circle |
+| CI/CD | GitHub Actions | CircleCI / Travis | Already on GitHub; no reason for external CI |
 
-## Vite Library Mode Configuration
+## Configuration Files Needed
 
-This is a critical configuration detail. The design doc calls for UMD + ESM output.
+| File | Purpose |
+|------|---------|
+| `site/.vitepress/config.ts` | VitePress site configuration (nav, sidebar, base path) |
+| `.github/workflows/ci.yml` | CI pipeline (build + test on push/PR) |
+| `.github/workflows/publish.yml` | npm publish on GitHub Release |
+| `.github/workflows/docs.yml` | VitePress build + GitHub Pages deploy |
 
-```typescript
-// vite.config.ts
-import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
+## What NOT to Add
 
-export default defineConfig({
-  plugins: [
-    dts({ rollupTypes: true }), // Bundle .d.ts into single file
-  ],
-  build: {
-    lib: {
-      entry: 'src/index.ts',
-      name: 'Work1ChatWidget',       // Global var for IIFE
-      formats: ['es', 'iife'],       // ESM for npm, IIFE for CDN
-      fileName: (format) => {
-        if (format === 'es') return 'work1-chat-widget.es.js';
-        return 'work1-chat-widget.js'; // IIFE for <script> tag
-      },
-    },
-    rollupOptions: {
-      // No externals — bundle everything for the CDN artifact
-    },
-    minify: 'terser',                // Better minification than esbuild default
-    target: 'es2021',                // Modern browsers only
-  },
-});
-```
-
-**Key points:**
-- `formats: ['es', 'iife']` — IIFE instead of UMD (see rationale above)
-- No externals — the CDN bundle must be fully self-contained
-- `rollupTypes: true` in dts plugin bundles all `.d.ts` into one file for clean npm distribution
-- `target: 'es2021'` — project targets last 2 versions of modern browsers, no IE11
-
-## Installation
-
-```bash
-# Core dependencies
-npm install lit marked dompurify
-
-# Type definitions (DOMPurify ships without built-in types)
-npm install -D @types/dompurify
-
-# Build tooling
-npm install -D vite vite-plugin-dts typescript terser
-
-# Testing
-npm install -D vitest @open-wc/testing happy-dom @playwright/test
-```
-
-**Total production dependencies: 3** (lit, marked, dompurify)
-**Estimated CDN bundle size: ~60-80KB gzipped** (Lit ~5KB + marked ~12KB + DOMPurify ~8KB + widget code ~15-25KB + overhead)
-
-## Version Pinning Strategy
-
-Pin exact major versions in `package.json` using `^` (caret) ranges:
-
-```json
-{
-  "dependencies": {
-    "lit": "^3.3.2",
-    "marked": "^17.0.4",
-    "dompurify": "^3.3.1"
-  }
-}
-```
-
-These are all semver-stable libraries. Caret ranges allow patch and minor updates. Lock exact versions via `package-lock.json`.
+- **No Storybook** -- Already have a custom playground (v0.2). Storybook is overkill for a single-component widget.
+- **No semantic-release / changesets** -- Premature automation. Manual version bumps + GitHub Releases are fine at this stage.
+- **No Turborepo / Nx** -- Single package, not a monorepo.
+- **No additional linting tools** -- Out of scope for v0.3.
+- **No Playwright / Cypress** -- E2E testing is not in v0.3 scope.
+- **No WebSocket reconnection library** -- Server handles reconnection (explicit project constraint).
 
 ## Sources
 
-- npm registry (queried 2026-03-04): lit@3.3.2, marked@17.0.4, dompurify@3.3.1, vite@7.3.1 (latest), vite@6.4.1 (previous LTS), vitest@4.0.18, typescript@5.9.3, vite-plugin-dts@4.5.4, @open-wc/testing@4.0.0, happy-dom@20.8.3, @playwright/test@1.58.2
-- Vite dist-tags: latest=7.3.1, previous=5.4.21, beta=8.0.0-beta.16
-- Project design document: `/docs/plans/2026-03-04-chat-widget-design.md`
-- WebSocket protocol: `/DRAFT.md` (chat-server v0.1.0)
+- [VitePress official site](https://vitepress.dev/) -- Version 1.6.4 stable
+- [VitePress deployment guide](https://vitepress.dev/guide/deploy) -- GitHub Pages workflow with actions/deploy-pages@v4
+- [GitHub Docs: Publishing Node.js packages](https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages) -- npm publish workflow with provenance
+- [npm Trusted Publishing docs](https://docs.npmjs.com/trusted-publishers/) -- OIDC setup (deferred to Node 24)
+- [npm Provenance docs](https://docs.npmjs.com/generating-provenance-statements/) -- --provenance flag requirements
+- [npm Trusted Publishing setup guide](https://remarkablemark.org/blog/2025/12/19/npm-trusted-publishing/) -- Node 24 / npm 11.5.1 requirement confirmed
+- [GitHub blog: npm trusted publishing GA](https://github.blog/changelog/2025-07-31-npm-trusted-publishing-with-oidc-is-generally-available/) -- GA announcement July 2025
+- [Starlight vs Docusaurus comparison](https://blog.logrocket.com/starlight-vs-docusaurus-building-documentation/) -- Docs generator comparison
+- [Documentation Generator Comparison 2025](https://okidoki.dev/documentation-generator-comparison) -- VitePress vs Docusaurus vs alternatives
 
 ## Confidence Notes
 
 | Area | Confidence | Reasoning |
 |------|------------|-----------|
-| Lit | HIGH | Versions verified via npm. Lit 3 is the established standard for Web Components. |
-| marked + DOMPurify | HIGH | Versions verified via npm. Well-established libraries, widely used together. |
-| Vite library mode | MEDIUM | Versions verified. IIFE vs UMD recommendation based on training data knowledge of Vite 6 library mode. The exact config should be validated during implementation. |
-| Vitest + happy-dom | MEDIUM | Versions verified. happy-dom's Shadow DOM support quality should be validated early — may need to fall back to @vitest/browser or Playwright for component tests if Shadow DOM behavior is incomplete. |
-| @open-wc/testing | MEDIUM | Version verified (4.0.0). Training data suggests good Vitest compatibility, but integration should be validated early in the project. |
-| Bundle size estimate | LOW | Based on training data knowledge of individual library sizes. Actual bundle size depends on tree-shaking effectiveness and widget code size. Measure after first build. |
+| VitePress choice | HIGH | Stable 1.x release, shares Vite toolchain, official deployment guides verified |
+| GitHub Actions workflows | HIGH | Official GitHub documentation verified, standard patterns |
+| npm publishing approach | HIGH | Token + provenance is well-documented; OIDC deferral justified by Node version constraint |
+| Connection status (no deps) | HIGH | Pure CSS + existing Lit reactive properties + existing WebSocket lifecycle |
+| Title/subtitle/greeting (no deps) | HIGH | Standard Lit @property() patterns already in use |
+| VitePress version (1.6.4) | MEDIUM | Version from npm search results, not directly verified on npm registry |
