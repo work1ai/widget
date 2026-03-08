@@ -62,7 +62,9 @@ Plans:
   2. A yellow dot appears in the title bar while WebSocket is connecting
   3. A red dot appears in the title bar when WebSocket is disconnected or connection fails
   4. The badge at the bottom of the chat panel reads "Powered by work1.ai" and clicking it opens https://work1.ai in a new tab
-**Plans**: TBD
+**Plans:** 1 plan
+Plans:
+- [ ] 11-01-PLAN.md — Add connection status dot to header and update branding badge link
 
 ### Phase 12: Documentation Site
 **Goal**: Widget consumers can find complete usage documentation on a public site
@@ -104,6 +106,6 @@ Phases execute in numeric order: 10 -> 11 -> 12 -> 13
 | 8. Mock WebSocket Server | v0.2 | 2/2 | Complete | 2026-03-07 |
 | 9. Control Panel | v0.2 | 2/2 | Complete | 2026-03-07 |
 | 10. Content Customization | 1/1 | Complete    | 2026-03-08 | - |
-| 11. Connection Status & Branding | v0.3 | 0/? | Not started | - |
+| 11. Connection Status & Branding | v0.3 | 0/1 | Not started | - |
 | 12. Documentation Site | v0.3 | 0/? | Not started | - |
 | 13. CI/CD Pipeline | v0.3 | 0/? | Not started | - |
