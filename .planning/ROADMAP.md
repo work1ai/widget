@@ -111,5 +111,5 @@ Phases execute in numeric order: 10 -> 11 -> 12 -> 13
 | 9. Control Panel | v0.2 | 2/2 | Complete | 2026-03-07 |
 | 10. Content Customization | v0.3 | 1/1 | Complete | 2026-03-08 |
 | 11. Connection Status & Branding | v0.3 | 1/1 | Complete | 2026-03-08 |
-| 12. Documentation Site | 3/3 | Complete   | 2026-03-08 | - |
+| 12. Documentation Site | 3/3 | Complete    | 2026-03-08 | - |
 | 13. CI/CD Pipeline | v0.3 | 0/? | Not started | - |
