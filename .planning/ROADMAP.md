@@ -34,7 +34,7 @@
 **Milestone Goal:** Add content customization (title, subtitle, greeting), connection status feedback, updated branding, a documentation site, and CI/CD for npm publishing.
 
 - [x] **Phase 10: Content Customization** - Configurable chat title, subtitle, and greeting message via HTML attributes (completed 2026-03-08)
-- [ ] **Phase 11: Connection Status & Branding** - Connection state indicator in title bar and updated branding badge
+- [x] **Phase 11: Connection Status & Branding** - Connection state indicator in title bar and updated branding badge (completed 2026-03-08)
 - [ ] **Phase 12: Documentation Site** - VitePress documentation published to GitHub Pages
 - [ ] **Phase 13: CI/CD Pipeline** - GitHub Actions for build/test, npm publish, and docs deployment
 
@@ -62,7 +62,7 @@ Plans:
   2. A yellow dot appears in the title bar while WebSocket is connecting
   3. A red dot appears in the title bar when WebSocket is disconnected or connection fails
   4. The badge at the bottom of the chat panel reads "Powered by work1.ai" and clicking it opens https://work1.ai in a new tab
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
 - [ ] 11-01-PLAN.md — Add connection status dot to header and update branding badge link
 
@@ -106,6 +106,6 @@ Phases execute in numeric order: 10 -> 11 -> 12 -> 13
 | 8. Mock WebSocket Server | v0.2 | 2/2 | Complete | 2026-03-07 |
 | 9. Control Panel | v0.2 | 2/2 | Complete | 2026-03-07 |
 | 10. Content Customization | 1/1 | Complete    | 2026-03-08 | - |
-| 11. Connection Status & Branding | v0.3 | 0/1 | Not started | - |
+| 11. Connection Status & Branding | 1/1 | Complete   | 2026-03-08 | - |
 | 12. Documentation Site | v0.3 | 0/? | Not started | - |
 | 13. CI/CD Pipeline | v0.3 | 0/? | Not started | - |

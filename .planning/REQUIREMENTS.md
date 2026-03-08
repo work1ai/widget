@@ -16,14 +16,14 @@ Requirements for v0.3 Customization, Docs & CI/CD. Each maps to roadmap phases.
 
 ### Connection Feedback
 
-- [ ] **CONN-01**: User sees a green dot in the title bar when WebSocket is connected
-- [ ] **CONN-02**: User sees a yellow dot in the title bar when WebSocket is connecting
-- [ ] **CONN-03**: User sees a red dot in the title bar when WebSocket is disconnected
+- [x] **CONN-01**: User sees a green dot in the title bar when WebSocket is connected
+- [x] **CONN-02**: User sees a yellow dot in the title bar when WebSocket is connecting
+- [x] **CONN-03**: User sees a red dot in the title bar when WebSocket is disconnected
 
 ### Branding
 
-- [ ] **BRAND-01**: Badge reads "Powered by work1.ai" instead of "Powered by AI"
-- [ ] **BRAND-02**: Badge text links to https://work1.ai and opens in a new tab
+- [x] **BRAND-01**: Badge reads "Powered by work1.ai" instead of "Powered by AI"
+- [x] **BRAND-02**: Badge text links to https://work1.ai and opens in a new tab
 
 ### Documentation
 
@@ -89,11 +89,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CUST-02 | Phase 10 | Complete |
 | CUST-03 | Phase 10 | Complete |
 | CUST-04 | Phase 10 | Complete |
-| CONN-01 | Phase 11 | Pending |
-| CONN-02 | Phase 11 | Pending |
-| CONN-03 | Phase 11 | Pending |
-| BRAND-01 | Phase 11 | Pending |
-| BRAND-02 | Phase 11 | Pending |
+| CONN-01 | Phase 11 | Complete |
+| CONN-02 | Phase 11 | Complete |
+| CONN-03 | Phase 11 | Complete |
+| BRAND-01 | Phase 11 | Complete |
+| BRAND-02 | Phase 11 | Complete |
 | DOCS-01 | Phase 12 | Pending |
 | DOCS-02 | Phase 12 | Pending |
 | DOCS-03 | Phase 12 | Pending |
