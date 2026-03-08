@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v0.3
 milestone_name: Customization, Docs & CI/CD
-status: completed
-stopped_at: Phase 12 context gathered
-last_updated: "2026-03-08T15:35:40.555Z"
-last_activity: 2026-03-08 — Completed 11-01 connection status dot and work1.ai branding
+status: in-progress
+stopped_at: Completed 12-01 documentation site setup
+last_updated: "2026-03-08T15:50:08Z"
+last_activity: 2026-03-08 — Completed 12-01 VitePress docs site with landing page and integration guide
 progress:
   total_phases: 4
   completed_phases: 2
-  total_plans: 2
-  completed_plans: 2
-  percent: 77
+  total_plans: 3
+  completed_plans: 3
+  percent: 84
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-07)
 
 **Core value:** The widget must reliably connect to the chat backend and stream agent responses in real time
-**Current focus:** Phase 11 - Connection Status & Branding
+**Current focus:** Phase 12 - Documentation Site
 
 ## Current Position
 
-Phase: 11 of 13 (Connection Status & Branding) — second phase of v0.3
-Plan: 1 of 1 complete
-Status: Phase complete
-Last activity: 2026-03-08 — Completed 11-01 connection status dot and work1.ai branding
+Phase: 12 of 13 (Documentation Site) — third phase of v0.3
+Plan: 1 of 4 complete
+Status: In progress
+Last activity: 2026-03-08 — Completed 12-01 VitePress docs site with landing page and integration guide
 
-Progress: [███████████████████████░░░░░░░] 77% (10/13 phases complete across all milestones)
+Progress: [█████████████████████████░░░░░] 84% (11/13 phases in progress across all milestones)
 
 ## Performance Metrics
 
@@ -48,6 +48,8 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - [Phase 10]: Greeting stored as ChatStore.greeting property, injected in connected handler, greetingAdded reset on disconnect
 - [Phase 11]: Reconnecting maps to same yellow dot as connecting (no separate visual state)
 - [Phase 11]: Status dot placed inside .header-title with flex layout for tight alignment
+- [Phase 12]: Created stub pages for sidebar links to avoid VitePress dead link build errors
+- [Phase 12]: Used VitePress top-level vue key for custom element compiler options
 
 ### Pending Todos
 
@@ -60,6 +62,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-08T15:35:40.553Z
-Stopped at: Phase 12 context gathered
-Resume file: .planning/phases/12-documentation-site/12-CONTEXT.md
+Last session: 2026-03-08T15:50:08Z
+Stopped at: Completed 12-01 documentation site setup
+Resume file: .planning/phases/12-documentation-site/12-01-SUMMARY.md
