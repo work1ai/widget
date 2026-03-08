@@ -45,10 +45,22 @@ export const panelStyles = css`
     flex-shrink: 0;
   }
 
+  .header-title-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
   .header-title {
     font-size: 16px;
     font-weight: 600;
-    flex: 1;
+  }
+
+  .header-subtitle {
+    font-size: 12px;
+    opacity: 0.85;
+    margin-top: 2px;
   }
 
   .header-badge {

@@ -57,6 +57,72 @@ async function openAndConnect(widget: WidgetInstance): Promise<void> {
   await widget.updateComplete;
 }
 
+describe('chat-title and chat-subtitle', () => {
+  let widget: WidgetInstance;
+
+  afterEach(() => {
+    widget?.remove();
+  });
+
+  it('setting chat-title="Support" renders "Support" in .header-title', async () => {
+    widget = createWidget({ 'chat-title': 'Support' });
+    await widget.updateComplete;
+    // Open panel so header renders
+    (widget as any).store.toggleOpen();
+    await widget.updateComplete;
+
+    const shadow = widget.shadowRoot!;
+    const title = shadow.querySelector('.header-title');
+    expect(title).toBeTruthy();
+    expect(title!.textContent).toBe('Support');
+  });
+
+  it('widget does NOT have override title property (no native tooltip conflict)', async () => {
+    widget = createWidget({ 'chat-title': 'Support' });
+    await widget.updateComplete;
+
+    // HTMLElement.title should be empty string (not overridden by widget)
+    expect(widget.title).toBe('');
+    // chatTitle should have the value
+    expect((widget as any).chatTitle).toBe('Support');
+  });
+
+  it('setting chat-subtitle="We reply fast" renders subtitle below title', async () => {
+    widget = createWidget({ 'chat-title': 'Support', 'chat-subtitle': 'We reply fast' });
+    await widget.updateComplete;
+    (widget as any).store.toggleOpen();
+    await widget.updateComplete;
+
+    const shadow = widget.shadowRoot!;
+    const subtitle = shadow.querySelector('.header-subtitle');
+    expect(subtitle).toBeTruthy();
+    expect(subtitle!.textContent).toBe('We reply fast');
+  });
+
+  it('when chat-subtitle is not set, no .header-subtitle element is rendered', async () => {
+    widget = createWidget({ 'chat-title': 'Support' });
+    await widget.updateComplete;
+    (widget as any).store.toggleOpen();
+    await widget.updateComplete;
+
+    const shadow = widget.shadowRoot!;
+    const subtitle = shadow.querySelector('.header-subtitle');
+    expect(subtitle).toBeNull();
+  });
+
+  it('default chat-title is "Chat" when no attribute is set', async () => {
+    widget = createWidget();
+    await widget.updateComplete;
+    (widget as any).store.toggleOpen();
+    await widget.updateComplete;
+
+    const shadow = widget.shadowRoot!;
+    const title = shadow.querySelector('.header-title');
+    expect(title).toBeTruthy();
+    expect(title!.textContent).toBe('Chat');
+  });
+});
+
 describe('Work1ChatWidget UI states', () => {
   let widget: WidgetInstance;
 

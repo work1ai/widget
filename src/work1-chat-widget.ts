@@ -43,11 +43,19 @@ export class Work1ChatWidget extends LitElement {
   debug: boolean = false;
 
   /**
-   * Header title text.
-   * @attr title
+   * Header title text. Uses `chat-title` attribute to avoid native
+   * HTMLElement.title tooltip conflict.
+   * @attr chat-title
    */
-  @property({ type: String })
-  override title: string = 'Chat';
+  @property({ attribute: 'chat-title', type: String })
+  chatTitle: string = 'Chat';
+
+  /**
+   * Optional subtitle text displayed below the title in the header.
+   * @attr chat-subtitle
+   */
+  @property({ attribute: 'chat-subtitle', type: String })
+  chatSubtitle: string = '';
 
   /**
    * Input placeholder text.
@@ -139,7 +147,7 @@ export class Work1ChatWidget extends LitElement {
         this.store.isOpen,
         pos,
         html`
-          ${renderHeader(this.title, () => this.handleClose())}
+          ${renderHeader(this.chatTitle, this.chatSubtitle, () => this.handleClose())}
           <div class="message-area" part="message-list">
             ${renderMessageList(
               this.store.messages,
