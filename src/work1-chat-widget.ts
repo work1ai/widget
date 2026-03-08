@@ -147,7 +147,7 @@ export class Work1ChatWidget extends LitElement {
         this.store.isOpen,
         pos,
         html`
-          ${renderHeader(this.chatTitle, this.chatSubtitle, () => this.handleClose())}
+          ${renderHeader(this.chatTitle, this.chatSubtitle, this.store.connectionState, () => this.handleClose())}
           <div class="message-area" part="message-list">
             ${renderMessageList(
               this.store.messages,

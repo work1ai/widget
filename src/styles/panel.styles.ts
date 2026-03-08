@@ -55,6 +55,30 @@ export const panelStyles = css`
   .header-title {
     font-size: 16px;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+  }
+
+  .status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+
+  .status-dot--connected {
+    background-color: #22c55e;
+  }
+
+  .status-dot--connecting {
+    background-color: #eab308;
+  }
+
+  .status-dot--disconnected {
+    background-color: #ef4444;
   }
 
   .header-subtitle {
@@ -67,6 +91,15 @@ export const panelStyles = css`
     font-size: 11px;
     opacity: 0.75;
     margin-right: 12px;
+  }
+
+  a.header-badge {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a.header-badge:hover {
+    text-decoration: underline;
   }
 
   .header-close {
